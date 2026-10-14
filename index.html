@@ -258,15 +258,34 @@ body{
 .bill-title   {font-family:var(--font-serif);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px;}
 .bill-title-en{font-size:11px;color:var(--ink-3);margin-bottom:6px;font-style:italic;}
 .bill-summary {font-size:12px;color:var(--ink-2);line-height:1.65;margin-bottom:8px;}
-/* progress track */
+/* ── 雙軌進度條 ── */
 .bill-progress-wrap{margin-bottom:10px;}
-.bill-stage-row{display:flex;gap:0;margin-bottom:4px;}
-.bill-stage{flex:1;text-align:center;font-size:9px;color:var(--ink-3);padding:3px 2px;
-  border-top:3px solid var(--rule-2);transition:border-color .2s;}
-.bill-stage.done{color:var(--blue);border-top-color:var(--blue);}
-.bill-card.taiwan .bill-stage.done{color:var(--accent);border-top-color:var(--accent);}
-.bill-stage.current{color:var(--gold);border-top-color:var(--gold);font-weight:700;}
-.bill-stage.law{color:var(--green);border-top-color:var(--green);font-weight:700;}
+.bill-track{margin-bottom:6px;}
+.bill-track-label{
+  font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:2px;
+}
+.bill-track.track-senate .bill-track-label{color:var(--blue);}
+.bill-track.track-house  .bill-track-label{color:var(--accent);}
+.bill-track.track-signed .bill-track-label{color:var(--green);}
+.bill-stage-row{display:flex;gap:0;}
+.bill-stage{
+  flex:1;text-align:center;font-size:9px;color:var(--ink-3);padding:4px 2px 2px;
+  border-top:3px solid var(--rule-2);transition:border-color .2s;line-height:1.4;
+}
+.bill-stage .stage-date{display:block;font-size:8px;color:var(--ink-3);margin-top:1px;}
+/* Senate track colours */
+.bill-track.track-senate .bill-stage.done   {color:var(--blue);border-top-color:var(--blue);}
+.bill-track.track-senate .bill-stage.done .stage-date{color:var(--blue);opacity:.7;}
+.bill-track.track-senate .bill-stage.current{color:var(--blue);border-top-color:var(--blue);font-weight:700;opacity:.55;}
+/* House track colours */
+.bill-track.track-house .bill-stage.done   {color:var(--accent);border-top-color:var(--accent);}
+.bill-track.track-house .bill-stage.done .stage-date{color:var(--accent);opacity:.7;}
+.bill-track.track-house .bill-stage.current{color:var(--accent);border-top-color:var(--accent);font-weight:700;opacity:.55;}
+/* Signed track */
+.bill-track.track-signed .bill-stage.done  {color:var(--green);border-top-color:var(--green);}
+.bill-track.track-signed .bill-stage.done .stage-date{color:var(--green);opacity:.7;}
+/* Pending stage (not yet reached) stays grey */
 /* sponsor */
 .bill-sponsors{font-size:11px;color:var(--ink-3);margin-bottom:8px;line-height:1.7;}
 .bill-sponsors strong{color:var(--ink-2);}
@@ -434,185 +453,404 @@ const EMBEDDED_DATA = [
     "bills": [
       {
         "bill_num": "H.R. 1512", "chamber": "house",
-        "title_zh": "台灣保證執行法（眾院版）", "title_en": "Taiwan Assurance Implementation Act",
-        "status": "已成為公法 119-45", "stage_idx": 4, "category": "taiwan",
-        "sponsor": "Ann Wagner（R-MO-2）", "cosponsors": [], "introduced": "2025年2月21日",
-        "summary": "要求國務院向國會提交關於《台灣保證法》執行情況的報告，包括對台軍售政策、台灣參與國際組織等事項的進展。已簽署成為公法。",
+        "title_zh": "台灣保證執行法", "title_en": "Taiwan Assurance Implementation Act",
+        "status": "已成為公法 119-45", "category": "taiwan",
+        "sponsor": "Ann Wagner（R-MO-2）", "cosponsors": [],
+        "house_introduced": "2025年2月21日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": "2025年5月5日",
+        "senate_introduced": "（配對法案 S.821，2025年3月3日）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": "2025年11月18日",
+        "signed_date": "2025年12月2日", "law_number": "公法 119-45",
+        "summary": "要求國務院向國會提交《台灣保證法》執行情況報告，包括對台軍售常態化、台灣參與國際組織等進展。眾院2025年5月通過，參院2025年11月通過，總統2025年12月2日簽署成為公法。",
         "url": "https://www.congress.gov/bill/119th-congress/house-bill/1512"
       },
       {
+        "bill_num": "S. 821", "chamber": "senate",
+        "title_zh": "台灣保證執行法（參院版）", "title_en": "Taiwan Assurance Implementation Act",
+        "status": "已列入參議院議事日程第 52 號", "category": "taiwan",
+        "sponsor": "John Cornyn（R-TX）", "cosponsors": [],
+        "senate_introduced": "2025年3月3日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.1512，2025年2月21日）", "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": "2025年5月5日",
+        "signed_date": "2025年12月2日", "law_number": "公法 119-45（H.R.1512）",
+        "summary": "要求國務院增加對台政策執行情況的報告，確保《台灣保證法》各項承諾落實。列入參院議事日程後，以配對法案 H.R.1512 形式完成立法程序。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/821"
+      },
+      {
         "bill_num": "H.R. 33", "chamber": "house",
-        "title_zh": "美台雙重課稅救濟法（眾院版）", "title_en": "U.S.-Taiwan Double Taxation Relief Act",
-        "status": "已送達參議院，交財政委員會", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "Jason Smith（R-MO-8）", "cosponsors": [], "introduced": "2025年1月15日",
-        "summary": "消除美國企業及個人在台灣的雙重課稅問題，提供相當於租稅協定的稅務救濟，以促進美台經濟往來。眾議院已通過，待參議院審議。",
+        "title_zh": "美台雙重課稅救濟法", "title_en": "U.S.-Taiwan Double Taxation Relief Act",
+        "status": "已送達參議院，交財政委員會", "category": "taiwan",
+        "sponsor": "Jason Smith（R-MO-8）", "cosponsors": [],
+        "house_introduced": "2025年1月3日", "house_committee_name": "眾院歲計委員會／規則委員會",
+        "house_committee_date": null, "house_floor_date": "2025年1月15日",
+        "senate_introduced": "（2025年1月16日送達參議院）", "senate_committee_name": "參院財政委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "消除美國企業及個人在台灣的雙重課稅問題，提供相當於租稅協定的稅務救濟，促進美台經濟往來。眾院2025年1月15日通過，待參院財政委員會審議。",
         "url": "https://www.congress.gov/bill/119th-congress/house-bill/33"
       },
       {
         "bill_num": "S. 199", "chamber": "senate",
         "title_zh": "美台雙重課稅救濟法（參院版）", "title_en": "U.S.-Taiwan Double Taxation Relief Act",
-        "status": "已列入參議院議事日程", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "Mike Crapo（R-ID）", "cosponsors": [], "introduced": "2025年1月23日",
+        "status": "已列入參議院議事日程", "category": "taiwan",
+        "sponsor": "Mike Crapo（R-ID）", "cosponsors": [],
+        "senate_introduced": "2025年1月23日", "senate_committee_name": "參院財政委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.33，2025年1月3日）", "house_committee_name": "眾院歲計委員會",
+        "house_committee_date": null, "house_floor_date": "2025年1月15日",
+        "signed_date": null, "law_number": null,
         "summary": "與 H.R.33 相對應的參議院版本，授權行政部門對台灣居民提供所得稅雙重課稅救濟，強化美台經貿關係。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/199"
       },
       {
-        "bill_num": "S. 821", "chamber": "senate",
-        "title_zh": "台灣保證執行法（參院版）", "title_en": "Taiwan Assurance Implementation Act",
-        "status": "已列入參議院議事日程第 52 號", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "John Cornyn（R-TX）", "cosponsors": ["3位連署人（名單未公開）"], "introduced": "2025年3月3日",
-        "summary": "要求國務院增加關於對台指導方針的報告，並確保《台灣保證法》各項承諾的具體落實，包括軍售常態化及台灣參與國際組織。",
-        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/821"
+        "bill_num": "S. Res. 86", "chamber": "senate",
+        "title_zh": "反對聯合國2758號決議誤用決議案", "title_en": "Resolution Regarding UN General Assembly Resolution 2758",
+        "status": "已列入參議院議事日程第 56 號", "category": "taiwan",
+        "sponsor": "James Risch（R-ID）", "cosponsors": [],
+        "senate_introduced": "2025年2月20日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2025年3月27日", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "聲明聯合國大會第2758號決議並未解決台灣代表權問題，反對中國以該決議為依據排除台灣參與國際組織。參院外交委員會2025年3月27日通過，列入議事日程第56號。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-resolution/86"
+      },
+      {
+        "bill_num": "H. Res. 148", "chamber": "house",
+        "title_zh": "反對聯合國2758號決議誤用決議案（眾院版）", "title_en": "Resolution Regarding UN General Assembly Resolution 2758",
+        "status": "眾院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Young Kim（R-CA-40）", "cosponsors": [],
+        "house_introduced": "2025年2月21日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": null,
+        "senate_introduced": null, "senate_committee_name": null,
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "與 S.Res.86 相對應的眾院決議，聲明聯合國大會第2758號決議不賦予中華人民共和國代表台灣的正當性，不應作為排除台灣參與國際組織的依據。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-resolution/148"
+      },
+      {
+        "bill_num": "H. Con. Res. 8", "chamber": "house",
+        "title_zh": "呼籲美台建立正式外交關係決議案", "title_en": "Calling for U.S.-Taiwan Diplomatic Ties",
+        "status": "眾院外交委員會及歲計委員會審議中", "category": "taiwan",
+        "sponsor": "Thomas Tiffany（R-WI-7）", "cosponsors": [],
+        "house_introduced": "2025年2月6日", "house_committee_name": "眾院外交委員會／歲計委員會",
+        "house_committee_date": null, "house_floor_date": null,
+        "senate_introduced": null, "senate_committee_name": null,
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "兩院同時決議案，呼籲美國行政部門與台灣就建立正式外交關係展開談判，並在正式關係建立之前持續強化實質關係。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-concurrent-resolution/8"
       },
       {
         "bill_num": "S. 733", "chamber": "senate",
         "title_zh": "台灣旅遊協調法", "title_en": "Taiwan Travel and Tourism Coordination Act",
-        "status": "已列入參議院議事日程", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "Marsha Blackburn（R-TN）", "cosponsors": [], "introduced": "2025年2月25日",
-        "summary": "促進美台之間的旅遊合作，協調兩地觀光推廣、簽證便利化及航空連結等事宜。",
+        "status": "已列入參議院議事日程", "category": "taiwan",
+        "sponsor": "Marsha Blackburn（R-TN）", "cosponsors": [],
+        "senate_introduced": "2025年2月25日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "促進美台之間的旅遊合作，協調兩地觀光推廣、簽證便利化及航空連結等事宜，強化美台人民交流。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/733"
-      },
-      {
-        "bill_num": "S. 974", "chamber": "senate",
-        "title_zh": "台灣代表處法", "title_en": "Taiwan Representative Office Act",
-        "status": "已列入參議院議事日程", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "John R. Curtis（R-UT）", "cosponsors": [], "introduced": "2025年3月12日",
-        "summary": "授權並鼓勵行政部門允許台灣在美國將「台北經濟文化代表處」更名為「台灣代表處」，提升台灣的外交能見度。",
-        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/974"
       },
       {
         "bill_num": "H.R. 910", "chamber": "house",
         "title_zh": "台灣非歧視法", "title_en": "Taiwan Non-Discrimination Act of 2025",
-        "status": "已列入參議院議事日程第 103 號", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "Young Kim（R-CA-40）", "cosponsors": [], "introduced": "2025年2月4日",
-        "summary": "禁止美國聯邦機構因台灣的非正式外交地位而對台灣企業或個人採取歧視性措施，確保台灣享有與其他貿易夥伴相同待遇。",
+        "status": "已送達參議院，列入議事日程第 103 號", "category": "taiwan",
+        "sponsor": "Young Kim（R-CA-40）", "cosponsors": [],
+        "house_introduced": "2025年2月4日", "house_committee_name": "眾院金融服務委員會",
+        "house_committee_date": null, "house_floor_date": "2025年6月（已通過）",
+        "senate_introduced": "（2025年送達參議院）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "禁止美國聯邦機構因台灣的非正式外交地位而對台灣企業或個人採取歧視性措施，確保台灣享有與其他貿易夥伴相同待遇。眾院通過後列入參院議事日程第103號。",
         "url": "https://www.congress.gov/bill/119th-congress/house-bill/910"
+      },
+      {
+        "bill_num": "S. 974", "chamber": "senate",
+        "title_zh": "台灣代表處法", "title_en": "Taiwan Representative Office Act",
+        "status": "已列入參議院議事日程", "category": "taiwan",
+        "sponsor": "John R. Curtis（R-UT）", "cosponsors": [],
+        "senate_introduced": "2025年3月12日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權並鼓勵行政部門允許台灣在美國將「台北經濟文化代表處」更名為「台灣代表處」，以提升台灣的外交能見度與國際地位。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/974"
       },
       {
         "bill_num": "H.R. 1531", "chamber": "house",
         "title_zh": "保護台灣法", "title_en": "PROTECT Taiwan Act",
-        "status": "已送達參議院，交外交委員會", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "Frank D. Lucas（R-OK-3）", "cosponsors": ["Vicente Gonzalez（D-TX-34）","Michael Lawler（R-NY-17）"], "introduced": "2025年2月24日",
-        "summary": "授權對中國侵台行動實施全面制裁，涵蓋金融、能源、貿易等多方面強制措施，並設立制裁觸發機制。眾議院已通過，現待參議院審議。",
+        "status": "已送達參議院，交外交委員會（2026年2月11日）", "category": "taiwan",
+        "sponsor": "Frank D. Lucas（R-OK-3）", "cosponsors": ["Vicente Gonzalez（D-TX-34）","Michael Lawler（R-NY-17）"],
+        "house_introduced": "2025年2月24日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": "2026年2月（已通過）",
+        "senate_introduced": "（2026年2月11日送達參議院）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權對中國侵台行動實施全面制裁，涵蓋金融、能源、貿易等強制措施，並設立制裁觸發機制。眾院已通過，2026年2月送達參院審議。",
         "url": "https://www.congress.gov/bill/119th-congress/house-bill/1531"
+      },
+      {
+        "bill_num": "H.R. 1716", "chamber": "house",
+        "title_zh": "台灣衝突嚇阻法", "title_en": "Taiwan Conflict Deterrence Act of 2025",
+        "status": "已送達參議院，交銀行委員會（2025年7月22日）", "category": "taiwan",
+        "sponsor": "Lisa C. McClain（R-MI-9）", "cosponsors": [],
+        "house_introduced": "2025年2月27日", "house_committee_name": "眾院金融服務委員會",
+        "house_committee_date": "2025年3月27日（48-0通過）", "house_floor_date": "2025年7月21日（全院一致通過）",
+        "senate_introduced": "（2025年7月22日送達參議院）", "senate_committee_name": "參院銀行委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權對試圖以武力改變台海現狀的行為者實施預防性制裁。眾院金融服務委員會2025年3月以48-0通過，同年7月21日全院一致通過，現待參院銀行委員會審議。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/1716"
+      },
+      {
+        "bill_num": "S. 1216", "chamber": "senate",
+        "title_zh": "台灣盟友基金法", "title_en": "Taiwan Allies Fund Act",
+        "status": "已列入參議院議事日程第 321 號", "category": "taiwan",
+        "sponsor": "Chris Van Hollen（D-MD）", "cosponsors": [],
+        "senate_introduced": "2025年3月31日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.2559，2025年4月1日）", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "設立專項基金，支援與台灣保持邦交的友邦國家，防止其在中國壓力下與台灣斷交，維護台灣的國際空間。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1216"
       },
       {
         "bill_num": "H.R. 2113", "chamber": "house",
         "title_zh": "美國支持台灣法", "title_en": "America Supports Taiwan Act",
-        "status": "眾議院外交委員會審議中", "stage_idx": 1, "category": "taiwan",
-        "sponsor": "Byron Donalds（R-FL-19）", "cosponsors": [], "introduced": "2025年3月14日",
-        "summary": "明確宣示美國支持台灣維護民主體制及事實獨立地位，授權強化美台官方往來及安全合作。",
+        "status": "眾院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Byron Donalds（R-FL-19）", "cosponsors": [],
+        "house_introduced": "2025年3月14日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": null,
+        "senate_introduced": null, "senate_committee_name": null,
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "明確宣示美國支持台灣維護民主體制及事實獨立地位，授權強化美台官方往來及安全合作關係。",
         "url": "https://www.congress.gov/bill/119th-congress/house-bill/2113"
       },
       {
         "bill_num": "H.R. 2416", "chamber": "house",
         "title_zh": "台灣國際團結法", "title_en": "Taiwan International Solidarity Act",
-        "status": "已送達參議院，交外交委員會", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "Gerald E. Connolly（D-VA-11）", "cosponsors": [], "introduced": "2025年3月27日",
-        "summary": "聲明聯合國大會第2758號決議並未解決台灣在聯合國的代表權問題，反對以該決議排除台灣參與國際組織。",
+        "status": "已送達參議院，交外交委員會（2025年5月6日）", "category": "taiwan",
+        "sponsor": "Gerald E. Connolly（D-VA-11）", "cosponsors": [],
+        "house_introduced": "2025年3月27日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": "2025年5月（已通過）",
+        "senate_introduced": "（2025年5月6日送達參議院）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "聲明聯合國大會第2758號決議並未解決台灣在聯合國的代表權問題，反對以該決議排除台灣參與國際組織。眾院通過後已送達參院。",
         "url": "https://www.congress.gov/bill/119th-congress/house-bill/2416"
       },
       {
-        "bill_num": "S. 1216", "chamber": "senate",
-        "title_zh": "台灣盟友基金法", "title_en": "Taiwan Allies Fund Act",
-        "status": "已列入參議院議事日程第 321 號", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "Chris Van Hollen（D-MD）", "cosponsors": [], "introduced": "2025年3月31日",
-        "summary": "設立專項基金，支援與台灣保持邦交的友邦國家，防止其在中國壓力下與台灣斷交，維護台灣的國際空間。",
-        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1216"
+        "bill_num": "H.R. 2559", "chamber": "house",
+        "title_zh": "台灣盟友基金法（眾院版）", "title_en": "Taiwan Allies Fund Act",
+        "status": "眾院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Raja Krishnamoorthi（D-IL-8）", "cosponsors": [],
+        "house_introduced": "2025年4月1日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": null,
+        "senate_introduced": "（配對法案 S.1216，2025年3月31日）", "senate_committee_name": null,
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "與 S.1216 相對應的眾院版本，設立台灣盟友基金，協助維繫台灣邦交國，對抗中國以金援換斷交的外交脅迫。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/2559"
       },
       {
-        "bill_num": "H.R. 1716", "chamber": "house",
-        "title_zh": "台灣衝突嚇阻法", "title_en": "Taiwan Conflict Deterrence Act of 2025",
-        "status": "已送達參議院，交銀行委員會", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "（待查）", "cosponsors": [], "introduced": "2025年",
-        "summary": "授權對試圖以武力改變台海現狀的行為者實施預防性制裁，建立嚇阻機制以防止中國軍事冒險。",
-        "url": "https://www.congress.gov/bill/119th-congress/house-bill/1716"
+        "bill_num": "S. 1588", "chamber": "senate",
+        "title_zh": "台灣關係強化法", "title_en": "Taiwan Relations Reinforcement Act of 2025",
+        "status": "參院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": [],
+        "senate_introduced": "2025年5月5日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "更新並強化《台灣關係法》框架，明確授權深化美台安全、外交及經濟合作，提升美國對台灣安全承諾的法律層級。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1588"
       },
       {
         "bill_num": "S. 1744", "chamber": "senate",
         "title_zh": "豪豬法（非對稱防衛授權法）", "title_en": "PORCUPINE Act",
-        "status": "委員會審議中", "stage_idx": 1, "category": "taiwan",
-        "sponsor": "（待查）", "cosponsors": [], "introduced": "2025年",
-        "summary": "授權並資助台灣以非對稱戰力建設為核心的防衛能力提升，包括反艦飛彈、水雷、無人機等，使侵台成本大幅提升。",
+        "status": "已列入參議院議事日程第 232 號（2025年12月）", "category": "taiwan",
+        "sponsor": "Pete Ricketts（R-NE）", "cosponsors": [],
+        "senate_introduced": "2025年5月13日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "Providing Our Regional Companions Upgraded Protection in Nefarious Environments Act。授權資助台灣以非對稱戰力為核心的防衛能力，包括反艦飛彈、水雷、無人機等，使侵台成本大幅提升。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1744"
+      },
+      {
+        "bill_num": "S. 1824", "chamber": "senate",
+        "title_zh": "台灣PLUS法", "title_en": "Taiwan PLUS Act",
+        "status": "參院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Rick Scott（R-FL）", "cosponsors": [],
+        "senate_introduced": "2025年5月21日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.3563，2025年5月21日）", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": "2026年5月13日（45-0通過）", "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "全面更新台美關係政策框架，包括強化安全合作機制、擴大軍售授權、提升台美官員互動層級及協助台灣參與國際組織。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1824"
+      },
+      {
+        "bill_num": "H.R. 3563", "chamber": "house",
+        "title_zh": "台灣PLUS法（眾院版）", "title_en": "Taiwan PLUS Act",
+        "status": "眾院外交委員會以 45-0 票通過（2026年5月13日）", "category": "taiwan",
+        "sponsor": "Scott Perry（R-PA-10）", "cosponsors": ["Thomas P. Tiffany（R-WI-7）","Chuck Fleischmann（R-TN-3）"],
+        "house_introduced": "2025年5月21日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": "2026年5月13日（45-0通過）", "house_floor_date": null,
+        "senate_introduced": "（配對法案 S.1824，2025年5月21日）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "全面更新台美關係政策框架，擴大軍售授權、提升台美官員互動層級及協助台灣參與國際組織。眾院外交委員會2026年5月以45-0通過替代版本，待全院表決。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/3563"
       },
       {
         "bill_num": "S. 1900", "chamber": "senate",
         "title_zh": "台灣非歧視法（參院版）", "title_en": "Taiwan Non-Discrimination Act of 2025",
-        "status": "已列入參議院議事日程第 100 號", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "（待查）", "cosponsors": [], "introduced": "2025年",
-        "summary": "與 H.R.910 相對應的參議院版本，禁止聯邦機構對台灣企業或個人採取歧視性措施。",
+        "status": "已列入參議院議事日程第 100 號", "category": "taiwan",
+        "sponsor": "David McCormick（R-PA）", "cosponsors": [],
+        "senate_introduced": "2025年5月22日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.910，2025年2月4日）", "house_committee_name": "眾院金融服務委員會",
+        "house_committee_date": null, "house_floor_date": "2025年6月（已通過）",
+        "signed_date": null, "law_number": null,
+        "summary": "與 H.R.910 相對應的參議院版本，禁止聯邦機構對台灣企業或個人採取歧視性措施，確保台灣享有與其他貿易夥伴相同待遇。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1900"
+      },
+      {
+        "bill_num": "S. 2222", "chamber": "senate",
+        "title_zh": "關鍵海底基礎設施韌性倡議法", "title_en": "Critical Undersea Infrastructure Resilience Initiative Act",
+        "status": "已列入參議院議事日程第 323 號", "category": "taiwan",
+        "sponsor": "John R. Curtis（R-UT）", "cosponsors": [],
+        "senate_introduced": "2025年7月9日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權美國加強與盟友合作，保護印太地區（包括台灣周邊）的海底電纜及海底基礎設施，防止中國蓄意破壞。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2222"
       },
       {
         "bill_num": "S. 2224", "chamber": "senate",
         "title_zh": "台灣國際團結法（參院版）", "title_en": "Taiwan International Solidarity Act",
-        "status": "已列入參議院議事日程第 237 號", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "（待查）", "cosponsors": [], "introduced": "2026年",
-        "summary": "與 H.R.2416 相對應的參議院版本，聲明聯合國大會第2758號決議不影響台灣的國際地位及代表權問題。",
+        "status": "已列入參議院議事日程第 237 號", "category": "taiwan",
+        "sponsor": "Chris Van Hollen（D-MD）", "cosponsors": [],
+        "senate_introduced": "2025年7月9日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.2416，2025年3月27日）", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": "2025年5月（已通過）",
+        "signed_date": null, "law_number": null,
+        "summary": "與 H.R.2416 相對應的參議院版本，聲明聯合國大會第2758號決議不賦予中華人民共和國代表台灣的正當性。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2224"
+      },
+      {
+        "bill_num": "S. 2626", "chamber": "senate",
+        "title_zh": "強化美國在美洲開發銀行領導力法", "title_en": "Strengthening United States Leadership at the IDB Act",
+        "status": "已列入參議院議事日程第 240 號", "category": "taiwan",
+        "sponsor": "David McCormick（R-PA）", "cosponsors": [],
+        "senate_introduced": "2025年7月31日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "要求減少中華人民共和國對美洲開發銀行的影響力，並確保台灣相關項目獲得公平對待。涉及台灣在國際金融機構的參與空間。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2626"
       },
       {
         "bill_num": "S. 2684", "chamber": "senate",
         "title_zh": "美台美洲夥伴關係法", "title_en": "U.S.-Taiwan Partnership in the Americas Act",
-        "status": "已列入參議院議事日程第 242 號", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "（待查）", "cosponsors": [], "introduced": "2026年",
-        "summary": "強化台灣與拉丁美洲及加勒比海地區的合作，授權美國協助台灣在西半球維持並擴展外交與經濟關係。",
+        "status": "已列入參議院議事日程第 242 號", "category": "taiwan",
+        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": [],
+        "senate_introduced": "2025年9月2日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "強化台灣與拉丁美洲及加勒比海地區的合作，授權美國協助台灣在西半球維持並擴展外交與經濟關係，對抗中國影響力滲透。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2684"
       },
       {
         "bill_num": "S. 2722", "chamber": "senate",
         "title_zh": "台灣能源安全暨反封鎖法", "title_en": "Taiwan Energy Security and Anti-Embargo Act of 2026",
-        "status": "已列入參議院議事日程第 325 號", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "（待查）", "cosponsors": [], "introduced": "2026年",
-        "summary": "要求行政部門制定計畫，確保台灣在遭受中國能源封鎖或海上封鎖時的能源供應穩定，涵蓋液化天然氣備援機制。",
+        "status": "已列入參議院議事日程第 325 號", "category": "taiwan",
+        "sponsor": "Pete Ricketts（R-NE）", "cosponsors": ["Christopher Coons（D-DE）","Ted Budd（R-NC）","John Hickenlooper（D-CO）","John Hoeven（R-ND）"],
+        "senate_introduced": "2025年9月4日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "要求行政部門制定計畫，確保台灣在遭受中國能源封鎖或海上封鎖時的能源供應穩定，涵蓋液化天然氣備援及友盟能源支援機制。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2722"
       },
       {
         "bill_num": "S. 2960", "chamber": "senate",
         "title_zh": "嚇阻中國侵台法", "title_en": "Deter PRC Aggression Against Taiwan Act",
-        "status": "已列入參議院議事日程第 245 號", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "（待查）", "cosponsors": [], "introduced": "2026年",
-        "summary": "授權預先部署武器裝備至台灣及附近盟友，並要求對台軍售快速審核，以強化台海實質嚇阻能力。",
+        "status": "已列入參議院議事日程第 245 號", "category": "taiwan",
+        "sponsor": "James Risch（R-ID）", "cosponsors": [],
+        "senate_introduced": "2025年10月1日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權預先部署武器裝備至台灣及附近盟友，並要求對台軍售快速審核，以強化台海實質嚇阻能力，明確要求行政部門就侵台場景進行規劃。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2960"
       },
       {
-        "bill_num": "H.R. 3563", "chamber": "house",
-        "title_zh": "台灣政策更新及戰略法", "title_en": "Taiwan PLUS Act",
-        "status": "眾院外交委員會以 45-0 票通過替代版本", "stage_idx": 1, "category": "taiwan",
-        "sponsor": "Scott Perry（R-PA-10）", "cosponsors": ["Thomas P. Tiffany（R-WI-7）","Chuck Fleischmann（R-TN-3）"], "introduced": "2025年5月21日",
-        "summary": "全面更新台美關係政策框架，包括強化安全合作機制、擴大軍售授權、提升台美官員互動層級，以及協助台灣參與國際組織。",
-        "url": "https://www.congress.gov/bill/119th-congress/house-bill/3563"
-      },
-      {
         "bill_num": "S. 4065", "chamber": "senate",
-        "title_zh": "制裁侵略鄰近民主國家法（涉台）", "title_en": "STAND with Taiwan Act of 2026",
-        "status": "委員會審議中", "stage_idx": 1, "category": "taiwan",
-        "sponsor": "Dan Sullivan（R-AK）", "cosponsors": [], "introduced": "2026年",
+        "title_zh": "制裁侵略鄰近民主國家法", "title_en": "STAND with Taiwan Act of 2026",
+        "status": "參院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Dan Sullivan（R-AK）", "cosponsors": [],
+        "senate_introduced": "2026年（待確認）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
         "summary": "全名 Sanctions Targeting Aggressors of Neighboring Democracies with Taiwan Act，授權對中國侵台或脅迫行為實施嚴厲制裁，涵蓋金融機構、能源及關鍵礦物出口。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4065"
       },
       {
         "bill_num": "S. 4259", "chamber": "senate",
         "title_zh": "藍天台灣法（無人機合作授權法）", "title_en": "Blue Skies for Taiwan Act of 2026",
-        "status": "已列入參議院議事日程第 507 號", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": ["Christopher Coons（D-DE）","Ted Cruz（R-TX）","John R. Curtis（R-UT）","Andy Kim（D-NJ）"], "introduced": "2026年3月26日",
-        "summary": "授權美台之間的無人機技術合作與共同生產，強化台灣不對稱防衛能力，委員會2026年6月17日通過，已列入參議院議事日程。",
+        "status": "已列入參議院議事日程第 507 號", "category": "taiwan",
+        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": ["Christopher Coons（D-DE）","Ted Cruz（R-TX）","John R. Curtis（R-UT）","Andy Kim（D-NJ）"],
+        "senate_introduced": "2026年3月26日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2026年6月（已通過）", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權美台之間的無人機技術合作與共同生產，強化台灣不對稱防衛能力。委員會2026年6月通過，已列入參議院議事日程第507號，待全院表決。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4259"
       },
       {
         "bill_num": "S. 4600", "chamber": "senate",
         "title_zh": "南海戰略法", "title_en": "South China Sea Strategy Act of 2026",
-        "status": "已列入參議院議事日程第 512 號", "stage_idx": 2, "category": "china",
-        "sponsor": "（待查）", "cosponsors": [], "introduced": "2026年",
+        "status": "已列入參議院議事日程第 512 號", "category": "china",
+        "sponsor": "（待確認）", "cosponsors": [],
+        "senate_introduced": "2026年", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
         "summary": "要求行政部門制定全面南海戰略，強化與台灣、菲律賓等地區國家的安全合作，應對中國在南海的強制性行動。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4600"
       },
       {
         "bill_num": "S. 4610", "chamber": "senate",
         "title_zh": "太平洋夥伴暨經濟韌性法", "title_en": "Pacific POWER Act",
-        "status": "已列入參議院議事日程第 513 號", "stage_idx": 2, "category": "taiwan",
-        "sponsor": "（待查）", "cosponsors": [], "introduced": "2026年",
+        "status": "已列入參議院議事日程第 513 號", "category": "taiwan",
+        "sponsor": "（待確認）", "cosponsors": [],
+        "senate_introduced": "2026年", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
         "summary": "授權美國強化與台灣及印太盟友的經濟及安全合作，聚焦供應鏈韌性、關鍵技術及第一島鏈防衛整合。",
         "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4610"
       }
@@ -818,55 +1056,73 @@ const EMBEDDED_DATA = [
   });
   if(!data.committees||!data.committees.length) cmteList.innerHTML='<div class="empty">本時段委員會無新動態</div>';
 
-  /* ── 法案 ── */
+  /* ── 法案（雙軌進度條） ── */
   const billsList = $id('bills-list');
-  const STAGES = ['提案','委員會','日曆','全院','簽署成法'];
-  function billStageIdx(b){
-    if(b.stage_idx!==undefined) return b.stage_idx;
-    const s=b.status||'';
-    if(s.includes('公法')||s.includes('成為法律')) return 4;
-    if(s.includes('全院')&&s.includes('通過')) return 3;
-    if(s.includes('日曆')||s.includes('立法日程')) return 2;
-    if(s.includes('委員會通過')||s.includes('委員會報告')) return 1;
-    return 0;
+
+  function makeTrack(label, trackClass, introduced, committee, committeeDate, floorDate, isSigned){
+    /* Returns HTML for one chamber track. Nodes: 提案→委員會→通過院會 */
+    if(!introduced && !committee && !floorDate) return '';
+    function node(text, date, isDone, isCurrent){
+      const cls='bill-stage'+(isDone?' done':isCurrent?' current':'');
+      const dateTxt=date?`<span class="stage-date">${date}</span>`:'';
+      return `<div class="${cls}">${text}${dateTxt}</div>`;
+    }
+    const hasFloor=!!floorDate;
+    const hasCommittee=!!(committee||committeeDate);
+    const hasIntro=!!introduced;
+    const n1=node('提案', hasIntro?introduced:null, hasIntro, !hasIntro);
+    const n2=node(committee||'委員會', committeeDate||null, hasCommittee&&hasIntro, hasIntro&&!hasCommittee);
+    const n3=node('通過院會', floorDate||null, hasFloor, hasCommittee&&!hasFloor);
+    return `<div class="bill-track ${trackClass}">
+      <div class="bill-track-label">${label}</div>
+      <div class="bill-stage-row">${n1}${n2}${n3}</div>
+    </div>`;
   }
-  function billStatusClass(b){
-    const i=billStageIdx(b);
-    if(i>=4) return 'bs-law';
-    if(i>=2) return 'bs-calendar';
-    if(i>=1) return 'bs-committee';
+
+  function overallStatusClass(b){
+    const s=b.status||'';
+    if(b.signed_date||s.includes('公法')) return 'bs-law';
+    if(s.includes('日程')||s.includes('calendar')) return 'bs-calendar';
+    if(s.includes('委員會通過')||s.includes('通過委員會')||s.includes('ordered reported')||
+       s.includes('45-0')||s.includes('48-0')) return 'bs-committee';
+    if(s.includes('送達參議院')||s.includes('送達眾議院')||s.includes('Received')) return 'bs-passed';
     return 'bs-senate';
   }
-  function billStatusLabel(b){
-    const i=billStageIdx(b);
-    if(i>=4) return '已成為公法';
-    if(i>=2) return '已列入議事日程';
-    if(i>=1) return '委員會通過';
+  function overallStatusLabel(b){
+    const s=b.status||'';
+    if(b.signed_date||s.includes('公法')) return '已成為公法 '+(b.law_number||'');
+    if(b.senate_floor_date&&b.house_floor_date) return '兩院均已通過';
+    if(s.includes('日程')) return '已列入議事日程';
+    if(s.includes('委員會通過')||s.includes('45-0')||s.includes('48-0')) return '委員會通過';
+    if(s.includes('送達')) return '已送達另院';
     return '已提出';
   }
+
   (data.bills||[]).forEach(b=>{
-    const si=billStageIdx(b);
-    const stagesHTML=STAGES.map((lbl,i)=>{
-      let cls='bill-stage';
-      if(i<si) cls+=' done';
-      else if(i===si) cls+=(si===4?' law':' current');
-      return `<div class="${cls}">${lbl}</div>`;
-    }).join('');
+    const senateTrack = makeTrack('參議院',   'track-senate',
+      b.senate_introduced, b.senate_committee_name, b.senate_committee_date, b.senate_floor_date, false);
+    const houseTrack  = makeTrack('眾議院',   'track-house',
+      b.house_introduced,  b.house_committee_name,  b.house_committee_date,  b.house_floor_date,  false);
+    const signedTrack = b.signed_date
+      ? `<div class="bill-track track-signed"><div class="bill-track-label">總統簽署</div>
+          <div class="bill-stage-row"><div class="bill-stage done">簽署成法<span class="stage-date">${b.signed_date}${b.law_number?' · '+b.law_number:''}</span></div></div></div>`
+      : '';
+
     const sponsor=b.sponsor?`<strong>提案人：</strong>${b.sponsor}`:'';
     const cospon=b.cosponsors&&b.cosponsors.length?` ／ <strong>連署：</strong>${b.cosponsors.join('、')}`:'';
-    const dateInfo=b.introduced?` ／ <strong>提案：</strong>${b.introduced}`:'';
-    const sc=billStatusClass(b);
+    const sc=overallStatusClass(b);
+    const slabel=overallStatusLabel(b);
     const d = document.createElement('div');
     d.className='bill-card '+(b.category||'taiwan');
     d.innerHTML=`
       <div class="bill-hd">
-        <span class="bill-num">${b.bill_num}　${b.chamber==='senate'?'參議院':'眾議院'}</span>
-        <span class="bill-status ${sc}">${billStatusLabel(b)}</span>
+        <span class="bill-num">${b.bill_num}</span>
+        <span class="bill-status ${sc}">${slabel}</span>
       </div>
       <div class="bill-title">${b.title_zh}</div>
       <div class="bill-title-en">${b.title_en}</div>
-      <div class="bill-progress-wrap"><div class="bill-stage-row">${stagesHTML}</div></div>
-      ${sponsor||cospon||dateInfo?`<div class="bill-sponsors">${sponsor}${cospon}${dateInfo}</div>`:''}
+      <div class="bill-progress-wrap">${senateTrack}${houseTrack}${signedTrack}</div>
+      ${sponsor||cospon?`<div class="bill-sponsors">${sponsor}${cospon}</div>`:''}
       <div class="bill-summary">${b.summary}</div>
       <div class="bill-footer">
         <a class="bill-link" href="${b.url}" target="_blank" rel="noopener">Congress.gov ↗</a>
