@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global Digest · 國際情勢彙整</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS ── */
+:root {
+  --ink: #18181a;
+  --ink-2: #3c3c42;
+  --ink-3: #7a7a85;
+  --rule: #d8d6d0;
+  --rule-2: #ece9e2;
+  --bg: #f5f3ee;
+  --bg-card: #ffffff;
+  --accent: #b5341a;
+  --accent-soft: #f6ede9;
+  --blue: #1a3f6e;
+  --blue-soft: #e8eef6;
+  --gold: #c8921a;
+  --gold-soft: #fdf5e0;
+  --green: #1f6d38;
+  --green-soft: #e8f5ee;
+  --purple: #5a3a8a;
+  --purple-soft: #f0ebf9;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 14px rgba(0,0,0,0.04);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #e8e6e0; --ink-2: #b0ada6; --ink-3: #706e68;
+    --rule: #2a2826; --rule-2: #222020; --bg: #141310; --bg-card: #1c1a17;
+    --accent: #d05038; --accent-soft: #2a1612;
+    --blue: #7ab0e8; --blue-soft: #131e2e;
+    --gold: #e0a830; --gold-soft: #201a08;
+    --green: #4cad6a; --green-soft: #0e1e14;
+    --purple: #9b79c8; --purple-soft: #1a1225;
+    --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.2);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #e8e6e0; --ink-2: #b0ada6; --ink-3: #706e68;
+  --rule: #2a2826; --rule-2: #222020; --bg: #141310; --bg-card: #1c1a17;
+  --accent: #d05038; --accent-soft: #2a1612;
+  --blue: #7ab0e8; --blue-soft: #131e2e;
+  --gold: #e0a830; --gold-soft: #201a08;
+  --green: #4cad6a; --green-soft: #0e1e14;
+  --purple: #9b79c8; --purple-soft: #1a1225;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 14px rgba(0,0,0,0.2);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Source Sans 3', 'Noto Sans TC', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100%;
+  line-height: 1.6;
+}
+
+/* ── TOP NAV BAR ── */
+.topnav {
+  background: var(--hero-bg);
+  border-bottom: 1px solid var(--hero-rule);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.topnav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.topnav-logo {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--hero-ink);
+  letter-spacing: 0.06em;
+  margin-right: 4px;
+}
+.topnav-logo-sub {
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: var(--hero-ink-3);
+  display: block;
+  text-transform: uppercase;
+}
+.topnav-sep { flex: 1; }
+.topnav-link {
+  padding: 0 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--hero-ink-2);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  transition: color 0.15s, border-color 0.15s;
+  letter-spacing: 0.03em;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.topnav-link:hover { color: var(--hero-accent); }
+.topnav-link.active { color: var(--hero-accent); border-bottom-color: var(--hero-accent); font-weight: 600; }
+.topnav-link.congress-tab { }
+.topnav-link.congress-tab.active { color: var(--purple); border-bottom-color: var(--purple); }
+.topnav-divider { width: 1px; height: 18px; background: var(--hero-rule); margin: 0 4px; }
+.topnav-lang {
+  margin-left: 16px;
+  padding: 5px 14px;
+  border: 1px solid var(--hero-rule);
+  border-radius: 2px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--hero-ink-2);
+  cursor: pointer;
+  background: transparent;
+  font-family: inherit;
+  letter-spacing: 0.04em;
+}
+.topnav-lang:hover { background: var(--hero-rule); }
+
+/* ── HERO ── */
+.hero {
+  background: var(--hero-bg);
+  position: relative;
+  overflow: hidden;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-bottom: 1px solid var(--hero-rule);
+}
+.hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px 32px 40px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.hero-text { flex: 1; }
+.hero-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--hero-ink-3);
+  margin-bottom: 20px;
+}
+.hero-headline {
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--hero-accent);
+  letter-spacing: -0.01em;
+  margin-bottom: 20px;
+}
+.hero-sub {
+  font-size: 13px;
+  color: var(--hero-ink-2);
+  line-height: 1.9;
+  max-width: 500px;
+  margin-bottom: 24px;
+}
+.hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.hero-meta-item {
+  font-size: 10.5px;
+  color: var(--hero-ink-3);
+  letter-spacing: 0.04em;
+}
+.hero-meta-item strong {
+  color: var(--hero-ink-2);
+  font-weight: 600;
+}
+.hero-globe {
+  flex-shrink: 0;
+  width: 340px;
+  opacity: 0.55;
+  align-self: center;
+  pointer-events: none;
+}
+@media (max-width: 700px) {
+  .hero-globe { display: none; }
+  .hero-inner { padding: 32px 16px 28px; }
+  .hero-headline { font-size: 34px; }
+}
+.hero-coords {
+  position: absolute;
+  right: 32px;
+  bottom: 16px;
+  font-size: 9.5px;
+  letter-spacing: 0.12em;
+  color: var(--hero-ink-3);
+  text-align: right;
+  z-index: 2;
+  line-height: 1.8;
+}
+
+/* ── HERO TOKENS (light always) ── */
+:root {
+  --hero-bg: #f2f0ea;
+  --hero-ink: #1a2e1a;
+  --hero-ink-2: #3d4d3a;
+  --hero-ink-3: #8a9885;
+  --hero-rule: #d6d2c8;
+  --hero-accent: #2d5a2d;
+}
+[data-theme="dark"] {
+  --hero-bg: #141a14;
+  --hero-ink: #c8d4c4;
+  --hero-ink-2: #8faa8a;
+  --hero-ink-3: #4a5e48;
+  --hero-rule: #2a342a;
+  --hero-accent: #6aaa6a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --hero-bg: #141a14;
+    --hero-ink: #c8d4c4;
+    --hero-ink-2: #8faa8a;
+    --hero-ink-3: #4a5e48;
+    --hero-rule: #2a342a;
+    --hero-accent: #6aaa6a;
+  }
+}
+
+/* ── UPDATE BAR (hero variant) ── */
+.hero-upd-bar {
+  background: var(--hero-bg);
+  border-bottom: 1px solid var(--hero-rule);
+  font-size: 11px;
+  color: var(--hero-ink-3);
+  padding: 5px 0;
+}
+.hero-upd-bar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.hero-upd-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--hero-accent); flex-shrink: 0;
+}
+
+/* ── MASTHEAD (legacy, replaced) ── */
+.masthead { display: none; }
+
+/* ── UPDATE BAR ── */
+.upd-bar {
+  background: var(--gold-soft);
+  border-bottom: 1px solid rgba(200,146,26,0.25);
+  font-size: 11.5px;
+  color: var(--gold);
+  padding: 6px 24px;
+}
+.upd-bar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.upd-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+/* ── SOURCES STRIP ── */
+.sources-strip { background: var(--hero-bg); border-bottom: 1px solid var(--hero-rule); }
+.sources-strip-inner {
+  max-width: 1280px; margin: 0 auto;
+  padding: 6px 32px;
+  display: flex; gap: 5px; flex-wrap: wrap; align-items: center;
+}
+.src-label {
+  font-size: 9px; text-transform: uppercase; letter-spacing: 0.16em;
+  color: var(--hero-ink-3); margin-right: 6px; font-weight: 700;
+}
+.src-chip {
+  background: transparent;
+  color: var(--hero-ink-3);
+  border-radius: 2px; padding: 1px 8px;
+  font-size: 10px; font-weight: 500; letter-spacing: 0.04em;
+  border: 1px solid var(--hero-rule);
+}
+
+/* ── MAIN NAV (hidden, replaced by topnav) ── */
+nav.main-nav { display: none; }
+.nav-tab, .nav-sep, .nav-spacer { display: none; }
+
+/* ── PAGE BODY ── */
+.page-body {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 28px;
+}
+@media (max-width: 820px) {
+  .page-body { grid-template-columns: 1fr; gap: 20px; padding: 16px; }
+  .sidebar { display: none; }
+}
+
+/* ── SECTION HEADER ── */
+.section-hd {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--ink);
+}
+.section-hd-en { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--ink); }
+.section-hd-zh { font-family: 'Noto Serif TC', serif; font-size: 13px; color: var(--ink-3); }
+.section-hd-badge {
+  margin-left: auto;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--accent); text-transform: uppercase; opacity: 0.85;
+}
+.section-hd-badge.purple { color: var(--purple); }
+
+/* ── BRIEFING META BAR ── */
+.briefing-meta-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 12px 20px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  box-shadow: var(--shadow);
+}
+.briefing-meta-time {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+.briefing-badge {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  padding: 2px 8px;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+.briefing-badge.live { background: var(--accent); color: white; }
+.briefing-summary-box {
+  background: var(--blue-soft);
+  border-left: 3px solid var(--blue);
+  padding: 10px 16px;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.75;
+  margin-bottom: 20px;
+  border-radius: 0 2px 2px 0;
+}
+
+/* ── REGION TABS (inside briefing) ── */
+.region-tabs-bar {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0;
+}
+.region-tab {
+  padding: 7px 12px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--ink-3);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.region-tab:hover { color: var(--ink); }
+.region-tab.active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 600; }
+.region-panel { display: none; }
+.region-panel.active { display: block; }
+
+/* ── TOPIC CARDS ── */
+.topic-item {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 18px 22px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+  transition: border-color 0.15s;
+}
+.topic-item:hover { border-color: var(--rule-2); }
+.topic-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+.topic-num { font-size: 11px; color: var(--ink-3); font-weight: 600; font-variant-numeric: tabular-nums; }
+.topic-tag {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.09em;
+  padding: 2px 7px; border-radius: 2px; text-transform: uppercase;
+}
+.topic-tag.geo { background: var(--blue-soft); color: var(--blue); }
+.topic-tag.politics { background: var(--gold-soft); color: var(--gold); }
+.topic-tag.economy { background: var(--green-soft); color: var(--green); }
+.topic-tag.security { background: var(--accent-soft); color: var(--accent); }
+.topic-tag.climate { background: var(--green-soft); color: var(--green); }
+.topic-tag.society { background: var(--rule-2); color: var(--ink-3); }
+.topic-tag.technology { background: var(--purple-soft); color: var(--purple); }
+.topic-tag.congress { background: var(--purple-soft); color: var(--purple); }
+.topic-headline {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.topic-body {
+  font-size: 13.5px;
+  color: var(--ink-2);
+  line-height: 1.8;
+  margin-bottom: 10px;
+}
+.topic-links { display: flex; flex-direction: column; gap: 4px; }
+.topic-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--blue);
+  text-decoration: none;
+  line-height: 1.5;
+  padding: 2px 0;
+}
+.topic-link:hover { color: var(--accent); }
+.topic-link .src {
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  background: var(--blue-soft);
+  padding: 1px 5px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── CONGRESS SECTION ── */
+.congress-section { margin-bottom: 28px; }
+.congress-section-hd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--purple-soft);
+}
+.congress-section-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--purple);
+  letter-spacing: 0.04em;
+}
+.congress-item {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--purple);
+  border-radius: 0 2px 2px 0;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  box-shadow: var(--shadow);
+}
+.congress-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  flex-wrap: wrap;
+}
+.congress-tag {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.09em;
+  padding: 2px 7px; border-radius: 2px; text-transform: uppercase;
+  background: var(--purple-soft); color: var(--purple);
+}
+.congress-tag.senate { background: #e8f0fc; color: #1a4a9e; }
+.congress-tag.house { background: #fce8e8; color: #9e1a1a; }
+.congress-bill-num {
+  font-size: 10.5px; font-weight: 700;
+  color: var(--ink-3); font-family: monospace; letter-spacing: 0.04em;
+}
+.congress-status {
+  font-size: 10px; color: var(--ink-3);
+  background: var(--rule-2); padding: 1px 6px; border-radius: 2px;
+  margin-left: auto;
+}
+.congress-headline {
+  font-size: 14.5px; font-weight: 600;
+  color: var(--ink); margin-bottom: 5px;
+  font-family: 'Noto Sans TC', sans-serif;
+}
+.congress-body { font-size: 13px; color: var(--ink-2); line-height: 1.75; margin-bottom: 8px; }
+.congress-links { display: flex; flex-direction: column; gap: 3px; }
+.congress-link {
+  font-size: 11px; color: var(--blue); text-decoration: none;
+  display: flex; align-items: center; gap: 4px;
+}
+.congress-link:hover { color: var(--purple); }
+.congress-link .src {
+  font-weight: 700; font-size: 9.5px; letter-spacing: 0.07em;
+  background: var(--purple-soft); color: var(--purple);
+  padding: 1px 4px; border-radius: 2px; flex-shrink: 0;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {}
+.sidebar-card {
+  background: var(--bg-card);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  margin-bottom: 18px;
+}
+.sidebar-hd {
+  background: var(--ink);
+  color: white;
+  padding: 10px 16px;
+  font-family: 'Noto Serif TC', serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+.sidebar-body { padding: 14px 16px; }
+.history-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px; cursor: pointer;
+  border-radius: 2px; margin-bottom: 4px;
+  border: 1px solid transparent;
+  transition: all 0.12s;
+}
+.history-item:hover, .history-item.active { background: var(--accent-soft); border-color: rgba(181,52,26,0.15); }
+.history-time { font-size: 12px; font-weight: 600; color: var(--ink); }
+.history-count { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
+.history-arr { font-size: 11px; color: var(--accent); flex-shrink: 0; }
+
+/* ── SOURCES SIDEBAR ── */
+.source-group { margin-bottom: 14px; }
+.source-group-label {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.13em; color: var(--ink-3); margin-bottom: 7px;
+}
+.source-list { display: flex; flex-wrap: wrap; gap: 4px; }
+.source-chip {
+  font-size: 10.5px; color: var(--ink-2); background: var(--rule-2);
+  padding: 2px 7px; border-radius: 2px;
+}
+
+/* ── EMPTY / ERROR STATES ── */
+.empty-state {
+  text-align: center; padding: 40px 20px;
+}
+.empty-icon { font-size: 32px; margin-bottom: 12px; }
+.empty-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--ink-2); }
+.empty-sub { font-size: 13px; color: var(--ink-3); }
+
+/* ── TABS (main) ── */
+#tab-briefings, #tab-history, #tab-congress { display: none; }
+#tab-briefings.active, #tab-history.active, #tab-congress.active { display: block; }
+
+/* ── LOADING ── */
+.loading-state { text-align: center; padding: 60px 24px; }
+.loading-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 20px; }
+.loading-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
+.loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes pulse { 0%,80%,100%{transform:scale(0.6);opacity:0.4} 40%{transform:scale(1);opacity:1} }
+.loading-text { font-size: 15px; font-weight: 600; color: var(--ink-2); margin-bottom: 8px; }
+.loading-sub { font-size: 12.5px; color: var(--ink-3); }
+
+/* ── FOOTER ── */
+footer {
+  text-align: center;
+  padding: 24px;
+  font-size: 11.5px;
+  color: var(--ink-3);
+  border-top: 1px solid var(--rule);
+  margin-top: 16px;
+}
+
+/* ── THEME TOGGLE ── */
+.theme-btn {
+  background: transparent; border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.45); border-radius: 2px;
+  padding: 4px 10px; font-size: 11px; cursor: pointer;
+  font-family: inherit; transition: all 0.15s;
+}
+.theme-btn:hover { color: rgba(255,255,255,0.8); border-color: rgba(255,255,255,0.4); }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-inner">
+    <div class="topnav-logo">
+      國際情勢彙整
+      <span class="topnav-logo-sub">Global Digest</span>
+    </div>
+    <div class="topnav-sep"></div>
+    <button class="topnav-link active" id="tnav-briefings" onclick="showMainTab('briefings')">每小時報告</button>
+    <button class="topnav-link congress-tab" id="tnav-congress" onclick="showMainTab('congress')">美國國會</button>
+    <button class="topnav-link" id="tnav-history" onclick="showMainTab('history')">歷史報告</button>
+    <div class="topnav-divider"></div>
+    <button class="topnav-link" onclick="showMainTab('sources')" style="display:none">新聞來源</button>
+    <button class="topnav-lang" onclick="toggleTheme()">🌓</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-eyebrow">International Intelligence</div>
+      <div class="hero-headline">每一小時，<br>看懂世界的變化。</div>
+      <p class="hero-sub">
+        從全球九大新聞來源，梳理事件、脈絡與下一步。<br>
+        每小時彙整近兩小時新聞，以繁體中文為你解讀。
+      </p>
+      <div class="hero-meta">
+        <span class="hero-meta-item">台北時間 <strong>UTC+8</strong></span>
+        <span class="hero-meta-item">最後更新：<strong id="last-upd-time">載入中…</strong></span>
+        <span class="hero-meta-item" id="current-date"></span>
+      </div>
+    </div>
+    <!-- Wire-frame globe SVG -->
+    <svg class="hero-globe" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="color:var(--hero-accent)">
+      <circle cx="200" cy="200" r="160" stroke="currentColor" stroke-width="0.8" opacity="0.4"/>
+      <!-- Latitude lines -->
+      <ellipse cx="200" cy="200" rx="160" ry="40" stroke="currentColor" stroke-width="0.6" opacity="0.3"/>
+      <ellipse cx="200" cy="200" rx="160" ry="80" stroke="currentColor" stroke-width="0.6" opacity="0.3"/>
+      <ellipse cx="200" cy="200" rx="160" ry="120" stroke="currentColor" stroke-width="0.6" opacity="0.3"/>
+      <ellipse cx="200" cy="200" rx="160" ry="155" stroke="currentColor" stroke-width="0.6" opacity="0.25"/>
+      <ellipse cx="200" cy="160" rx="160" ry="40" stroke="currentColor" stroke-width="0.6" opacity="0.25"/>
+      <ellipse cx="200" cy="240" rx="160" ry="40" stroke="currentColor" stroke-width="0.6" opacity="0.25"/>
+      <!-- Longitude lines -->
+      <ellipse cx="200" cy="200" rx="40" ry="160" stroke="currentColor" stroke-width="0.6" opacity="0.3"/>
+      <ellipse cx="200" cy="200" rx="80" ry="160" stroke="currentColor" stroke-width="0.6" opacity="0.3"/>
+      <ellipse cx="200" cy="200" rx="120" ry="160" stroke="currentColor" stroke-width="0.6" opacity="0.3"/>
+      <ellipse cx="200" cy="200" rx="155" ry="160" stroke="currentColor" stroke-width="0.6" opacity="0.25"/>
+      <!-- Tilted rings (orbital style) -->
+      <ellipse cx="200" cy="200" rx="195" ry="55" stroke="currentColor" stroke-width="1" opacity="0.35" transform="rotate(-20 200 200)"/>
+      <ellipse cx="200" cy="200" rx="195" ry="55" stroke="currentColor" stroke-width="0.7" opacity="0.2" transform="rotate(30 200 200)"/>
+      <!-- Center dot -->
+      <circle cx="200" cy="200" r="3" fill="currentColor" opacity="0.4"/>
+    </svg>
+  </div>
+  <div class="hero-coords">
+    25.03° N / 121.56° E<br>
+    <span style="opacity:0.6">GLOBAL PERSPECTIVE<br>LOCAL CLARITY</span>
+  </div>
+</section>
+
+<!-- SOURCES STRIP -->
+<div class="sources-strip">
+  <div class="sources-strip-inner">
+    <span class="src-label">來源</span>
+    <span class="src-chip">Reuters</span>
+    <span class="src-chip">AP</span>
+    <span class="src-chip">AFP</span>
+    <span class="src-chip">BBC</span>
+    <span class="src-chip">DW</span>
+    <span class="src-chip">France24</span>
+    <span class="src-chip">NHK</span>
+    <span class="src-chip">Yonhap</span>
+    <span class="src-chip">CNA</span>
+    <span class="src-chip">White House</span>
+    <span class="src-chip">State Dept</span>
+    <span class="src-chip">DoD</span>
+    <span class="src-chip">Treasury</span>
+    <span class="src-chip">Commerce</span>
+    <span class="src-chip">USTR</span>
+    <span class="src-chip">Congress.gov</span>
+    <span class="src-chip">X / Twitter</span>
+  </div>
+</div>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+  <main>
+
+    <!-- ════ TAB: 國際新聞 ════ -->
+    <div id="tab-briefings" class="active">
+      <div class="section-hd">
+        <span class="section-hd-en">International Briefing</span>
+        <span class="section-hd-zh">國際新聞彙整</span>
+        <span class="section-hd-badge" id="briefing-badge">彙整</span>
+      </div>
+      <div id="briefing-container"><!-- rendered by JS --></div>
+    </div>
+
+    <!-- ════ TAB: 美國國會 ════ -->
+    <div id="tab-congress">
+      <div class="section-hd">
+        <span class="section-hd-en">U.S. Congress Watch</span>
+        <span class="section-hd-zh">美國國會動態</span>
+        <span class="section-hd-badge purple">涉台法案</span>
+      </div>
+      <div id="congress-container"><!-- rendered by JS --></div>
+    </div>
+
+    <!-- ════ TAB: 歷史彙整 ════ -->
+    <div id="tab-history">
+      <div class="section-hd">
+        <span class="section-hd-en">Archive</span>
+        <span class="section-hd-zh">歷史彙整</span>
+      </div>
+      <div id="history-container"></div>
+    </div>
+
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <!-- Sources -->
+    <div class="sidebar-card">
+      <div class="sidebar-hd">新聞來源</div>
+      <div class="sidebar-body">
+        <div class="source-group">
+          <div class="source-group-label">國際通訊社</div>
+          <div class="source-list">
+            <span class="source-chip">Reuters</span>
+            <span class="source-chip">AP News</span>
+            <span class="source-chip">AFP</span>
+          </div>
+        </div>
+        <div class="source-group">
+          <div class="source-group-label">歐美廣電</div>
+          <div class="source-list">
+            <span class="source-chip">BBC</span>
+            <span class="source-chip">DW</span>
+            <span class="source-chip">France 24</span>
+          </div>
+        </div>
+        <div class="source-group">
+          <div class="source-group-label">亞洲媒體</div>
+          <div class="source-list">
+            <span class="source-chip">NHK World</span>
+            <span class="source-chip">韓聯社</span>
+            <span class="source-chip">中央社</span>
+          </div>
+        </div>
+        <div class="source-group">
+          <div class="source-group-label">美國政府</div>
+          <div class="source-list">
+            <span class="source-chip">白宮</span>
+            <span class="source-chip">國務院</span>
+            <span class="source-chip">國防部</span>
+            <span class="source-chip">財政部</span>
+            <span class="source-chip">商務部</span>
+            <span class="source-chip">USTR</span>
+          </div>
+        </div>
+        <div class="source-group">
+          <div class="source-group-label">國會與即時</div>
+          <div class="source-list">
+            <span class="source-chip">Congress.gov</span>
+            <span class="source-chip">X / Twitter</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="sidebar-card" id="history-sidebar-card">
+      <div class="sidebar-hd">歷史彙整</div>
+      <div class="sidebar-body" id="history-sidebar-list">
+        <div style="font-size:12px;color:var(--ink-3)">載入中…</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<footer>
+  Global Digest · 國際情勢彙整 · 每小時自動更新<br>
+  資料來源：Reuters · AP · AFP · BBC · DW · France24 · NHK · Yonhap · CNA · 美國政府官方聲明 · X/Twitter
+</footer>
+
+<script>
+// ════════════════════════════════════════════════════════
+// EMBEDDED DATA
+// Structure:
+//   EMBEDDED_HISTORY: array of briefing objects (newest first)
+//     each briefing: { generated_at, period_start, period_end, date, is_embedded, summary, regions, congress }
+//     regions: { north_america, latin_america, europe, middle_east, southeast_asia, northeast_asia, oceania }
+//       each region: [ { id, category, headline, body, links:[{source,title,url}] } ]
+//     congress: { floor_schedule, committees, bills, member_statements }
+//       bills: [ { bill_num, chamber, title, status, summary, taiwan_relevance, links } ]
+//       committees: [ { name, date, topic, summary, links } ]
+//       member_statements: [ { member, party, chamber, quote, context, links } ]
+// ════════════════════════════════════════════════════════
+
+const EMBEDDED_HISTORY = [{
+  "generated_at": "18:00",
+  "period_start": "16:00",
+  "period_end": "18:00",
+  "date": "2026年10月14日",
+  "is_embedded": true,
+  "summary": "10月14日傍晚國際局勢：中東緊張持續，胡塞武裝飛彈打擊沙烏地阿美石油總部、伊朗宣稱掌控荷姆茲海峽；歐洲方面俄烏戰場無人機壓力未減，波羅的海海底電纜疑遭破壞；東北亞IMF下調中國成長預測並上修台韓AI供應鏈前景；美國國會多項台海相關法案持續推進。",
+  "regions": {
+    "north_america": [
+      {
+        "id": 1, "category": "politics",
+        "headline": "IMF：美國成長2.2%、通膨升壓新挑戰",
+        "body": "IMF《世界經濟展望》（10月13日）預測美國2026年GDP成長2.2%，較7月估值小幅上修，但警告關稅通膨疊加聯準會維持高利率，可能使成長動能在2027年顯著放緩。財政部長發表回應聲明，強調就業市場韌性。川普政府貿易辦公室（USTR）同日對中國電動車及半導體追加301條款調查，為今年第三輪。",
+        "links": [
+          {"source": "IMF", "title": "World Economic Outlook October 2026", "url": "https://www.imf.org/en/Publications/WEO"},
+          {"source": "UPI", "title": "IMF: Global growth holding up well against geopolitical headwinds", "url": "https://upi.com/Top_News/World-News/2026/10/13/IMF-says-global-economy-holding-up/4421791886039"}
+        ]
+      },
+      {
+        "id": 2, "category": "economy",
+        "headline": "美財政部擴大對伊朗實體制裁",
+        "body": "美國財政部海外資產控制辦公室（OFAC）10月14日宣布，新增18個伊朗實體及個人至SDN清單，主要涉及石油非法出口與革命衛隊採購網絡。制裁同時涵蓋三家協助伊朗原油規避制裁的第三國中間商，商務部亦同步更新出口管制名單（Entity List），限制對伊朗雙用途商品出口。",
+        "links": [
+          {"source": "Treasury/OFAC", "title": "OFAC Actions (SDN List)", "url": "https://home.treasury.gov/policy-issues/financial-sanctions/recent-actions"},
+          {"source": "Gulf News", "title": "US-Iran war latest: Hormuz tensions and new sanctions", "url": "https://gulfnews.com/world/mena/us-iran-war-latest-hormuz-tensions-trump-comments-and-uae-flight-updates-1.500653223"}
+        ]
+      }
+    ],
+    "latin_america": [
+      {
+        "id": 1, "category": "politics",
+        "headline": "委內瑞拉：馬杜羅政府拘押反對派議員",
+        "body": "委內瑞拉當局10月13日逮捕至少4名反對黨議員，理由為「勾結外國勢力圖謀政變」。美洲國家組織（OAS）發表聲明，要求馬杜羅政府立即釋放被拘人士，並警告將提交人權法庭審查。美國國務院亦宣布對委內瑞拉安全部門官員追加制裁，並重申不承認馬杜羅政府2025年選舉結果。",
+        "links": [
+          {"source": "AP News", "title": "Venezuela arrests opposition legislators", "url": "https://apnews.com/world-news/venezuela"},
+          {"source": "State Dept", "title": "Venezuela Sanctions and Democracy Support", "url": "https://www.state.gov/venezuela/"}
+        ]
+      },
+      {
+        "id": 2, "category": "economy",
+        "headline": "巴西雷亞爾重貶：利率困境下的財政壓力",
+        "body": "巴西雷亞爾兌美元本週再度走弱，觸及1美元兌5.89雷亞爾的近期低點，主因為國會通過財政支出擴張法案，市場對財政紀律憂慮加深。巴西央行面臨通膨與外匯雙重壓力，市場預期10月底例會或再升息2碼（50個基點）。全球油價上漲雖對石油出口有利，但對通膨的衝擊抵銷了貿易紅利。",
+        "links": [
+          {"source": "Reuters", "title": "Brazil real weakens on fiscal spending concerns", "url": "https://www.reuters.com/markets/currencies/"},
+          {"source": "Euronews", "title": "IMF forecasts 3.1% global growth in 2026", "url": "https://euronews.com/2026/10/13/imf-forecasts-31-global-growth-in-2026-with-eurozone-at-11"}
+        ]
+      }
+    ],
+    "europe": [
+      {
+        "id": 1, "category": "security",
+        "headline": "英制裁伊朗革命衛隊：Fairford事件外交風暴",
+        "body": "英國首相安迪·伯納姆10月12日宣布，RAF Fairford 基地陰謀「幾乎可以確定」由伊朗革命衛隊直接指揮，制裁反情報主管魯霍拉·巴茲根迪（Ruhollah Bazghandi）及一名關聯人員。外交大臣召見伊朗大使；29國聯合聲明譴責伊朗境外暴力行動。伊朗否認所有指控，反指英方提供偽造情報。",
+        "links": [
+          {"source": "Al Jazeera", "title": "UK blames Iran for airbase plot, sanctions two Iranian nationals", "url": "https://www.aljazeera.com/news/2026/10/12/uk-blames-iran-for-airbase-plot-sanctions-two-iranian-nationals"},
+          {"source": "Al-Monitor", "title": "British airbase plot almost certainly directed by Iran Guards – UK PM", "url": "https://www.al-monitor.com/originals/2026/10/british-airbase-plot-almost-certainly-directed-iran-guards-uk-pm"}
+        ]
+      },
+      {
+        "id": 2, "category": "geo",
+        "headline": "俄烏戰場：無人機持續、波海電纜疑遭破壞",
+        "body": "俄烏戰事持續，烏克蘭無人機持續飛抵莫斯科周邊，俄方以飛彈及無人機轟炸哈爾科夫、蘇梅等地。拉脫維亞與立陶宛之間的波羅的海海底通訊電纜疑遭蓄意破壞，拉脫維亞調查人員已登上在場可疑船隻查驗，外界廣泛懷疑涉及俄羅斯影子艦隊操作。",
+        "links": [
+          {"source": "Al Jazeera", "title": "Russia-Ukraine war: List of key events, day 1,411", "url": "https://www.yahoo.com/news/articles/russia-ukraine-war-list-key-043606976.html"},
+          {"source": "Geopolitics Explained", "title": "This Week in Geopolitics – 11th October 2026", "url": "https://geopoliticsexplained.substack.com/p/this-week-in-geopolitics-11th-october"}
+        ]
+      }
+    ],
+    "middle_east": [
+      {
+        "id": 1, "category": "security",
+        "headline": "胡塞飛彈命中沙烏地阿美達蘭總部",
+        "body": "葉門胡塞武裝10月14日以彈道飛彈打擊沙烏地阿美公司位於達蘭（Dhahran）的總部辦公大樓，沙烏地能源部確認建物頂層受損，無人員傷亡。胡塞武裝稱此為報復沙烏地空軍打擊胡塞控制區能源設施的行動。利雅德機場亦持續承受飛彈及無人機壓力。",
+        "links": [
+          {"source": "Euronews / inkl", "title": "Latest news bulletin October 14th 2026 morning", "url": "https://www.inkl.com/news/latest-news-bulletin-october-14th-2026-morning"},
+          {"source": "Khaleej Times", "title": "Houthis claim attacks on Riyadh airport", "url": "https://www.khaleejtimes.com/world/gulf/yemen-houthis-claim-attacks-riyadh-king-khalid-international-airport-oct-2026"}
+        ]
+      },
+      {
+        "id": 2, "category": "security",
+        "headline": "伊朗宣稱掌控荷姆茲、威脅擊沉美艦",
+        "body": "伊朗革命衛隊海軍司令公開宣稱對波斯灣及荷姆茲海峽擁有完整控制權，警告任何試圖進入的美國軍艦將遭擊沉。同日伊朗召見英國大使就 Fairford 事件提出強烈抗議，並警告英方若持續指控，兩國關係將面臨嚴重衝擊。",
+        "links": [
+          {"source": "Gulf News", "title": "US-Iran war latest: Hormuz tensions, Trump comments and UAE flight updates", "url": "https://gulfnews.com/world/mena/us-iran-war-latest-hormuz-tensions-trump-comments-and-uae-flight-updates-1.500653223"},
+          {"source": "Al Jazeera", "title": "UK blames Iran for airbase plot", "url": "https://www.aljazeera.com/news/2026/10/12/uk-blames-iran-for-airbase-plot-sanctions-two-iranian-nationals"}
+        ]
+      },
+      {
+        "id": 3, "category": "politics",
+        "headline": "以色列大選倒數13天：納坦雅胡追平在野黨",
+        "body": "以色列定於10月27日舉行國會大選，最新民調顯示納坦雅胡與艾森科特（Yashar黨）支持率各佔38%，局勢膠著。反納坦雅胡陣營料獲60席，距組閣門檻僅差一席。選民最關注多線戰爭處置（32%）及通貨膨脹（25%）。",
+        "links": [
+          {"source": "WION News", "title": "Netanyahu poll numbers rise amid internal turmoil ahead of Israel election", "url": "https://www.wionews.com/world/netanyahu-poll-rise-israel-election-gadi-eisenkot-1785429474400"},
+          {"source": "i24 News", "title": "Israeli elections set for October 27", "url": "https://www.i24news.tv/en/news/israel-election-s-2026/artc-israeli-elections-set-for-next-october-27"}
+        ]
+      }
+    ],
+    "southeast_asia": [
+      {
+        "id": 1, "category": "economy",
+        "headline": "東南亞部長馬尼拉集會：伊朗衝突能源應對",
+        "body": "東南亞多國外長及能源部長10月於馬尼拉召開緊急會議，討論伊朗衝突對石油供應鏈的衝擊。越南、菲律賓、泰國等高度依賴荷姆茲輸油的國家呼籲建立區域緊急儲備共享機制。ASEAN秘書長表示，成員國平均能源進口依存度達72%，荷姆茲危機每持續一週，即導致年通膨推升約0.3個百分點。",
+        "links": [
+          {"source": "Daily Pioneer", "title": "Southeast Asian ministers gather in Manila amid Iran conflict", "url": "https://dailypioneer.com/news/slug-lite/southeast-asian-ministers-gather-in-manila-amid-iran-conflict?year=2026"},
+          {"source": "ISSI", "title": "Issue brief: Iran war and Southeast Asia's energy fragility", "url": "https://issi.org.pk/issue-brief-on-the-war-against-iran-and-the-fragility-of-southeast-asias-energy-responses/"}
+        ]
+      },
+      {
+        "id": 2, "category": "geo",
+        "headline": "菲律賓：中國在黃岩島裝設水下屏障",
+        "body": "路透社取得衛星影像，顯示中國在菲律賓主張的黃岩島（Scarborough Shoal）周邊裝設水下屏障，有效阻止菲律賓漁船進入。菲律賓外交部提出正式抗議，並在美菲《相互防禦條約》架構下知會美方。中方未有回應，外界分析認為此舉為近兩年中國在南海漸進式「灰色地帶行動」升級的又一步。",
+        "links": [
+          {"source": "TaiwanPlus / Reuters", "title": "Satellite images show Chinese barrier at disputed Scarborough Shoal", "url": "https://www.taiwanplus.com/news/world-news/asia-pacific/260415014/satellite-images-show-chinese-barrier-at-disputed-scarborough-shoal-reuters"},
+          {"source": "Breaking Defense", "title": "China to once again dominate the headlines: 2026 preview for the Indo-Pacific", "url": "https://breakingdefense.com/2026/01/china-to-once-again-dominate-the-headlines-2026-preview-for-the-indo-pacific/"}
+        ]
+      }
+    ],
+    "northeast_asia": [
+      {
+        "id": 1, "category": "economy",
+        "headline": "IMF：台韓AI供應鏈成長領先全球",
+        "body": "IMF《世界經濟展望》指出，台灣2026年成長率預測上修至4.8%，南韓2.9%，均顯著高於全球3.1%均值，主因為AI伺服器及半導體需求持續強勁。IMF同時下調中國成長預測至4.5%（-0.5pp），指出內需疲軟及房地產持續去槓桿為主因。報告警告AI紅利呈現「兩極分化」，未能進入AI供應鏈的低收入國家面臨更深困境。",
+        "links": [
+          {"source": "UPI", "title": "IMF: Global growth holding up well against geopolitical headwinds", "url": "https://upi.com/Top_News/World-News/2026/10/13/IMF-says-global-economy-holding-up/4421791886039"},
+          {"source": "The Star", "title": "Global economy to decelerate to 3.1% in 2026", "url": "https://thestar.com.my/business/business-news/2026/10/13/global-economy-to-decelerate-to-31-in-2026-in-2026-before-recovering-to-34-in-2027---imf"}
+        ]
+      },
+      {
+        "id": 2, "category": "geo",
+        "headline": "台灣海巡：首次記錄中國侵入太平島禁止水域",
+        "body": "台灣海巡署報告，中國海警船隻近期首次記錄侵入太平島（Itu Aba）海岸警衛設定的禁止水域，海巡艦艇隨即廣播警告並伴航。太平島為台灣在南沙群島唯一實際控制島礁，此事件被視為中國持續擴大「灰色地帶行動」至南海多個海域的一部分。",
+        "links": [
+          {"source": "TaiwanPlus", "title": "Coast guard reports first Chinese intrusion into Taiping's prohibited waters", "url": "https://www.taiwanplus.com/news/taiwan-news/taiwan-china-relations/260611023/coast-guard-reports-first-chinese-intrusion-into-taipings-prohibited-waters"},
+          {"source": "GlobalSecurity.org", "title": "Taiwan/China news index 2026", "url": "https://www.globalsecurity.org/wmd/library/news/taiwan/2026/index_07.htm"}
+        ]
+      }
+    ],
+    "oceania": [
+      {
+        "id": 1, "category": "geo",
+        "headline": "澳洲：與美日深化三邊印太安全合作",
+        "body": "澳洲國防部長10月14日在坎培拉與到訪的美國及日本國防代表舉行三邊會議，確認深化「奧庫斯」（AUKUS）核潛艦計畫時程，並同意在荷姆茲危機期間強化印太海上巡邏協調。澳洲總理同日發表聲明，重申南海航行自由立場，並呼籲中國尊重仲裁庭2016年裁決。",
+        "links": [
+          {"source": "AP News", "title": "AUKUS nuclear submarine cooperation latest 2026", "url": "https://apnews.com/hub/aukus"},
+          {"source": "Breaking Defense", "title": "Indo-Pacific security 2026 preview", "url": "https://breakingdefense.com/2026/01/china-to-once-again-dominate-the-headlines-2026-preview-for-the-indo-pacific/"}
+        ]
+      }
+    ]
+  },
+  "congress": {
+    "floor_schedule": "第119屆國會本週（10月12-18日）參眾兩院均進入中期選舉前選區公關期（district work period），預計至10月20日後恢復全會議事。",
+    "committees": [
+      {
+        "name": "參議院外交關係委員會",
+        "date": "待定（11月初選後）",
+        "topic": "多項台海及印太相關法案議程排程中",
+        "summary": "委員會已在2026年7月27日核准多項涉台法案進入立法日曆（Legislative Calendar），包括 S.4259 藍天台灣法、S.4610 太平洋 POWER 法及 S.4600 南海戰略法。委員會主席表示，預計選後臨時會期（lame-duck session）將推動多項安全法案表決。",
+        "links": [
+          {"source": "LegiList", "title": "Taiwan-related bills in 119th Congress", "url": "https://legilist.com/topics/taiwan/"}
+        ]
+      }
+    ],
+    "bills": [
+      {
+        "bill_num": "S. 4259", "chamber": "senate",
+        "title": "Blue Skies for Taiwan Act of 2026（藍天台灣法）",
+        "status": "列入參議院立法日曆第 507 號（2026年7月27日）",
+        "summary": "授權聯邦航空總署（FAA）與台灣民航當局建立正式雙邊航空安全協議，並促進台灣加入國際民航組織（ICAO）相關技術論壇。同名眾議院版本 H.R. 9042 已送交眾議院外交事務委員會審查。",
+        "taiwan_relevance": true,
+        "links": [
+          {"source": "LegiList", "title": "S.4259 Blue Skies for Taiwan Act", "url": "https://legilist.com/topics/taiwan/"},
+          {"source": "Congress.gov", "title": "Senate Legislative Calendar", "url": "https://www.congress.gov/"}
+        ]
+      },
+      {
+        "bill_num": "H.R. 3563", "chamber": "house",
+        "title": "Taiwan PLUS Act（台灣夥伴、聯繫與共同繁榮法）",
+        "status": "眾議院外交事務委員會以 45-0 票通過替代版本（2026年5月13日）",
+        "summary": "強化美台經貿及技術合作框架，授權美國貿易代表辦公室（USTR）就台灣市場准入展開正式雙邊磋商，並要求國務院每年就台灣國際參與情況向國會提交報告。",
+        "taiwan_relevance": true,
+        "links": [
+          {"source": "LegiList", "title": "HR.3563 Taiwan PLUS Act", "url": "https://legilist.com/topics/taiwan/"},
+          {"source": "Congress.gov", "title": "HR 3563 Text", "url": "https://www.congress.gov/"}
+        ]
+      },
+      {
+        "bill_num": "S. 4610", "chamber": "senate",
+        "title": "Pacific POWER Act（太平洋夥伴、機遇、韌性與繁榮法）",
+        "status": "列入參議院立法日曆第 513 號（2026年7月27日）",
+        "summary": "授權美國在印太地區加大基礎設施、能源及數位連接投資，以制衡中國「一帶一路」倡議。明確要求任何計畫須考量台灣海峽及南海穩定情況，並禁止向涉及脅迫台灣的實體提供美國資金。",
+        "taiwan_relevance": true,
+        "links": [
+          {"source": "LegiList", "title": "S.4610 Pacific POWER Act", "url": "https://legilist.com/topics/taiwan/"},
+          {"source": "Congress.gov", "title": "Senate Calendar No. 513", "url": "https://www.congress.gov/"}
+        ]
+      },
+      {
+        "bill_num": "H.R. 1531", "chamber": "house",
+        "title": "PROTECT Taiwan Act（保護台灣法）",
+        "status": "已送參議院外交關係委員會（2026年2月11日）",
+        "summary": "授權總統若中國對台動武或進行全面封鎖，得啟動一系列對中國的嚴厲制裁，並要求拓展台灣在美軍售程序的適用範圍，將台灣更近似於「主要非北約盟友（MNNA）」地位對待。",
+        "taiwan_relevance": true,
+        "links": [
+          {"source": "LegiList", "title": "HR.1531 PROTECT Taiwan Act", "url": "https://legilist.com/topics/taiwan/"},
+          {"source": "Congress.gov", "title": "HR 1531 status", "url": "https://www.congress.gov/"}
+        ]
+      },
+      {
+        "bill_num": "S. 4600", "chamber": "senate",
+        "title": "South China Sea Strategy Act of 2026（南海戰略法）",
+        "status": "列入參議院立法日曆第 512 號（2026年7月27日）",
+        "summary": "要求國務院制定並每年更新南海整體戰略，涵蓋外交、經濟及軍事面向，並提供相關資金支援印太盟友的海上執法能力建構。特別要求策略應考量台灣海峽及台灣安全情況。",
+        "taiwan_relevance": true,
+        "links": [
+          {"source": "LegiList", "title": "S.4600 South China Sea Strategy Act", "url": "https://legilist.com/topics/taiwan/"},
+          {"source": "Congress.gov", "title": "Senate Calendar No. 512", "url": "https://www.congress.gov/"}
+        ]
+      }
+    ],
+    "member_statements": [
+      {
+        "member": "參議院外交關係委員會（多位成員）",
+        "party": "兩黨",
+        "chamber": "senate",
+        "quote": "台灣海峽穩定是我們在印太最核心的利益之一，任何縮減對台軍售或外交承諾的舉措都是極其危險的錯誤。",
+        "context": "委員會2026年7月通過多項涉台法案後的聯合聲明；呼籲行政部門加快落實台灣政策法框架。",
+        "links": [
+          {"source": "Senate Foreign Relations", "title": "Committee legislation Taiwan", "url": "https://www.foreign.senate.gov/legislation/s37"}
+        ]
+      }
+    ]
+  }
+}];
+
+// ── RUNTIME STORE ──
+let briefingHistory = [];
+try { briefingHistory = JSON.parse(localStorage.getItem('gd_history_v3') || '[]'); } catch(e) {}
+
+// ── REGION CONFIG ──
+const REGIONS = [
+  { key: 'north_america', label: '北美', flag: '🇺🇸' },
+  { key: 'latin_america', label: '中南美', flag: '🌎' },
+  { key: 'europe',        label: '歐洲',   flag: '🇪🇺' },
+  { key: 'middle_east',   label: '中東',   flag: '🌙' },
+  { key: 'southeast_asia',label: '東南亞', flag: '🌏' },
+  { key: 'northeast_asia',label: '東北亞', flag: '🗾' },
+  { key: 'oceania',       label: '大洋洲', flag: '🦘' },
+];
+
+const CAT_LABELS = {
+  geo: ['地緣政治', 'geo'], geopolitics: ['地緣政治', 'geo'],
+  politics: ['政治外交', 'politics'],
+  economy: ['經濟金融', 'economy'],
+  security: ['安全防務', 'security'],
+  climate: ['氣候環境', 'climate'],
+  society: ['社會文化', 'society'],
+  technology: ['科技', 'technology'],
+  congress: ['國會動態', 'congress'],
+};
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── MAIN TAB SWITCHING ──
+function showMainTab(tab) {
+  document.getElementById('tab-briefings').classList.toggle('active', tab === 'briefings');
+  document.getElementById('tab-congress').classList.toggle('active', tab === 'congress');
+  document.getElementById('tab-history').classList.toggle('active', tab === 'history');
+  // Update topnav active state
+  ['briefings','congress','history'].forEach(t => {
+    const el = document.getElementById('tnav-' + t);
+    if (el) el.classList.toggle('active', t === tab);
+  });
+  if (tab === 'history') renderHistory();
+  if (tab === 'congress') renderCongress(getCurrentData());
+}
+
+// ── GET CURRENT DATA ──
+function getCurrentData() {
+  if (briefingHistory.length > 0) return briefingHistory[0];
+  return EMBEDDED_HISTORY[0];
+}
+
+// ── RENDER BRIEFING (region-tabbed) ──
+function renderBriefing(data, container) {
+  const isLive = !data.is_embedded;
+  const badge = document.getElementById('briefing-badge');
+  if (badge) { badge.textContent = isLive ? '● 即時' : '● 彙整'; badge.classList.toggle('live', isLive); }
+
+  // Meta bar
+  let html = `
+    <div class="briefing-meta-bar">
+      <span class="briefing-meta-time">📅 ${escHtml(data.date)} &nbsp; ${escHtml(data.period_start)} – ${escHtml(data.period_end)}</span>
+      <span class="briefing-badge${isLive ? ' live' : ''}">${isLive ? '● 最新' : '● 彙整'}</span>
+    </div>`;
+
+  // Summary
+  if (data.summary) {
+    html += `<div class="briefing-summary-box">${escHtml(data.summary)}</div>`;
+  }
+
+  // Region tabs
+  const regions = data.regions || {};
+  const availableRegions = REGIONS.filter(r => regions[r.key] && regions[r.key].length > 0);
+  if (availableRegions.length > 0) {
+    html += `<div class="region-tabs-bar">`;
+    availableRegions.forEach((r, i) => {
+      html += `<button class="region-tab${i===0?' active':''}" onclick="switchRegion(this,'region-${r.key}')">${r.flag} ${r.label}</button>`;
+    });
+    html += `</div>`;
+
+    availableRegions.forEach((r, i) => {
+      html += `<div class="region-panel${i===0?' active':''}" id="region-${r.key}">`;
+      (regions[r.key] || []).forEach(t => {
+        html += renderTopicItem(t);
+      });
+      html += `</div>`;
+    });
+  } else if (data.topics) {
+    // fallback: flat topics list (old format)
+    (data.topics || []).forEach(t => { html += renderTopicItem(t); });
+  }
+
+  container.innerHTML = html;
+}
+
+function renderTopicItem(t) {
+  const [catLabel, catClass] = CAT_LABELS[t.category] || [t.category, ''];
+  const linksHtml = (t.links || []).map(l =>
+    `<a class="topic-link" href="${escHtml(l.url)}" target="_blank" rel="noopener noreferrer">
+      <span class="src">${escHtml(l.source)}</span> · ${escHtml((l.title || '原文連結').slice(0,50))}
+    </a>`
+  ).join('');
+  return `<div class="topic-item">
+    <div class="topic-meta">
+      <span class="topic-num">${t.id}.</span>
+      <span class="topic-tag ${catClass}">${catLabel}</span>
+    </div>
+    <div class="topic-headline">${escHtml(t.headline)}</div>
+    <div class="topic-body">${escHtml(t.body)}</div>
+    ${linksHtml ? `<div class="topic-links">${linksHtml}</div>` : ''}
+  </div>`;
+}
+
+function switchRegion(btn, panelId) {
+  btn.closest('.page-body, main, #tab-briefings').querySelectorAll('.region-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.region-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById(panelId);
+  if (panel) panel.classList.add('active');
+}
+
+// ── RENDER CONGRESS ──
+function renderCongress(data) {
+  const container = document.getElementById('congress-container');
+  if (!data || !data.congress) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🏛️</div><div class="empty-title">尚無國會動態</div><div class="empty-sub">下次更新時將同步載入。</div></div>`;
+    return;
+  }
+  const c = data.congress;
+  let html = '';
+
+  // Floor schedule
+  if (c.floor_schedule) {
+    html += `<div class="congress-section">
+      <div class="congress-section-hd"><span class="congress-section-title">📅 全會議事日程</span></div>
+      <div class="congress-item">
+        <div class="congress-body">${escHtml(c.floor_schedule)}</div>
+      </div>
+    </div>`;
+  }
+
+  // Committees
+  if (c.committees && c.committees.length > 0) {
+    html += `<div class="congress-section"><div class="congress-section-hd"><span class="congress-section-title">🏛️ 委員會動態</span></div>`;
+    c.committees.forEach(cmte => {
+      const linksHtml = (cmte.links || []).map(l =>
+        `<a class="congress-link" href="${escHtml(l.url)}" target="_blank" rel="noopener noreferrer"><span class="src">${escHtml(l.source)}</span> ${escHtml((l.title||'').slice(0,50))}</a>`
+      ).join('');
+      html += `<div class="congress-item">
+        <div class="congress-item-meta">
+          <span class="congress-tag">${escHtml(cmte.name)}</span>
+          <span class="congress-bill-num">${escHtml(cmte.date)}</span>
+        </div>
+        <div class="congress-headline">${escHtml(cmte.topic)}</div>
+        <div class="congress-body">${escHtml(cmte.summary)}</div>
+        ${linksHtml ? `<div class="congress-links">${linksHtml}</div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Bills
+  if (c.bills && c.bills.length > 0) {
+    html += `<div class="congress-section"><div class="congress-section-hd"><span class="congress-section-title">📜 涉台・印太法案追蹤</span></div>`;
+    c.bills.forEach(b => {
+      const chamberClass = b.chamber === 'senate' ? 'senate' : 'house';
+      const chamberLabel = b.chamber === 'senate' ? '參議院' : '眾議院';
+      const linksHtml = (b.links || []).map(l =>
+        `<a class="congress-link" href="${escHtml(l.url)}" target="_blank" rel="noopener noreferrer"><span class="src">${escHtml(l.source)}</span> ${escHtml((l.title||'').slice(0,50))}</a>`
+      ).join('');
+      html += `<div class="congress-item">
+        <div class="congress-item-meta">
+          <span class="congress-tag ${chamberClass}">${chamberLabel}</span>
+          <span class="congress-bill-num">${escHtml(b.bill_num)}</span>
+          ${b.taiwan_relevance ? '<span class="congress-tag" style="background:#fff0f0;color:#c0392b">涉台</span>' : ''}
+          <span class="congress-status">${escHtml(b.status)}</span>
+        </div>
+        <div class="congress-headline">${escHtml(b.title)}</div>
+        <div class="congress-body">${escHtml(b.summary)}</div>
+        ${linksHtml ? `<div class="congress-links">${linksHtml}</div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Member statements
+  if (c.member_statements && c.member_statements.length > 0) {
+    html += `<div class="congress-section"><div class="congress-section-hd"><span class="congress-section-title">🗣️ 議員重要言論</span></div>`;
+    c.member_statements.forEach(s => {
+      const chamberClass = s.chamber === 'senate' ? 'senate' : 'house';
+      const chamberLabel = s.chamber === 'senate' ? '參議院' : '眾議院';
+      const linksHtml = (s.links || []).map(l =>
+        `<a class="congress-link" href="${escHtml(l.url)}" target="_blank" rel="noopener noreferrer"><span class="src">${escHtml(l.source)}</span> ${escHtml((l.title||'').slice(0,50))}</a>`
+      ).join('');
+      html += `<div class="congress-item">
+        <div class="congress-item-meta">
+          <span class="congress-tag ${chamberClass}">${chamberLabel}</span>
+          <span class="congress-bill-num">${escHtml(s.member)}</span>
+          ${s.party ? `<span style="font-size:10px;color:var(--ink-3)">${escHtml(s.party)}</span>` : ''}
+        </div>
+        <div class="congress-body" style="border-left:2px solid var(--purple);padding-left:10px;font-style:italic;margin-bottom:8px;">"${escHtml(s.quote)}"</div>
+        <div class="congress-body" style="font-size:12px;">${escHtml(s.context)}</div>
+        ${linksHtml ? `<div class="congress-links">${linksHtml}</div>` : ''}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  if (!html) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">🏛️</div><div class="empty-title">尚無國會動態資料</div></div>`;
+  } else {
+    container.innerHTML = html;
+  }
+}
+
+// ── HISTORY ──
+function renderHistory() {
+  const container = document.getElementById('history-container');
+  const embeddedItems = EMBEDDED_HISTORY.map(b => ({ ...b, _isEmbedded: true }));
+  const items = [...embeddedItems, ...briefingHistory];
+  if (items.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📁</div><div class="empty-title">尚無歷史記錄</div></div>`;
+    return;
+  }
+  container.innerHTML = items.map((b, i) => `
+    <div class="history-item${i===0?' active':''}" onclick="showHistoryItem(${i})">
+      <div>
+        <div class="history-time">${escHtml(b.date)} · ${escHtml(b.period_start)}–${escHtml(b.period_end)}</div>
+        <div class="history-count">${b._isEmbedded ? '內嵌版本' : '已儲存'}</div>
+      </div>
+      <span class="history-arr">查看 →</span>
+    </div>`).join('');
+
+  // Sidebar
+  const sidebarList = document.getElementById('history-sidebar-list');
+  if (sidebarList) {
+    sidebarList.innerHTML = items.slice(0, 8).map((b, i) => `
+      <div class="history-item${i===0?' active':''}" onclick="showHistoryItem(${i}); showMainTab('briefings')">
+        <div>
+          <div class="history-time">${escHtml(b.date).slice(0,10)} ${escHtml(b.period_start)}</div>
+          <div class="history-count">${b._isEmbedded ? '內嵌' : '已儲存'}</div>
+        </div>
+        <span class="history-arr">→</span>
+      </div>`).join('');
+  }
+}
+
+function showHistoryItem(idx) {
+  const embeddedItems = EMBEDDED_HISTORY.map(b => ({ ...b, _isEmbedded: true }));
+  const items = [...embeddedItems, ...briefingHistory];
+  const data = items[idx];
+  if (!data) return;
+  showMainTab('briefings');
+  renderBriefing(data, document.getElementById('briefing-container'));
+}
+
+// ── DATE ──
+function updateDate() {
+  const now = new Date();
+  const el = document.getElementById('current-date');
+  if (el) el.textContent =
+    now.toLocaleDateString('zh-TW', { year:'numeric', month:'long', day:'numeric', weekday:'long', timeZone:'Asia/Taipei' }) + '　' +
+    now.toLocaleTimeString('zh-TW', { hour:'2-digit', minute:'2-digit', timeZone:'Asia/Taipei' });
+}
+setInterval(updateDate, 30000);
+updateDate();
+
+// ── THEME ──
+function toggleTheme() {
+  const root = document.documentElement;
+  const cur = root.getAttribute('data-theme');
+  root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+}
+
+// ── INIT ──
+renderBriefing(getCurrentData(), document.getElementById('briefing-container'));
+renderHistory();
+</script>
+</body>
+</html>
