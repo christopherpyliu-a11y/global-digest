@@ -147,7 +147,9 @@ body{
 .stat-card{
   background:var(--bg-card);border:1px solid var(--rule);border-radius:6px;
   padding:14px 16px;box-shadow:var(--shadow);border-top:3px solid var(--rule);
+  cursor:pointer;transition:box-shadow .15s,border-color .15s;
 }
+.stat-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.12),0 6px 20px rgba(0,0,0,.08);}
 .stat-card.s-taiwan{border-top-color:var(--accent);}
 .stat-card.s-bills {border-top-color:var(--blue);}
 .stat-card.s-stmt  {border-top-color:var(--gold);}
@@ -451,16 +453,8 @@ const EMBEDDED_DATA = [
       "house": "⚠️ 本週休會（District Work Period，10月12–18日）。眾議院未開議，無院會議程。",
       "date": "截至 2026年10月14日"
     },
-    "committees": [
-      { "committee": "SASC（參院軍事委員會）", "activity": "印太安全政策聽證會，聚焦台海嚇阻戰略", "taiwan_rel": true },
-      { "committee": "HFAC（眾院外交委員會）", "activity": "台灣相關法案審議排程公告", "taiwan_rel": true }
-    ],
-    "upcoming": [
-      { "date": "2026-10-15", "month": "OCT", "day": "15", "title": "SASC 印太安全政策聽證會", "body": "參議院軍事委員會就印太安全政策進行公開聽證，預計涉及台海嚇阻議題", "taiwan": true, "rel": "涉台" },
-      { "date": "2026-10-16", "month": "OCT", "day": "16", "title": "眾議院 Taiwan PLUS Act 全院辯論", "body": "眾議院就 Taiwan PLUS Act 替代版本進行全院辯論與表決程序", "taiwan": true, "rel": "涉台" },
-      { "date": "2026-10-21", "month": "OCT", "day": "21", "title": "SFRC 聽證：台美關係現況與展望", "body": "參議院外交關係委員會公開聽證，聚焦台美安全合作現況", "taiwan": true, "rel": "涉台" },
-      { "date": "2026-10-28", "month": "OCT", "day": "28", "title": "NDAA FY2027 全院表決", "body": "2027財年國防授權法案預計進行全院表決，含多項涉台條文", "ndaa": true, "rel": "NDAA" }
-    ]
+    "committees": [],
+    "upcoming": []
   }
 ];
 </script>
@@ -502,20 +496,20 @@ const EMBEDDED_DATA = [
       <span class="period-tag" id="period-date">—</span>
     </div>
     <div class="stat-row">
-      <div class="stat-card s-taiwan">
+      <div class="stat-card s-taiwan" onclick="switchTab('dashboard')" title="點擊查看新聞">
         <div class="s-label">涉台重大動態</div>
         <div class="s-val" id="stat-taiwan">—</div>
-        <div class="s-sub">本期直接涉台則數</div>
+        <div class="s-sub">本期直接涉台則數 →</div>
       </div>
-      <div class="stat-card s-bills">
+      <div class="stat-card s-bills" onclick="switchTab('bills')" title="點擊查看法案追蹤">
         <div class="s-label">追蹤法案</div>
         <div class="s-val" id="stat-bills">—</div>
-        <div class="s-sub">涉台／涉中進行中</div>
+        <div class="s-sub">涉台／涉中進行中 →</div>
       </div>
-      <div class="stat-card s-stmt">
+      <div class="stat-card s-stmt" onclick="switchTab('statements')" title="點擊查看議員言論">
         <div class="s-label">議員涉台言論</div>
         <div class="s-val" id="stat-stmts">—</div>
-        <div class="s-sub">本期公開發言</div>
+        <div class="s-sub">本期公開發言 →</div>
       </div>
     </div>
     <div class="sec-hd">
@@ -696,13 +690,18 @@ const EMBEDDED_DATA = [
   if(!data.upcoming||!data.upcoming.length) schedList.innerHTML='<div class="empty">本週暫無涉台重要議程</div>';
 
   /* ── tabs ── */
+  function switchTab(name){
+    document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    const btn=document.querySelector(`.nav-tab[data-tab="${name}"]`);
+    if(btn) btn.classList.add('active');
+    const panel=document.getElementById('tab-'+name);
+    if(panel){ panel.classList.add('active'); panel.scrollIntoView({behavior:'smooth',block:'start'}); }
+  }
+  window.switchTab=switchTab;
+
   document.querySelectorAll('.nav-tab').forEach(btn=>{
-    btn.addEventListener('click',()=>{
-      document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
-      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
-    });
+    btn.addEventListener('click',()=>switchTab(btn.dataset.tab));
   });
 })();
 </script>
