@@ -97,18 +97,6 @@ body{
   background:var(--green);box-shadow:0 0 5px var(--green);
 }
 
-/* ── BREAKING BANNER ── */
-.breaking-bar{
-  background:var(--accent);
-  padding:8px max(20px,env(safe-area-inset-left,0px));
-  display:flex;align-items:center;gap:10px;overflow:hidden;
-}
-.breaking-label{
-  font-size:10px;letter-spacing:.14em;text-transform:uppercase;
-  color:#fff;font-weight:700;white-space:nowrap;
-  background:rgba(0,0,0,.2);padding:2px 8px;border-radius:2px;flex-shrink:0;
-}
-.breaking-text{font-size:12px;color:rgba(255,255,255,.92);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 /* ── NAV TABS ── */
 .nav-tabs{
@@ -270,10 +258,10 @@ body{
 .bill-track.track-signed .bill-track-label{color:var(--green);}
 .bill-stage-row{display:flex;gap:0;}
 .bill-stage{
-  flex:1;text-align:center;font-size:11px;color:var(--ink-3);padding:5px 3px 3px;
+  flex:1;text-align:center;font-size:13px;color:var(--ink-3);padding:5px 3px 3px;
   border-top:3px solid var(--rule-2);transition:border-color .2s;line-height:1.5;
 }
-.bill-stage .stage-date{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;}
+.bill-stage .stage-date{display:block;font-size:12px;color:var(--ink-3);margin-top:2px;}
 /* Senate track colours */
 .bill-track.track-senate .bill-stage.done   {color:var(--blue);border-top-color:var(--blue);}
 .bill-track.track-senate .bill-stage.done .stage-date{color:var(--blue);opacity:.7;}
@@ -298,12 +286,18 @@ body{
 .stmt-src:hover{color:var(--accent);}
 
 /* ── STATEMENTS ── */
+.stmt-section-hd{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  padding:6px 0 4px;border-bottom:1px solid var(--rule);margin:16px 0 10px;}
+.stmt-section-hd:first-child{margin-top:0;}
 .stmt-list{display:flex;flex-direction:column;gap:10px;}
 .stmt-card{background:var(--bg-card);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;box-shadow:var(--shadow);}
+.stmt-card.stmt-old{opacity:.8;}
 .stmt-hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+.stmt-date-badge{font-size:11px;font-weight:700;color:var(--ink-2);background:var(--rule-2);padding:2px 8px;border-radius:4px;white-space:nowrap;}
 .stmt-member{font-size:13px;font-weight:700;color:var(--ink);}
 .party-r{color:#c0392b;}
 .party-d{color:var(--blue);}
+.stmt-chamber{font-size:11px;color:var(--ink-3);}
 .stmt-committee{font-size:11px;color:var(--ink-3);}
 .stmt-topic{font-size:10px;padding:2px 7px;border-radius:3px;background:var(--accent-soft);color:var(--accent);font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
 .stmt-body{font-size:13px;color:var(--ink-2);line-height:1.7;border-left:3px solid var(--rule);padding-left:12px;font-style:italic;}
@@ -857,22 +851,76 @@ const EMBEDDED_DATA = [
     ],
     "member_statements": [
       {
-        "member": "Tommy Pigott（國務院發言人）",
-        "committee": "美國國務院",
-        "party": "—",
-        "topic": "中國制裁巴拉圭、貝里斯官員",
-        "time": "2026-10-14",
-        "source_url": "https://abcnews.go.com/International/wireStory/china-sanctions-paraguay-belize-officials-ties-taiwan-137186560",
-        "body": "美國反對中國對西半球國家施加脅迫與侵略（opposes coercion and aggression by China against countries in our hemisphere）。中國制裁巴拉圭通訊部長 Gustavo Villate 與貝里斯外交部長 Francis Fonseca 的行為，是北京脅迫行為的延伸，違反國際準則。"
+        "member": "John Moolenaar",
+        "role": "議員",
+        "chamber": "眾院",
+        "committee": "眾院對中共特別委員會主席",
+        "party": "R",
+        "state": "MI",
+        "topic": "中共在美境內監控台灣總統之子",
+        "time": "2026-10-06",
+        "source_url": "https://chinaselectcommittee.house.gov/media/press-releases/ccp-surveillance-plot-targeting-taiwan-president-s-son-on-us-soil-disrupted",
+        "body": "I condemn the CCP's violation of American sovereignty and its dangerous belligerence against Taiwan. 中共的台海野心是全球性威脅。本委員會與美國人民與賴總統及其家人同在。"
       },
       {
-        "member": "毛寧（中國外交部發言人）",
-        "committee": "中國外交部",
-        "party": "—",
-        "topic": "台灣投資阿拉斯加天然氣管線",
-        "time": "2026-10-14",
-        "source_url": "https://www.fmprc.gov.cn/mfa_eng/xw/fyrbt/202610/t20261014_12040329.html",
-        "body": "涉及台灣的任何對外交流都必須遵守一個中國原則。民進黨當局妄圖以貿易投資換取台獨，這是不可能成功的。"
+        "member": "Michael Bennet",
+        "role": "議員",
+        "chamber": "參院",
+        "committee": "參院情報委員會委員",
+        "party": "D",
+        "state": "CO",
+        "topic": "訪問台灣、深化美台安全與情報合作",
+        "time": "2026-10-06",
+        "source_url": "https://focustaiwan.tw/politics/202610060005",
+        "body": "（訪台聲明）此次訪問展現美國對美台夥伴關係的堅定承諾，會談涵蓋美台關係、區域安全及共同利益等議題。美國學台灣參議院情報委員會委員，長期推動美台太空與情報合作立法。"
+      },
+      {
+        "member": "Brendan Boyle",
+        "role": "議員",
+        "chamber": "眾院",
+        "committee": "眾院預算委員會首席少數黨議員",
+        "party": "D",
+        "state": "PA",
+        "topic": "跨黨派訪問台灣、推動台灣國際參與",
+        "time": "2026-10-07",
+        "source_url": "https://focustaiwan.tw/politics/202610070006",
+        "body": "（訪台代表團聲明）此次訪問討論美台關係、經貿、科技及區域安全議題；Boyle 曾共同提案《台灣旅行法》及支持台灣參與國際刑警組織決議。"
+      },
+      {
+        "member": "Jeanne Shaheen",
+        "role": "議員",
+        "chamber": "參院",
+        "committee": "參院外交委員會首席少數黨議員",
+        "party": "D",
+        "state": "NH",
+        "topic": "敦促川普立即向台灣交付軍售（21位民主黨參議員聯署）",
+        "time": "2026-09-25",
+        "source_url": "https://www.taipeitimes.com/News/front/archives/2026/10/02/2003865245",
+        "body": "美國對台灣自我防衛的支持是不可談判的。我們敦促總統立即交付國會已批准的防禦援助，包含13億美元的已批准資金與140億美元新軍售案。"
+      },
+      {
+        "member": "Roger Wicker",
+        "role": "議員",
+        "chamber": "參院",
+        "committee": "參院軍事委員會主席",
+        "party": "R",
+        "state": "MS",
+        "topic": "美國必須遵守《台灣關係法》並兌現對台承諾",
+        "time": "2026-09-29",
+        "source_url": "https://www.taipeitimes.com/News/taiwan/archives/2026/10/01/2003865191",
+        "body": "身為國會議員，我們有責任確保本法（《台灣關係法》）得到遵守。國會已授權大幅增加對台資源，這些授權必須用於國會所意圖的目的。美國不得諮詢北京意見就對台軍售。"
+      },
+      {
+        "member": "Mike Johnson",
+        "role": "議員",
+        "chamber": "眾院",
+        "committee": "眾議院議長",
+        "party": "R",
+        "state": "LA",
+        "topic": "台灣的穩定與獨立攸關美國國家安全",
+        "time": "2026-09-28",
+        "source_url": "https://www.taipeitimes.com/News/front/archives/2026/10/02/2003865245",
+        "body": "台灣是夥伴，其穩定與獨立對美國國家安全和經濟至關重要。對於川普將140億美元軍售延遲作為對華談判籌碼的說法，他表示不必過度解讀，軍售延遲與中東伊朗衝突後飛彈庫存需求有關。"
       }
     ],
     "floor_schedule": {
@@ -902,10 +950,6 @@ const EMBEDDED_DATA = [
   </div>
 </header>
 
-<div class="breaking-bar">
-  <span class="breaking-label">本期重點</span>
-  <span class="breaking-text" id="breaking-text">載入中…</span>
-</div>
 
 <button id="btn-home" onclick="switchTab('dashboard')" aria-label="回首頁">⌂ 回首頁</button>
 
@@ -969,7 +1013,18 @@ const EMBEDDED_DATA = [
       <h2><span class="marker"></span>議員涉台言論監測</h2>
       <span class="sec-badge" id="stmt-period">—</span>
     </div>
-    <div class="stmt-list" id="stmt-list"></div>
+    <div style="font-size:11px;color:var(--ink-3);margin-bottom:12px;">資料涵蓋本日及前十日 · 僅收錄參眾兩院民選議員 · 各則附原始連結</div>
+    <!-- 近五日區 -->
+    <div class="stmt-section-hd" id="stmt-recent-hd" hidden>📅 近五日言論</div>
+    <div class="stmt-list" id="stmt-recent"></div>
+    <!-- 五日以前區（可折疊） -->
+    <details id="stmt-older-details" hidden style="margin-top:16px;">
+      <summary style="cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:6px 0 4px;border-bottom:1px solid var(--rule);list-style:none;display:flex;justify-content:space-between;align-items:center;">
+        <span>🗂 五日以前言論</span><span style="font-size:12px;">▼ 展開</span>
+      </summary>
+      <div class="stmt-list" id="stmt-older" style="margin-top:10px;"></div>
+    </details>
+    <div id="stmt-empty" class="empty" hidden>本時段無涉台議員言論</div>
   </div>
 
   <!-- 議程日曆 -->
@@ -1000,7 +1055,6 @@ const EMBEDDED_DATA = [
   $id('update-time').textContent = data.date + '　' + data.generated_at;
   $id('period-range').textContent = data.period_start + ' – ' + data.period_end + '　台北時間';
   $id('period-date').textContent = data.date;
-  $id('breaking-text').textContent = data.summary || '本時段無重大快訊';
 
   const twNews = (data.news||[]).filter(n=>n.taiwan_rel==='直接');
   $id('stat-taiwan').textContent = twNews.length;
@@ -1131,22 +1185,44 @@ const EMBEDDED_DATA = [
   });
 
   /* ── 議員言論 ── */
-  const stmtList = $id('stmt-list');
   $id('stmt-period').textContent = data.date;
-  (data.member_statements||[]).forEach(s=>{
-    const d = document.createElement('div');
-    d.className='stmt-card';
-    d.innerHTML=`
-      <div class="stmt-hd">
-        <span class="stmt-member ${s.party==='R'?'party-r':'party-d'}">${s.member}</span>
-        <span class="stmt-committee">${s.committee}</span>
-        <span class="stmt-topic">${s.topic}</span>
-      </div>
-      <div class="stmt-body">「${s.body}」</div>
-      <div class="stmt-time">${s.time}${s.source_url?` · <a class="stmt-src" href="${s.source_url}" target="_blank" rel="noopener">來源 ↗</a>`:''}</div>`;
-    stmtList.appendChild(d);
-  });
-  if(!data.member_statements||!data.member_statements.length) stmtList.innerHTML='<div class="empty">本時段無涉台議員言論</div>';
+  (function(){
+    const stmts = (data.member_statements||[]);
+    // 今日及前十日區間
+    const today = new Date(data.date);
+    const cutoff5 = new Date(today); cutoff5.setDate(today.getDate()-5);
+    const recentList = $id('stmt-recent');
+    const olderList  = $id('stmt-older');
+    let cntRecent=0, cntOlder=0;
+
+    // 排序：最新在前
+    const sorted = stmts.slice().sort((a,b)=>b.time.localeCompare(a.time));
+
+    sorted.forEach(s=>{
+      const sDate = new Date(s.time);
+      const isRecent = sDate > cutoff5;
+      const partyClass = s.party==='R'?'party-r':(s.party==='D'?'party-d':'');
+      const chamberLabel = s.chamber ? `${s.chamber}` : '';
+      const d = document.createElement('div');
+      d.className='stmt-card' + (isRecent?'':' stmt-old');
+      d.innerHTML=`
+        <div class="stmt-hd">
+          <span class="stmt-date-badge">${s.time}</span>
+          <span class="stmt-member ${partyClass}">${s.member}</span>
+          ${chamberLabel?`<span class="stmt-chamber">${chamberLabel}</span>`:''}
+          <span class="stmt-committee">${s.committee}</span>
+          <span class="stmt-topic">${s.topic}</span>
+        </div>
+        <div class="stmt-body">「${s.body}」</div>
+        <div class="stmt-time">${s.source_url?`<a class="stmt-src" href="${s.source_url}" target="_blank" rel="noopener">原始來源 ↗</a>`:'（無原始連結）'}</div>`;
+      if(isRecent){ recentList.appendChild(d); cntRecent++; }
+      else         { olderList.appendChild(d);  cntOlder++; }
+    });
+
+    if(cntRecent>0){ $id('stmt-recent-hd').hidden=false; }
+    if(cntOlder>0) { $id('stmt-older-details').hidden=false; }
+    if(cntRecent===0&&cntOlder===0){ $id('stmt-empty').hidden=false; }
+  })();
 
   /* ── 議程 ── */
   const schedList = $id('sched-list');
