@@ -473,7 +473,47 @@ body{
 .dir-party-d{color:var(--accent);font-weight:700;}
 .dir-party-i{color:var(--green);font-weight:700;}
 .dir-district{font-size:10px;color:var(--ink-4);}
-.dir-bills{font-size:10px;color:var(--ink-4);margin-top:4px;}
+/* 法案與發言 details 區塊 */
+.dir-details-bills,.dir-details-stmts{margin-top:6px;border-radius:6px;overflow:hidden;}
+.dir-details-bills>summary,.dir-details-stmts>summary{
+  font-size:10.5px;font-weight:600;color:var(--ink-3);cursor:pointer;
+  padding:3px 2px;display:flex;align-items:center;gap:5px;list-style:none;
+  user-select:none;
+}
+.dir-details-bills>summary::-webkit-details-marker,.dir-details-stmts>summary::-webkit-details-marker{display:none;}
+.dir-details-bills>summary::before{content:'▶';font-size:8px;transition:transform .2s;}
+.dir-details-bills[open]>summary::before,.dir-details-stmts[open]>summary::before{transform:rotate(90deg);}
+.dir-details-stmts>summary::before{content:'▶';font-size:8px;transition:transform .2s;}
+.dir-cnt{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--accent);color:#fff;font-size:9px;font-weight:700;
+  width:16px;height:16px;border-radius:50%;margin-left:2px;
+}
+.dir-details-stmts .dir-cnt{background:var(--green);}
+/* 法案列表 */
+.dir-bills-list{margin-top:4px;display:flex;flex-direction:column;gap:4px;}
+.dir-bill-item{display:flex;align-items:flex-start;gap:4px;font-size:10.5px;}
+.dir-bill-role{
+  flex-shrink:0;font-size:9px;padding:1px 5px;border-radius:10px;font-weight:700;
+  display:inline-block;margin-top:1px;
+}
+.dir-bill-role.sponsor{background:var(--accent-soft);color:var(--accent);}
+.dir-bill-role.cosponsor{background:var(--rule-2);color:var(--ink-3);}
+.dir-bill-link{
+  flex-shrink:0;font-size:10.5px;font-weight:700;color:var(--accent);
+  text-decoration:none;white-space:nowrap;
+}
+.dir-bill-link:hover{text-decoration:underline;}
+.dir-bill-title{font-size:10px;color:var(--ink-3);line-height:1.4;}
+/* 發言列表 */
+.dir-stmts-list{margin-top:4px;display:flex;flex-direction:column;gap:6px;}
+.dir-stmt-item{border-left:2px solid var(--green);padding-left:6px;}
+.dir-stmt-meta{display:flex;align-items:center;gap:6px;margin-bottom:2px;}
+.dir-stmt-date{font-size:10px;color:var(--ink-4);}
+.dir-stmt-src{font-size:10px;color:var(--accent);text-decoration:none;}
+.dir-stmt-src:hover{text-decoration:underline;}
+.dir-stmt-topic{font-size:10.5px;font-weight:600;color:var(--ink-2);margin-bottom:2px;}
+.dir-stmt-body{font-size:10px;color:var(--ink-3);line-height:1.5;}
 .dir-chamber-hd{
   font-family:var(--font-serif);font-size:15px;font-weight:700;
   padding:12px 16px;background:var(--accent);color:#fff;border-radius:8px;
@@ -1542,19 +1582,37 @@ const EMBEDDED_DATA = [
       AS:'美屬薩摩亞',DC:'哥倫比亞特區',GU:'關島',MP:'北馬里亞納群島',PR:'波多黎各',VI:'美屬維京群島'
     };
 
-    // 從法案中建立議員-法案對應（方便標注）
-    const memberBillMap={};
+    // 從法案中建立議員-法案對應（含完整資訊：提案人＋共同提案人）
+    function extractName(s){
+      if(!s) return null;
+      const m=s.match(/^(.+?)（/);
+      return m?m[1].trim():s.trim();
+    }
+    const memberBillMap={}; // { memberName: [{bill_num, title_zh, url, role}] }
     (data.bills||[]).forEach(b=>{
-      function extractName(s){
-        if(!s) return null;
-        const m=s.match(/^(.+?)（/);
-        return m?m[1].trim():s.trim();
+      function addBill(name, role){
+        if(!name) return;
+        if(!memberBillMap[name]) memberBillMap[name]=[];
+        // 避免重複同一法案
+        if(!memberBillMap[name].find(x=>x.bill_num===b.bill_num)){
+          memberBillMap[name].push({bill_num:b.bill_num, title_zh:b.title_zh, url:b.url, role:role});
+        }
       }
-      const nm=extractName(b.sponsor);
-      if(nm){
-        if(!memberBillMap[nm]) memberBillMap[nm]=[];
-        if(!memberBillMap[nm].includes(b.bill_num)) memberBillMap[nm].push(b.bill_num);
-      }
+      addBill(extractName(b.sponsor), 'sponsor');
+      (b.cosponsors||[]).forEach(cs=>{
+        // cosponsor 格式可能是 "Name（R-ST）" 或含中文說明的字串
+        const nm=extractName(cs);
+        if(nm) addBill(nm, 'cosponsor');
+      });
+    });
+
+    // 從議員發言建立議員-發言對應
+    const memberStmtMap={}; // { memberName: [{topic, time, body, source_url}] }
+    (data.member_statements||[]).forEach(s=>{
+      const nm=s.member;
+      if(!nm) return;
+      if(!memberStmtMap[nm]) memberStmtMap[nm]=[];
+      memberStmtMap[nm].push({topic:s.topic, time:s.time, body:s.body, source_url:s.source_url});
     });
 
     function makeCard(m, isSenate){
@@ -1563,8 +1621,48 @@ const EMBEDDED_DATA = [
       const chamberClass = isSenate?'senate':'house';
       const chamberLabel = isSenate?'參院':'眾院';
       const distLabel = m.d&&m.d!=='AL'?` 第${m.d}選區`:(m.d==='AL'?'（全州）':'');
+
+      // 法案區塊
       const bills = memberBillMap[m.n];
-      const billHtml = bills&&bills.length?`<div class="dir-bills">涉台法案：${bills.join('、')}</div>`:'';
+      let billHtml = '';
+      if(bills&&bills.length){
+        const billItems = bills.map(b=>{
+          const roleTag = b.role==='sponsor'
+            ?'<span class="dir-bill-role sponsor">提案</span>'
+            :'<span class="dir-bill-role cosponsor">共提</span>';
+          const linkPart = b.url
+            ?`<a class="dir-bill-link" href="${b.url}" target="_blank" rel="noopener">${b.bill_num}</a>`
+            :`<span class="dir-bill-link">${b.bill_num}</span>`;
+          return `<div class="dir-bill-item">${roleTag}${linkPart}<span class="dir-bill-title">${b.title_zh||''}</span></div>`;
+        }).join('');
+        billHtml=`<details class="dir-details-bills">
+          <summary>🗂 友台法案 <span class="dir-cnt">${bills.length}</span></summary>
+          <div class="dir-bills-list">${billItems}</div>
+        </details>`;
+      }
+
+      // 發言區塊
+      const stmts = memberStmtMap[m.n];
+      let stmtHtml = '';
+      if(stmts&&stmts.length){
+        const stmtItems = stmts.map(s=>{
+          const dateStr = s.time ? s.time.replace(/-/g,'/') : '';
+          const bodyExcerpt = s.body ? (s.body.length>80?s.body.slice(0,80)+'…':s.body) : '';
+          const srcLink = s.source_url
+            ?`<a class="dir-stmt-src" href="${s.source_url}" target="_blank" rel="noopener">來源 ↗</a>`
+            :'';
+          return `<div class="dir-stmt-item">
+            <div class="dir-stmt-meta"><span class="dir-stmt-date">${dateStr}</span>${srcLink}</div>
+            <div class="dir-stmt-topic">${s.topic||''}</div>
+            <div class="dir-stmt-body">${bodyExcerpt}</div>
+          </div>`;
+        }).join('');
+        stmtHtml=`<details class="dir-details-stmts">
+          <summary>💬 涉台發言 <span class="dir-cnt">${stmts.length}</span></summary>
+          <div class="dir-stmts-list">${stmtItems}</div>
+        </details>`;
+      }
+
       return `<div class="dir-card" data-name="${m.n}" data-state="${m.st}" data-chamber="${isSenate?'senate':'house'}">
         <div class="dir-name">${m.n}</div>
         <div class="dir-meta">
@@ -1572,7 +1670,7 @@ const EMBEDDED_DATA = [
           <span class="dir-chamber ${chamberClass}">${chamberLabel}</span>
           <span class="dir-district">${STATE_NAMES[m.st]||m.st}${distLabel}</span>
         </div>
-        ${billHtml}
+        ${billHtml}${stmtHtml}
       </div>`;
     }
 
