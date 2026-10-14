@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>美國國會情報系統</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500&family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Sans+3:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS（舊版 Global Digest 色調）── */
+:root {
+  --ink:    #18181a;
+  --ink-2:  #3c3c42;
+  --ink-3:  #7a7a85;
+  --rule:   #d8d6d0;
+  --rule-2: #ece9e2;
+  --bg:     #f5f3ee;
+  --bg-card:#ffffff;
+  --accent: #b5341a;
+  --accent-soft: #f6ede9;
+  --blue:   #1a3f6e;
+  --blue-soft: #e8eef6;
+  --gold:   #c8921a;
+  --gold-soft: #fdf5e0;
+  --green:  #1f6d38;
+  --green-soft: #e8f5ee;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 14px rgba(0,0,0,.04);
+  --font-serif: 'Noto Serif TC', 'Playfair Display', Georgia, serif;
+  --font-sans:  'Source Sans 3', 'Noto Sans TC', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink:#e8e6e0; --ink-2:#b0ada6; --ink-3:#706e68;
+    --rule:#2a2826; --rule-2:#222020; --bg:#141310; --bg-card:#1c1a17;
+    --accent:#d05038; --accent-soft:#2a1612;
+    --blue:#7ab0e8; --blue-soft:#131e2e;
+    --gold:#e0a830; --gold-soft:#201a08;
+    --green:#4cad6a; --green-soft:#0e1e14;
+    --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.2);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ink:#e8e6e0; --ink-2:#b0ada6; --ink-3:#706e68;
+  --rule:#2a2826; --rule-2:#222020; --bg:#141310; --bg-card:#1c1a17;
+  --accent:#d05038; --accent-soft:#2a1612;
+  --blue:#7ab0e8; --blue-soft:#131e2e;
+  --gold:#e0a830; --gold-soft:#201a08;
+  --green:#4cad6a; --green-soft:#0e1e14;
+  --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.2);
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:var(--font-sans);
+  background:var(--bg);
+  color:var(--ink);
+  min-height:100%;
+  line-height:1.6;
+  display:flex;flex-direction:column;
+}
+
+/* ── HEADER ── */
+.site-header{
+  background:var(--bg-card);
+  border-bottom:2px solid var(--rule);
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:100;
+}
+.header-inner{
+  max-width:1200px;margin:0 auto;
+  padding-block:12px;
+  padding-left:max(20px,env(safe-area-inset-left,0px));
+  padding-right:max(20px,env(safe-area-inset-right,0px));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+}
+.site-title{display:flex;flex-direction:column;gap:2px;}
+.site-title .en{
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);font-family:var(--font-sans);
+}
+.site-title .zh{
+  font-family:var(--font-serif);font-size:17px;font-weight:700;
+  color:var(--ink);line-height:1.2;
+}
+.header-right{
+  display:flex;align-items:center;gap:14px;
+  font-size:11px;color:var(--ink-3);font-family:var(--font-sans);
+}
+.status-live{
+  display:flex;align-items:center;gap:5px;
+  color:var(--green);font-size:11px;font-weight:500;
+}
+.status-live::before{
+  content:'';display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 5px var(--green);
+}
+
+
+/* ── NAV TABS ── */
+.nav-tabs{
+  background:var(--bg-card);
+  border-bottom:1px solid var(--rule);
+  padding-left:max(20px,env(safe-area-inset-left,0px));
+  padding-right:max(20px,env(safe-area-inset-right,0px));
+  display:flex;overflow-x:auto;scrollbar-width:none;
+}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{
+  font-size:12px;font-weight:500;letter-spacing:.04em;
+  color:var(--ink-3);padding:11px 18px;
+  border-bottom:2px solid transparent;
+  cursor:pointer;white-space:nowrap;
+  background:none;border-top:none;border-left:none;border-right:none;
+  transition:color .15s,border-color .15s;
+  font-family:var(--font-sans);
+}
+.nav-tab:hover{color:var(--ink-2);}
+.nav-tab.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
+
+/* ── 回首頁浮動按鈕 ── */
+#btn-home{
+  position:fixed;bottom:calc(24px + env(safe-area-inset-bottom,0px));
+  right:max(20px,env(safe-area-inset-right,0px));
+  z-index:200;
+  display:none; /* 儀表板時隱藏 */
+  background:var(--accent);color:#fff;
+  border:none;border-radius:50px;
+  padding:10px 18px;font-size:13px;font-weight:600;
+  font-family:var(--font-sans);letter-spacing:.03em;
+  box-shadow:0 4px 16px rgba(0,0,0,.22);
+  cursor:pointer;transition:background .15s,transform .1s;
+}
+#btn-home:hover{background:var(--ink);transform:translateY(-1px);}
+#btn-home:active{transform:translateY(0);}
+
+/* ── MAIN ── */
+.main{
+  flex:1;max-width:1200px;width:100%;margin:0 auto;
+  padding:24px max(20px,env(safe-area-inset-left,0px));
+  padding-right:max(20px,env(safe-area-inset-right,0px));
+}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── STAT CARDS ── */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+@media(max-width:700px){.stat-row{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.stat-row{grid-template-columns:1fr;}}
+.stat-card{
+  background:var(--bg-card);border:1px solid var(--rule);border-radius:6px;
+  padding:14px 16px;box-shadow:var(--shadow);border-top:3px solid var(--rule);
+  cursor:pointer;transition:box-shadow .15s,border-color .15s;
+}
+.stat-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.12),0 6px 20px rgba(0,0,0,.08);}
+.stat-card.s-taiwan{border-top-color:var(--accent);}
+.stat-card.s-bills {border-top-color:var(--blue);}
+.stat-card.s-stmt  {border-top-color:var(--gold);}
+.stat-card .s-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:5px;}
+.stat-card .s-val  {font-size:26px;font-weight:700;font-family:var(--font-serif);color:var(--ink);line-height:1;}
+.stat-card .s-sub  {font-size:11px;color:var(--ink-3);margin-top:4px;}
+
+/* ── BACK HOME BUTTON ── */
+.back-home{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:12px;font-weight:500;color:var(--ink-3);
+  background:var(--bg-card);border:1px solid var(--rule);border-radius:20px;
+  padding:5px 14px;cursor:pointer;margin-bottom:16px;
+  transition:color .15s,border-color .15s,background .15s;
+  font-family:var(--font-sans);
+}
+.back-home:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);}
+.back-home::before{content:'←';font-size:13px;}
+
+/* ── SECTION HEADING ── */
+.sec-hd{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  margin:28px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--rule);
+}
+.sec-hd h2{
+  font-family:var(--font-serif);font-size:14px;font-weight:700;
+  color:var(--ink);letter-spacing:.04em;
+  display:flex;align-items:center;gap:8px;
+}
+.sec-hd h2 .marker{display:inline-block;width:4px;height:16px;background:var(--accent);border-radius:2px;}
+.sec-badge{font-size:10px;color:var(--ink-3);background:var(--rule-2);border:1px solid var(--rule);padding:2px 8px;border-radius:10px;}
+
+/* ── NOTIFICATION-STYLE NEWS CARDS ── */
+.notif-list{display:flex;flex-direction:column;gap:10px;}
+.notif-item{
+  background:var(--bg-card);border:1px solid var(--rule);border-radius:8px;
+  padding:14px 16px 12px;box-shadow:var(--shadow);
+  display:grid;grid-template-columns:4px 1fr;gap:0 12px;align-items:start;
+  transition:border-color .15s,box-shadow .15s;
+}
+.notif-item:hover{border-color:var(--accent);box-shadow:0 2px 8px rgba(0,0,0,.1);}
+.notif-stripe{border-radius:4px;align-self:stretch;}
+.notif-stripe.p-critical{background:var(--accent);}
+.notif-stripe.p-high    {background:var(--gold);}
+.notif-stripe.p-normal  {background:var(--blue);}
+.notif-stripe.p-low     {background:var(--rule);}
+.notif-meta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:5px;}
+.notif-cat{
+  font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 7px;border-radius:3px;font-weight:600;font-family:var(--font-sans);
+}
+.cat-taiwan {background:var(--accent-soft);color:var(--accent);}
+.cat-china  {background:var(--blue-soft);color:var(--blue);}
+.cat-defense{background:var(--blue-soft);color:var(--blue);}
+.cat-leg    {background:var(--gold-soft);color:var(--gold);}
+.cat-news   {background:var(--rule-2);color:var(--ink-3);}
+.notif-time{font-size:10px;color:var(--ink-3);}
+.notif-rel-badge{font-size:9px;padding:1px 6px;border-radius:3px;background:var(--accent-soft);color:var(--accent);font-weight:600;}
+.notif-title{font-family:var(--font-serif);font-size:14px;font-weight:700;color:var(--ink);line-height:1.45;margin-bottom:5px;text-wrap:balance;}
+.notif-summary{font-size:13px;color:var(--ink-2);line-height:1.65;margin-bottom:8px;}
+.notif-footer{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.notif-actors{font-size:11px;color:var(--ink-3);}
+.notif-actors span{color:var(--ink-2);font-weight:500;}
+.notif-link{
+  font-size:11px;color:var(--blue);font-weight:600;
+  text-decoration:none;display:inline-flex;align-items:center;gap:3px;
+  border-bottom:1px solid rgba(26,63,110,.25);
+  transition:border-color .12s,color .12s;
+}
+.notif-link:hover{color:var(--accent);border-color:var(--accent);}
+.notif-link::after{content:'↗';font-size:10px;}
+
+/* ── BILL CARDS ── */
+.bills-list{display:flex;flex-direction:column;gap:12px;}
+.bill-card{
+  background:var(--bg-card);border:1px solid var(--rule);border-radius:8px;
+  padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--blue);
+}
+.bill-card.taiwan{border-left-color:var(--accent);}
+.bill-card.china {border-left-color:var(--gold);}
+.bill-hd{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.bill-num{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--blue);font-family:var(--font-sans);}
+.bill-card.taiwan .bill-num{color:var(--accent);}
+.bill-status{font-size:10px;padding:2px 10px;border-radius:10px;border:1px solid;white-space:nowrap;}
+.bs-calendar {color:var(--gold);border-color:var(--gold);background:var(--gold-soft);}
+.bs-committee{color:var(--green);border-color:var(--green);background:var(--green-soft);}
+.bs-senate   {color:var(--blue);border-color:var(--blue);background:var(--blue-soft);}
+.bs-passed   {color:var(--green);border-color:var(--green);background:var(--green-soft);}
+.bs-law      {color:var(--green);border-color:var(--green);background:var(--green-soft);font-weight:700;}
+.bill-title   {font-family:var(--font-serif);font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.bill-title-en{font-size:11px;color:var(--ink-3);margin-bottom:6px;font-style:italic;}
+.bill-summary {font-size:12px;color:var(--ink-2);line-height:1.65;margin-bottom:8px;}
+/* ── 雙軌進度條 ── */
+.bill-progress-wrap{margin-bottom:10px;}
+.bill-track{margin-bottom:6px;}
+.bill-track-label{
+  font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:3px;
+}
+.bill-track.track-senate .bill-track-label{color:var(--blue);}
+.bill-track.track-house  .bill-track-label{color:var(--accent);}
+.bill-track.track-signed .bill-track-label{color:var(--green);}
+.bill-stage-row{display:flex;gap:0;}
+.bill-stage{
+  flex:1;text-align:center;font-size:13px;color:var(--ink-3);padding:5px 3px 3px;
+  border-top:3px solid var(--rule-2);transition:border-color .2s;line-height:1.5;
+}
+.bill-stage .stage-date{display:block;font-size:12px;color:var(--ink-3);margin-top:2px;}
+/* Senate track colours */
+.bill-track.track-senate .bill-stage.done   {color:var(--blue);border-top-color:var(--blue);}
+.bill-track.track-senate .bill-stage.done .stage-date{color:var(--blue);opacity:.7;}
+.bill-track.track-senate .bill-stage.current{color:var(--blue);border-top-color:var(--blue);font-weight:700;opacity:.55;}
+/* House track colours */
+.bill-track.track-house .bill-stage.done   {color:var(--accent);border-top-color:var(--accent);}
+.bill-track.track-house .bill-stage.done .stage-date{color:var(--accent);opacity:.7;}
+.bill-track.track-house .bill-stage.current{color:var(--accent);border-top-color:var(--accent);font-weight:700;opacity:.55;}
+/* Signed track */
+.bill-track.track-signed .bill-stage.done  {color:var(--green);border-top-color:var(--green);}
+.bill-track.track-signed .bill-stage.done .stage-date{color:var(--green);opacity:.7;}
+/* Pending stage (not yet reached) stays grey */
+/* sponsor */
+.bill-sponsors{font-size:11px;color:var(--ink-3);margin-bottom:8px;line-height:1.7;}
+.bill-sponsors strong{color:var(--ink-2);}
+.bill-footer  {display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;}
+.bill-link    {font-size:11px;color:var(--blue);font-weight:600;text-decoration:none;border-bottom:1px solid rgba(26,63,110,.25);}
+.bill-link:hover{color:var(--accent);}
+/* stmt link */
+.stmt-src{font-size:11px;color:var(--blue);font-weight:600;text-decoration:none;
+  border-bottom:1px solid rgba(26,63,110,.25);margin-top:6px;display:inline-block;}
+.stmt-src:hover{color:var(--accent);}
+
+/* ── STATEMENTS ── */
+.stmt-section-hd{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+  padding:6px 0 4px;border-bottom:1px solid var(--rule);margin:16px 0 10px;}
+.stmt-section-hd:first-child{margin-top:0;}
+.stmt-list{display:flex;flex-direction:column;gap:10px;}
+.stmt-card{background:var(--bg-card);border:1px solid var(--rule);border-radius:8px;padding:14px 16px;box-shadow:var(--shadow);}
+.stmt-card.stmt-old{opacity:.8;}
+.stmt-hd{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+.stmt-date-badge{font-size:11px;font-weight:700;color:var(--ink-2);background:var(--rule-2);padding:2px 8px;border-radius:4px;white-space:nowrap;}
+.stmt-member{font-size:13px;font-weight:700;color:var(--ink);}
+.party-r{color:#c0392b;}
+.party-d{color:var(--blue);}
+.stmt-chamber{font-size:11px;color:var(--ink-3);}
+.stmt-committee{font-size:11px;color:var(--ink-3);}
+.stmt-topic{font-size:10px;padding:2px 7px;border-radius:3px;background:var(--accent-soft);color:var(--accent);font-weight:600;letter-spacing:.06em;text-transform:uppercase;}
+.stmt-body{font-size:13px;color:var(--ink-2);line-height:1.7;border-left:3px solid var(--rule);padding-left:12px;font-style:italic;}
+.stmt-time{font-size:11px;color:var(--ink-3);margin-top:8px;}
+
+/* ── SCHEDULE ── */
+.sched-list{display:flex;flex-direction:column;gap:8px;}
+.sched-item{
+  background:var(--bg-card);border:1px solid var(--rule);border-radius:8px;
+  padding:14px 16px;box-shadow:var(--shadow);
+  display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;
+}
+@media(max-width:560px){.sched-item{grid-template-columns:60px 1fr;}.sched-rel{display:none;}}
+.sched-date-box{text-align:center;line-height:1.2;}
+.sched-month{font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-3);}
+.sched-day  {font-size:22px;font-weight:700;font-family:var(--font-serif);color:var(--accent);}
+.sched-title{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.sched-body {font-size:11px;color:var(--ink-3);}
+.sched-rel  {font-size:11px;color:var(--gold);font-weight:600;white-space:nowrap;}
+.sched-tag  {display:inline-block;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:6px;font-weight:600;}
+.st-taiwan  {background:var(--accent-soft);color:var(--accent);}
+.st-ndaa    {background:var(--gold-soft);color:var(--gold);}
+.st-defense {background:var(--blue-soft);color:var(--blue);}
+
+/* ── PERIOD BAR ── */
+.period-bar{
+  background:var(--rule-2);border:1px solid var(--rule);border-radius:6px;
+  padding:10px 16px;display:flex;align-items:center;justify-content:space-between;
+  gap:8px;flex-wrap:wrap;margin-bottom:20px;
+}
+.period-lbl{font-size:12px;color:var(--ink-3);}
+.period-lbl strong{color:var(--ink);}
+.period-tag{font-size:11px;padding:2px 10px;background:var(--blue-soft);border:1px solid rgba(26,63,110,.2);border-radius:10px;color:var(--blue);font-weight:600;}
+
+/* ── FLOOR SUMMARY ── */
+.floor-box{background:var(--bg-card);border:1px solid var(--rule);border-radius:8px;padding:16px;box-shadow:var(--shadow);font-size:13px;color:var(--ink-2);line-height:1.65;}
+.floor-box .chamber{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px;display:flex;align-items:center;gap:6px;}
+.floor-box .chamber-block{margin-bottom:12px;}
+.floor-box .date-note{font-size:11px;color:var(--ink-3);margin-top:8px;}
+
+/* ── COMMITTEE ── */
+.cmte-list{display:flex;flex-direction:column;gap:6px;}
+.cmte-item{background:var(--bg-card);border:1px solid var(--rule);border-radius:6px;padding:11px 14px;display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--ink-2);line-height:1.5;}
+.cmte-name{font-weight:700;color:var(--ink);white-space:nowrap;flex-shrink:0;}
+.cmte-badge{font-size:9px;padding:1px 6px;border-radius:3px;background:var(--accent-soft);color:var(--accent);font-weight:700;margin-left:6px;}
+
+/* ── EMPTY STATE ── */
+.empty{padding:28px;text-align:center;color:var(--ink-3);font-size:12px;border:1px dashed var(--rule);border-radius:6px;background:var(--rule-2);}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--rule);
+  padding:14px max(20px,env(safe-area-inset-left,0px));
+  padding-right:max(20px,env(safe-area-inset-right,0px));
+  font-size:11px;color:var(--ink-3);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px;
+}
+footer a{color:var(--blue);text-decoration:none;}
+footer a:hover{text-decoration:underline;}
+
+@media(max-width:480px){
+  .header-right .update-time{display:none;}
+  .site-title .zh{font-size:15px;}
+}
+</style>
+
+<!-- ═══════════════════════════════════════════════════════
+     EMBEDDED DATA — 排程任務每3小時覆寫此區塊
+     ═══════════════════════════════════════════════════════ -->
+<script>
+const EMBEDDED_DATA = [
+  {
+    "generated_at": "21:30",
+    "period_start": "06:00",
+    "period_end": "21:30",
+    "date": "2026年10月14日",
+    "is_embedded": true,
+    "summary": "解放軍今日9架次越台灣海峽中線；台海巡在普拉塔斯海域水炮驅中國漁船，北京警告「承擔後果」；中國外交部批台灣44億美元阿拉斯加管線投資；北京制裁友台國家官員，美國務院發聲批評；IMF預測台灣GDP年增10.7%",
+    "news": [
+      {
+        "id": "n1", "priority": "critical",
+        "category": "defense", "cat_label": "軍事",
+        "time": "06:00 台北", "time_et": "前日 18:00 ET",
+        "title": "解放軍9架次越台海中線　入侵北部、中部、西南及東部防空識別區",
+        "summary": "台灣國防部公告，截至10月14日清晨6時，偵測解放軍9架次升空，全數越過台灣海峽中線並進入防空識別區四個扇區。台灣空軍、海軍及岸基飛彈系統全程監控應處。解放軍另有6艘海軍艦艇及6艘官方船隻在台灣周邊海域活動。",
+        "actors": ["台灣國防部", "解放軍空軍", "台灣空軍"],
+        "taiwan_rel": "直接",
+        "source": "air.mnd.gov.tw",
+        "source_url": "https://air.mnd.gov.tw/en/News/News_Detail.aspx?CID=214&ID=59309"
+      },
+      {
+        "id": "n2", "priority": "critical",
+        "category": "taiwan", "cat_label": "涉台",
+        "time": "09:00 台北", "time_et": "21:00 ET(昨)",
+        "title": "台海巡水炮驅離普拉塔斯群島中國漁船　北京警告「承擔後果」",
+        "summary": "台灣海巡署對普拉塔斯群島（東沙群島）附近的中國漁船動用水炮驅離。中國國台辦發言人陳斌華表示台灣必須「承擔後果」，台中雙方灰色地帶摩擦持續升溫，形勢引發外界高度關注。",
+        "actors": ["台灣海巡署", "中國國台辦", "陳斌華"],
+        "taiwan_rel": "直接",
+        "source": "riotimesonline.com",
+        "source_url": "https://www.riotimesonline.com/asia-intelligence-brief-wednesday-october-14-2026/"
+      },
+      {
+        "id": "n3", "priority": "high",
+        "category": "taiwan", "cat_label": "涉台",
+        "time": "10:00 台北", "time_et": "22:00 ET(昨)",
+        "title": "北京制裁友台國家官員　美國務院批評「脅迫與侵略」",
+        "summary": "中國宣布制裁數名支持台灣的友邦國家部長級官員。美國國務院隨即發表聲明，批評北京脅迫行為，稱此舉違反國際準則。美方重申持續支持台灣維護民主自由立場。",
+        "actors": ["中國外交部", "美國國務院", "友台國家"],
+        "taiwan_rel": "直接",
+        "source": "focustaiwan.tw",
+        "source_url": "https://focustaiwan.tw/society/202610140003"
+      },
+      {
+        "id": "n4", "priority": "high",
+        "category": "china", "cat_label": "涉中",
+        "time": "15:00 台北", "time_et": "03:00 ET",
+        "title": "北京外交部批台灣以阿拉斯加管線投資「換取台獨」　44億美元計畫遭點名",
+        "summary": "中國外交部發言人毛寧在例行記者會上，點名批評台灣計畫投資44億美元於美國阿拉斯加天然氣管線項目。毛寧稱任何涉及台灣的對外交流必須遵守一個中國原則，DPP當局「不會通過貿易投資達成台獨目的」。",
+        "actors": ["中國外交部", "毛寧", "DPP"],
+        "taiwan_rel": "直接",
+        "source": "fmprc.gov.cn",
+        "source_url": "https://www.fmprc.gov.cn/mfa_eng/xw/fyrbt/202610/t20261014_12040329.html"
+      },
+      {
+        "id": "n5", "priority": "high",
+        "category": "defense", "cat_label": "國防",
+        "time": "08:00 台北", "time_et": "20:00 ET(昨)",
+        "title": "台灣海鯤號潛艦完成第24次海試　不對稱戰力里程碑",
+        "summary": "台灣首艘自製潛艦「海鯤號」於10月13日完成第24次海試。此消息被視為台灣強化不對稱作戰能力的重要里程碑，亦符合美台安全合作架構下軍事自主能力建設的整體方向。",
+        "actors": ["台灣國防部", "中山科學研究院", "海鯤號"],
+        "taiwan_rel": "直接",
+        "source": "riotimesonline.com",
+        "source_url": "https://www.riotimesonline.com/asia-intelligence-brief-wednesday-october-14-2026/"
+      },
+      {
+        "id": "n6", "priority": "normal",
+        "category": "news", "cat_label": "經濟",
+        "time": "14:00 台北", "time_et": "02:00 ET",
+        "title": "IMF預測台灣2026年GDP成長10.7%　中國九月對美順差達340億美元",
+        "summary": "IMF公布最新預測，台灣今年GDP成長率達10.7%，為近年高點。同期中國9月對美貿易順差340億美元，全球月度順差達1335億美元，IMF管理層警告中國應轉向內需拉動成長模式。",
+        "actors": ["IMF", "Kristalina Georgieva（IMF總裁）", "台灣行政院"],
+        "taiwan_rel": "間接",
+        "source": "riotimesonline.com",
+        "source_url": "https://www.riotimesonline.com/asia-intelligence-brief-wednesday-october-14-2026/"
+      }
+    ],
+    "bills": [
+      {
+        "bill_num": "H.R. 1512", "chamber": "house",
+        "title_zh": "台灣保證執行法", "title_en": "Taiwan Assurance Implementation Act",
+        "status": "已成為公法 119-45", "category": "taiwan",
+        "sponsor": "Ann Wagner（R-MO-2）", "cosponsors": ["Gerald Connolly（D-VA）","Ted Lieu（D-CA）","Michael Lawler（R-NY）"],
+        "house_introduced": "2025年2月21日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": "2025年5月5日",
+        "senate_introduced": "（配對法案 S.821，2025年3月3日）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2025年3月27日", "senate_floor_date": "2025年11月18日",
+        "signed_date": "2025年12月2日", "law_number": "公法 119-45",
+        "summary": "要求國務院向國會提交《台灣保證法》執行情況報告，包括對台軍售常態化、台灣參與國際組織等進展。眾院2025年5月通過，參院2025年11月通過，總統2025年12月2日簽署成為公法。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/1512"
+      },
+      {
+        "bill_num": "S. 821", "chamber": "senate",
+        "title_zh": "台灣保證執行法（參院版）", "title_en": "Taiwan Assurance Implementation Act",
+        "status": "已列入參議院議事日程第 52 號", "category": "taiwan",
+        "sponsor": "John Cornyn（R-TX）", "cosponsors": ["（連署人3人，詳見Congress.gov）"],
+        "senate_introduced": "2025年3月3日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2025年3月27日", "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.1512，2025年2月21日）", "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": "2025年5月5日",
+        "signed_date": "2025年12月2日", "law_number": "公法 119-45（H.R.1512）",
+        "summary": "要求國務院增加對台政策執行情況的報告，確保《台灣保證法》各項承諾落實。列入參院議事日程後，以配對法案 H.R.1512 形式完成立法程序。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/821"
+      },
+      {
+        "bill_num": "H.R. 33", "chamber": "house",
+        "title_zh": "美台雙重課稅救濟法", "title_en": "U.S.-Taiwan Double Taxation Relief Act",
+        "status": "已送達參議院，交財政委員會", "category": "taiwan",
+        "sponsor": "Jason Smith（R-MO-8）", "cosponsors": [],
+        "house_introduced": "2025年1月3日", "house_committee_name": "眾院歲計委員會／規則委員會",
+        "house_committee_date": null, "house_floor_date": "2025年1月15日",
+        "senate_introduced": "（2025年1月16日送達參議院）", "senate_committee_name": "參院財政委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "消除美國企業及個人在台灣的雙重課稅問題，提供相當於租稅協定的稅務救濟，促進美台經濟往來。眾院2025年1月15日通過，待參院財政委員會審議。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/33"
+      },
+      {
+        "bill_num": "S. 199", "chamber": "senate",
+        "title_zh": "美台雙重課稅救濟法（參院版）", "title_en": "U.S.-Taiwan Double Taxation Relief Act",
+        "status": "已列入參議院議事日程", "category": "taiwan",
+        "sponsor": "Mike Crapo（R-ID）", "cosponsors": ["Ron Wyden（D-OR）","James Risch（R-ID）","Jeanne Shaheen（D-NH）","Chris Van Hollen（D-MD）","Thom Tillis（R-NC）","（另43人）"],
+        "senate_introduced": "2025年1月23日", "senate_committee_name": "參院財政委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.33，2025年1月3日）", "house_committee_name": "眾院歲計委員會",
+        "house_committee_date": null, "house_floor_date": "2025年1月15日",
+        "signed_date": null, "law_number": null,
+        "summary": "與 H.R.33 相對應的參議院版本，授權行政部門對台灣居民提供所得稅雙重課稅救濟，強化美台經貿關係。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/199"
+      },
+      {
+        "bill_num": "S. Res. 86", "chamber": "senate",
+        "title_zh": "反對聯合國2758號決議誤用決議案", "title_en": "Resolution Regarding UN General Assembly Resolution 2758",
+        "status": "已列入參議院議事日程第 56 號", "category": "taiwan",
+        "sponsor": "James Risch（R-ID）", "cosponsors": ["Pete Ricketts（R-NE）","Christopher Coons（D-DE）","Jeanne Shaheen（D-NH）","Tammy Duckworth（D-IL）","Andy Kim（D-NJ）","（另11人）"],
+        "senate_introduced": "2025年2月20日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2025年3月27日", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "聲明聯合國大會第2758號決議並未解決台灣代表權問題，反對中國以該決議為依據排除台灣參與國際組織。參院外交委員會2025年3月27日通過，列入議事日程第56號。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-resolution/86"
+      },
+      {
+        "bill_num": "H. Res. 148", "chamber": "house",
+        "title_zh": "反對聯合國2758號決議誤用決議案（眾院版）", "title_en": "Resolution Regarding UN General Assembly Resolution 2758",
+        "status": "眾院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Young Kim（R-CA-40）", "cosponsors": ["Ami Bera（D-CA）","Joaquin Castro（D-TX）","Josh Gottheimer（D-NJ）","Raja Krishnamoorthi（D-IL）","John R. Moolenaar（R-MI）","Carlos Gimenez（R-FL）","Michael Lawler（R-NY）","Gerald Connolly（D-VA）","Ed Case（D-HI）","Derrick Van Orden（R-WI）","Ashley Hinson（R-IA）","Gabe Evans（R-CO）","Mike Quigley（D-IL）","Sarah McBride（D-DE）","Maria Elvira Salazar（R-FL）","Frank Lucas（R-OK）","Randy Feenstra（R-IA）","Tim Moore（R-NC）","Julie Johnson（D-TX）","Donald Davis（D-NC）","Thomas Suozzi（D-NY）","Suhas Subramanyam（D-VA）","Dina Titus（D-NV）","Chrissy Houlahan（D-PA）","Ted Lieu（D-CA）","Pete Sessions（R-TX）","Wesley Bell（D-MO）","Scott DesJarlais（R-TN）","Anna Paulina Luna（R-FL）"],
+        "house_introduced": "2025年2月21日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": null,
+        "senate_introduced": null, "senate_committee_name": null,
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "與 S.Res.86 相對應的眾院決議，聲明聯合國大會第2758號決議不賦予中華人民共和國代表台灣的正當性，不應作為排除台灣參與國際組織的依據。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-resolution/148"
+      },
+      {
+        "bill_num": "H. Con. Res. 8", "chamber": "house",
+        "title_zh": "呼籲美台建立正式外交關係決議案", "title_en": "Calling for U.S.-Taiwan Diplomatic Ties",
+        "status": "眾院外交委員會及歲計委員會審議中", "category": "taiwan",
+        "sponsor": "Thomas Tiffany（R-WI-7）", "cosponsors": ["Scott Perry（R-PA）","Christopher Smith（R-NJ）","Nicole Malliotakis（R-NY）","Andrew Ogles（R-TN）","Lance Gooden（R-TX）","Kat Cammack（R-FL）","James Baird（R-IN）","Glenn Grothman（R-WI）","Pete Stauber（R-MN）","Randy Weber（R-TX）","Tony Wied（R-WI）","Scott Fitzgerald（R-WI）","Diana Harshbarger（R-TN）","Jake Ellzey（R-TX）","Richard McCormick（R-GA）","Charles Fleischmann（R-TN）","Dan Meuser（R-PA）","Carlos Gimenez（R-FL）","Lauren Boebert（R-CO）","Roger Williams（R-TX）","Randy Feenstra（R-IA）","Andrew Garbarino（R-NY）","Zachary Nunn（R-IA）","Ashley Hinson（R-IA）","Michael Lawler（R-NY）","Earl Carter（R-GA）","Byron Donalds（R-FL）","Burgess Owens（R-UT）","Carol Miller（R-WV）","Nicholas Begich（R-AK）","Keith Self（R-TX）","August Pfluger（R-TX）","Addison McDowell（R-NC）","Tim Burchett（R-TN）","Robert Aderholt（R-AL）","Jefferson Shreve（R-IN）","Tracey Mann（R-KS）","John Rose（R-TN）"],
+        "house_introduced": "2025年2月6日", "house_committee_name": "眾院外交委員會／歲計委員會",
+        "house_committee_date": null, "house_floor_date": null,
+        "senate_introduced": null, "senate_committee_name": null,
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "兩院同時決議案，呼籲美國行政部門與台灣就建立正式外交關係展開談判，並在正式關係建立之前持續強化實質關係。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-concurrent-resolution/8"
+      },
+      {
+        "bill_num": "S. 733", "chamber": "senate",
+        "title_zh": "台灣旅遊協調法", "title_en": "Taiwan Travel and Tourism Coordination Act",
+        "status": "已列入參議院議事日程", "category": "taiwan",
+        "sponsor": "Marsha Blackburn（R-TN）", "cosponsors": ["Brian Schatz（D-HI）","Pete Ricketts（R-NE）"],
+        "senate_introduced": "2025年2月25日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "促進美台之間的旅遊合作，協調兩地觀光推廣、簽證便利化及航空連結等事宜，強化美台人民交流。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/733"
+      },
+      {
+        "bill_num": "H.R. 910", "chamber": "house",
+        "title_zh": "台灣非歧視法", "title_en": "Taiwan Non-Discrimination Act of 2025",
+        "status": "已送達參議院，列入議事日程第 103 號", "category": "taiwan",
+        "sponsor": "Young Kim（R-CA-40）", "cosponsors": ["Al Green（D-TX）","Ted Lieu（D-CA）","Michael Lawler（R-NY）"],
+        "house_introduced": "2025年2月4日", "house_committee_name": "眾院金融服務委員會",
+        "house_committee_date": "2025年3月5日", "house_floor_date": "2025年6月23日",
+        "senate_introduced": "（2025年送達參議院）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "禁止美國聯邦機構因台灣的非正式外交地位而對台灣企業或個人採取歧視性措施，確保台灣享有與其他貿易夥伴相同待遇。眾院通過後列入參院議事日程第103號。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/910"
+      },
+      {
+        "bill_num": "S. 974", "chamber": "senate",
+        "title_zh": "台灣代表處法", "title_en": "Taiwan Representative Office Act",
+        "status": "已列入參議院議事日程", "category": "taiwan",
+        "sponsor": "John R. Curtis（R-UT）", "cosponsors": ["Jeff Merkley（D-OR）","Cynthia Lummis（R-WY）","Rick Scott（R-FL）"],
+        "senate_introduced": "2025年3月12日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權並鼓勵行政部門允許台灣在美國將「台北經濟文化代表處」更名為「台灣代表處」，以提升台灣的外交能見度與國際地位。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/974"
+      },
+      {
+        "bill_num": "H.R. 1531", "chamber": "house",
+        "title_zh": "保護台灣法", "title_en": "PROTECT Taiwan Act",
+        "status": "已送達參議院，交外交委員會（2026年2月11日）", "category": "taiwan",
+        "sponsor": "Frank D. Lucas（R-OK-3）", "cosponsors": ["Vicente Gonzalez（D-TX-34）","Michael Lawler（R-NY-17）"],
+        "house_introduced": "2025年2月24日", "house_committee_name": "眾院金融服務委員會",
+        "house_committee_date": "2025年9月16日（49-0通過）", "house_floor_date": "2026年2月9日",
+        "senate_introduced": "（2026年2月11日送達參議院）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權對中國侵台行動實施全面制裁，涵蓋金融、能源、貿易等強制措施，並設立制裁觸發機制。眾院已通過，2026年2月送達參院審議。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/1531"
+      },
+      {
+        "bill_num": "H.R. 1716", "chamber": "house",
+        "title_zh": "台灣衝突嚇阻法", "title_en": "Taiwan Conflict Deterrence Act of 2025",
+        "status": "已送達參議院，交銀行委員會（2025年7月22日）", "category": "taiwan",
+        "sponsor": "Lisa C. McClain（R-MI-9）", "cosponsors": [],
+        "house_introduced": "2025年2月27日", "house_committee_name": "眾院金融服務委員會",
+        "house_committee_date": "2025年3月27日（48-0通過）", "house_floor_date": "2025年7月21日（全院一致通過）",
+        "senate_introduced": "（2025年7月22日送達參議院）", "senate_committee_name": "參院銀行委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權對試圖以武力改變台海現狀的行為者實施預防性制裁。眾院金融服務委員會2025年3月以48-0通過，同年7月21日全院一致通過，現待參院銀行委員會審議。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/1716"
+      },
+      {
+        "bill_num": "S. 1216", "chamber": "senate",
+        "title_zh": "台灣盟友基金法", "title_en": "Taiwan Allies Fund Act",
+        "status": "已列入參議院議事日程第 321 號", "category": "taiwan",
+        "sponsor": "Chris Van Hollen（D-MD）", "cosponsors": ["John R. Curtis（R-UT）","Andy Kim（D-NJ）","Michael Bennet（D-CO）"],
+        "senate_introduced": "2025年3月31日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2026年1月29日", "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.2559，2025年4月1日）", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "設立專項基金，支援與台灣保持邦交的友邦國家，防止其在中國壓力下與台灣斷交，維護台灣的國際空間。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1216"
+      },
+      {
+        "bill_num": "H.R. 2113", "chamber": "house",
+        "title_zh": "美國支持台灣法", "title_en": "America Supports Taiwan Act",
+        "status": "眾院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Byron Donalds（R-FL-19）", "cosponsors": ["Mike Collins（R-GA）","Barry Moore（R-AL）","Thomas Tiffany（R-WI）","Andrew Ogles（R-TN）"],
+        "house_introduced": "2025年3月14日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": null,
+        "senate_introduced": null, "senate_committee_name": null,
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "明確宣示美國支持台灣維護民主體制及事實獨立地位，授權強化美台官方往來及安全合作關係。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/2113"
+      },
+      {
+        "bill_num": "H.R. 2416", "chamber": "house",
+        "title_zh": "台灣國際團結法", "title_en": "Taiwan International Solidarity Act",
+        "status": "已送達參議院，交外交委員會（2025年5月6日）", "category": "taiwan",
+        "sponsor": "Gerald E. Connolly（D-VA-11）", "cosponsors": ["Thomas Suozzi（D-NY）","Dave Min（D-CA）","Brad Sherman（D-CA）","Steve Cohen（D-TN）","Brian Fitzpatrick（R-PA）","（另7人）"],
+        "house_introduced": "2025年3月27日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": "2025年5月5日",
+        "senate_introduced": "（2025年5月6日送達參議院）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "聲明聯合國大會第2758號決議並未解決台灣在聯合國的代表權問題，反對以該決議排除台灣參與國際組織。眾院通過後已送達參院。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/2416"
+      },
+      {
+        "bill_num": "H.R. 2559", "chamber": "house",
+        "title_zh": "台灣盟友基金法（眾院版）", "title_en": "Taiwan Allies Fund Act",
+        "status": "眾院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Raja Krishnamoorthi（D-IL-8）", "cosponsors": ["Gregory Meeks（D-NY）","Gabe Amo（D-RI）","Andy Barr（R-KY）","Ami Bera（D-CA）","Thomas Suozzi（D-NY）","Ted Lieu（D-CA）","Ed Case（D-HI）","Jim Costa（D-CA）","Gerald Connolly（D-VA）","Sheila Cherfilus-McCormick（D-FL）","John Moolenaar（R-MI）","Brian Fitzpatrick（R-PA）","Josh Gottheimer（D-NJ）","Wesley Bell（D-MO）","Jennifer Kiggans（R-VA）","Yassamin Ansari（D-AZ）","Jill Tokuda（D-HI）","Julie Johnson（D-TX）","Sydney Kamlager-Dove（D-CA）","Johnny Olszewski（D-MD）","Seth Moulton（D-MA）","Greg Stanton（D-AZ）","Robert Menendez（D-NJ）","Michael Baumgartner（R-WA）","Brad Schneider（D-IL）","Suzan DelBene（D-WA）","James Moylan（R-GU）","James Walkinshaw（D-VA）","Thomas Kean（R-NJ）","Brad Sherman（D-CA）","April McClain Delaney（D-MD）","Sylvia Garcia（D-TX）"],
+        "house_introduced": "2025年4月1日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": null,
+        "senate_introduced": "（配對法案 S.1216，2025年3月31日）", "senate_committee_name": null,
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "與 S.1216 相對應的眾院版本，設立台灣盟友基金，協助維繫台灣邦交國，對抗中國以金援換斷交的外交脅迫。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/2559"
+      },
+      {
+        "bill_num": "S. 1588", "chamber": "senate",
+        "title_zh": "台灣關係強化法", "title_en": "Taiwan Relations Reinforcement Act of 2025",
+        "status": "參院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": ["John R. Curtis（R-UT）"],
+        "senate_introduced": "2025年5月5日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "更新並強化《台灣關係法》框架，明確授權深化美台安全、外交及經濟合作，提升美國對台灣安全承諾的法律層級。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1588"
+      },
+      {
+        "bill_num": "S. 1744", "chamber": "senate",
+        "title_zh": "豪豬法（非對稱防衛授權法）", "title_en": "PORCUPINE Act",
+        "status": "已通過參議院（2025年12月11日）", "category": "taiwan",
+        "sponsor": "Pete Ricketts（R-NE）", "cosponsors": ["Christopher Coons（D-DE）","John Cornyn（R-TX）","Michael Bennet（D-CO）","Ted Budd（R-NC）","Rick Scott（R-FL）","Raphael Warnock（D-GA）"],
+        "senate_introduced": "2025年5月13日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2025年10月22日", "senate_floor_date": "2025年12月11日",
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "Providing Our Regional Companions Upgraded Protection in Nefarious Environments Act。授權資助台灣以非對稱戰力為核心的防衛能力，包括反艦飛彈、水雷、無人機等，使侵台成本大幅提升。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1744"
+      },
+      {
+        "bill_num": "S. 1824", "chamber": "senate",
+        "title_zh": "台灣PLUS法", "title_en": "Taiwan PLUS Act",
+        "status": "參院外交委員會審議中", "category": "taiwan",
+        "sponsor": "Rick Scott（R-FL）", "cosponsors": [],
+        "senate_introduced": "2025年5月21日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.3563，2025年5月21日）", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": "2026年5月13日（45-0通過）", "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "全面更新台美關係政策框架，包括強化安全合作機制、擴大軍售授權、提升台美官員互動層級及協助台灣參與國際組織。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1824"
+      },
+      {
+        "bill_num": "H.R. 3563", "chamber": "house",
+        "title_zh": "台灣PLUS法（眾院版）", "title_en": "Taiwan PLUS Act",
+        "status": "眾院外交委員會以 45-0 票通過（2026年5月13日）", "category": "taiwan",
+        "sponsor": "Scott Perry（R-PA-10）", "cosponsors": ["Thomas P. Tiffany（R-WI-7）","Chuck Fleischmann（R-TN-3）"],
+        "house_introduced": "2025年5月21日", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": "2026年5月13日（45-0通過）", "house_floor_date": null,
+        "senate_introduced": "（配對法案 S.1824，2025年5月21日）", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "全面更新台美關係政策框架，擴大軍售授權、提升台美官員互動層級及協助台灣參與國際組織。眾院外交委員會2026年5月以45-0通過替代版本，待全院表決。",
+        "url": "https://www.congress.gov/bill/119th-congress/house-bill/3563"
+      },
+      {
+        "bill_num": "S. 1900", "chamber": "senate",
+        "title_zh": "台灣非歧視法（參院版）", "title_en": "Taiwan Non-Discrimination Act of 2025",
+        "status": "已列入參議院議事日程第 100 號", "category": "taiwan",
+        "sponsor": "David McCormick（R-PA）", "cosponsors": ["Jacky Rosen（D-NV）","Dan Sullivan（R-AK）","Elissa Slotkin（D-MI）","Ted Budd（R-NC）","Jeff Merkley（D-OR）","Pete Ricketts（R-NE）"],
+        "senate_introduced": "2025年5月22日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2025年6月5日", "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.910，2025年2月4日）", "house_committee_name": "眾院金融服務委員會",
+        "house_committee_date": "2025年3月5日", "house_floor_date": "2025年6月23日",
+        "signed_date": null, "law_number": null,
+        "summary": "與 H.R.910 相對應的參議院版本，禁止聯邦機構對台灣企業或個人採取歧視性措施，確保台灣享有與其他貿易夥伴相同待遇。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/1900"
+      },
+      {
+        "bill_num": "S. 2222", "chamber": "senate",
+        "title_zh": "關鍵海底基礎設施韌性倡議法", "title_en": "Critical Undersea Infrastructure Resilience Initiative Act",
+        "status": "已列入參議院議事日程第 323 號", "category": "taiwan",
+        "sponsor": "John R. Curtis（R-UT）", "cosponsors": ["Jacky Rosen（D-NV）","David McCormick（R-PA）"],
+        "senate_introduced": "2025年7月9日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2026年1月29日", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權美國加強與盟友合作，保護印太地區（包括台灣周邊）的海底電纜及海底基礎設施，防止中國蓄意破壞。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2222"
+      },
+      {
+        "bill_num": "S. 2224", "chamber": "senate",
+        "title_zh": "台灣國際團結法（參院版）", "title_en": "Taiwan International Solidarity Act",
+        "status": "已列入參議院議事日程第 237 號", "category": "taiwan",
+        "sponsor": "Chris Van Hollen（D-MD）", "cosponsors": ["John R. Curtis（R-UT）"],
+        "senate_introduced": "2025年7月9日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2025年10月22日", "senate_floor_date": null,
+        "house_introduced": "（配對法案 H.R.2416，2025年3月27日）", "house_committee_name": "眾院外交委員會",
+        "house_committee_date": null, "house_floor_date": "2025年5月5日",
+        "signed_date": null, "law_number": null,
+        "summary": "與 H.R.2416 相對應的參議院版本，聲明聯合國大會第2758號決議不賦予中華人民共和國代表台灣的正當性。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2224"
+      },
+      {
+        "bill_num": "S. 2626", "chamber": "senate",
+        "title_zh": "強化美國在美洲開發銀行領導力法", "title_en": "Strengthening United States Leadership at the IDB Act",
+        "status": "已列入參議院議事日程第 240 號", "category": "taiwan",
+        "sponsor": "David McCormick（R-PA）", "cosponsors": ["Timothy Kaine（D-VA）"],
+        "senate_introduced": "2025年7月31日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2025年10月22日", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "要求減少中華人民共和國對美洲開發銀行的影響力，並確保台灣相關項目獲得公平對待。涉及台灣在國際金融機構的參與空間。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2626"
+      },
+      {
+        "bill_num": "S. 2684", "chamber": "senate",
+        "title_zh": "美台美洲夥伴關係法", "title_en": "U.S.-Taiwan Partnership in the Americas Act",
+        "status": "已列入參議院議事日程第 242 號", "category": "taiwan",
+        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": ["John R. Curtis（R-UT）","Timothy Kaine（D-VA）","Pete Ricketts（R-NE）","Michael Bennet（D-CO）","Ron Wyden（D-OR）","（另1人）"],
+        "senate_introduced": "2025年9月2日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2025年10月22日", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "強化台灣與拉丁美洲及加勒比海地區的合作，授權美國協助台灣在西半球維持並擴展外交與經濟關係，對抗中國影響力滲透。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2684"
+      },
+      {
+        "bill_num": "S. 2722", "chamber": "senate",
+        "title_zh": "台灣能源安全暨反封鎖法", "title_en": "Taiwan Energy Security and Anti-Embargo Act of 2026",
+        "status": "已列入參議院議事日程第 325 號", "category": "taiwan",
+        "sponsor": "Pete Ricketts（R-NE）", "cosponsors": ["Christopher Coons（D-DE）","Ted Budd（R-NC）","John Hickenlooper（D-CO）","John Hoeven（R-ND）"],
+        "senate_introduced": "2025年9月4日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2026年1月29日", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "要求行政部門制定計畫，確保台灣在遭受中國能源封鎖或海上封鎖時的能源供應穩定，涵蓋液化天然氣備援及友盟能源支援機制。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2722"
+      },
+      {
+        "bill_num": "S. 2960", "chamber": "senate",
+        "title_zh": "嚇阻中國侵台法", "title_en": "Deter PRC Aggression Against Taiwan Act",
+        "status": "已列入參議院議事日程第 245 號", "category": "taiwan",
+        "sponsor": "James Risch（R-ID）", "cosponsors": ["Jeanne Shaheen（D-NH）","Christopher Coons（D-DE）","Pete Ricketts（R-NE）","John Cornyn（R-TX）","Bill Hagerty（R-TN）","Andy Kim（D-NJ）","John Boozman（R-AR）","Michael Bennet（D-CO）","Ted Budd（R-NC）","Rick Scott（R-FL）","Jeff Merkley（D-OR）","Roger Wicker（R-MS）","David McCormick（R-PA）"],
+        "senate_introduced": "2025年10月1日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2025年10月22日", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權預先部署武器裝備至台灣及附近盟友，並要求對台軍售快速審核，以強化台海實質嚇阻能力，明確要求行政部門就侵台場景進行規劃。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/2960"
+      },
+      {
+        "bill_num": "S. 4065", "chamber": "senate",
+        "title_zh": "制裁侵略鄰近民主國家法", "title_en": "STAND with Taiwan Act of 2026",
+        "status": "參院銀行委員會審議中", "category": "taiwan",
+        "sponsor": "Dan Sullivan（R-AK）", "cosponsors": ["Ted Budd（R-NC）","John Cornyn（R-TX）","Tammy Duckworth（D-IL）","Lindsey Graham（R-SC）","John Kennedy（R-LA）","（另2人）"],
+        "senate_introduced": "2026年3月11日", "senate_committee_name": "參院銀行委員會",
+        "senate_committee_date": null, "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "全名 Sanctions Targeting Aggressors of Neighboring Democracies with Taiwan Act，授權對中國侵台或脅迫行為實施嚴厲制裁，涵蓋金融機構、能源及關鍵礦物出口。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4065"
+      },
+      {
+        "bill_num": "S. 4259", "chamber": "senate",
+        "title_zh": "藍天台灣法（無人機合作授權法）", "title_en": "Blue Skies for Taiwan Act of 2026",
+        "status": "已列入參議院議事日程第 507 號", "category": "taiwan",
+        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": ["Christopher Coons（D-DE）","Ted Cruz（R-TX）","John R. Curtis（R-UT）","Andy Kim（D-NJ）"],
+        "senate_introduced": "2026年3月26日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2026年6月17日", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權美台之間的無人機技術合作與共同生產，強化台灣不對稱防衛能力。委員會2026年6月通過，已列入參議院議事日程第507號，待全院表決。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4259"
+      },
+      {
+        "bill_num": "S. 4600", "chamber": "senate",
+        "title_zh": "南海戰略法", "title_en": "South China Sea Strategy Act of 2026",
+        "status": "已列入參議院議事日程第 512 號", "category": "china",
+        "sponsor": "Tammy Duckworth（D-IL）", "cosponsors": ["John R. Curtis（R-UT）"],
+        "senate_introduced": "2026年5月20日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2026年6月17日", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "要求行政部門制定全面南海戰略，強化與台灣、菲律賓等地區國家的安全合作，應對中國在南海的強制性行動。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4600"
+      },
+      {
+        "bill_num": "S. 4610", "chamber": "senate",
+        "title_zh": "太平洋夥伴暨經濟韌性法", "title_en": "Pacific POWER Act",
+        "status": "已列入參議院議事日程第 513 號", "category": "taiwan",
+        "sponsor": "Brian Schatz（D-HI）", "cosponsors": [],
+        "senate_introduced": "2026年5月20日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2026年6月17日", "senate_floor_date": null,
+        "house_introduced": null, "house_committee_name": null,
+        "house_committee_date": null, "house_floor_date": null,
+        "signed_date": null, "law_number": null,
+        "summary": "授權美國強化與台灣及印太盟友的經濟及安全合作，聚焦供應鏈韌性、關鍵技術及第一島鏈防衛整合。",
+        "url": "https://www.congress.gov/bill/119th-congress/senate-bill/4610"
+      }
+    ],
+    "member_statements": [
+      {
+        "member": "John Moolenaar",
+        "role": "議員",
+        "chamber": "眾院",
+        "committee": "眾院對中共特別委員會主席",
+        "party": "R",
+        "state": "MI",
+        "topic": "中共在美境內監控台灣總統之子",
+        "time": "2026-10-06",
+        "source_url": "https://chinaselectcommittee.house.gov/media/press-releases/ccp-surveillance-plot-targeting-taiwan-president-s-son-on-us-soil-disrupted",
+        "body": "I condemn the CCP's violation of American sovereignty and its dangerous belligerence against Taiwan. 中共的台海野心是全球性威脅。本委員會與美國人民與賴總統及其家人同在。"
+      },
+      {
+        "member": "Michael Bennet",
+        "role": "議員",
+        "chamber": "參院",
+        "committee": "參院情報委員會委員",
+        "party": "D",
+        "state": "CO",
+        "topic": "訪問台灣、深化美台安全與情報合作",
+        "time": "2026-10-06",
+        "source_url": "https://focustaiwan.tw/politics/202610060005",
+        "body": "（訪台聲明）此次訪問展現美國對美台夥伴關係的堅定承諾，會談涵蓋美台關係、區域安全及共同利益等議題。美國學台灣參議院情報委員會委員，長期推動美台太空與情報合作立法。"
+      },
+      {
+        "member": "Brendan Boyle",
+        "role": "議員",
+        "chamber": "眾院",
+        "committee": "眾院預算委員會首席少數黨議員",
+        "party": "D",
+        "state": "PA",
+        "topic": "跨黨派訪問台灣、推動台灣國際參與",
+        "time": "2026-10-07",
+        "source_url": "https://focustaiwan.tw/politics/202610070006",
+        "body": "（訪台代表團聲明）此次訪問討論美台關係、經貿、科技及區域安全議題；Boyle 曾共同提案《台灣旅行法》及支持台灣參與國際刑警組織決議。"
+      },
+      {
+        "member": "Jeanne Shaheen",
+        "role": "議員",
+        "chamber": "參院",
+        "committee": "參院外交委員會首席少數黨議員",
+        "party": "D",
+        "state": "NH",
+        "topic": "敦促川普立即向台灣交付軍售（21位民主黨參議員聯署）",
+        "time": "2026-09-25",
+        "source_url": "https://www.taipeitimes.com/News/front/archives/2026/10/02/2003865245",
+        "body": "美國對台灣自我防衛的支持是不可談判的。我們敦促總統立即交付國會已批准的防禦援助，包含13億美元的已批准資金與140億美元新軍售案。"
+      },
+      {
+        "member": "Roger Wicker",
+        "role": "議員",
+        "chamber": "參院",
+        "committee": "參院軍事委員會主席",
+        "party": "R",
+        "state": "MS",
+        "topic": "美國必須遵守《台灣關係法》並兌現對台承諾",
+        "time": "2026-09-29",
+        "source_url": "https://www.taipeitimes.com/News/taiwan/archives/2026/10/01/2003865191",
+        "body": "身為國會議員，我們有責任確保本法（《台灣關係法》）得到遵守。國會已授權大幅增加對台資源，這些授權必須用於國會所意圖的目的。美國不得諮詢北京意見就對台軍售。"
+      },
+      {
+        "member": "Mike Johnson",
+        "role": "議員",
+        "chamber": "眾院",
+        "committee": "眾議院議長",
+        "party": "R",
+        "state": "LA",
+        "topic": "台灣的穩定與獨立攸關美國國家安全",
+        "time": "2026-09-28",
+        "source_url": "https://www.taipeitimes.com/News/front/archives/2026/10/02/2003865245",
+        "body": "台灣是夥伴，其穩定與獨立對美國國家安全和經濟至關重要。對於川普將140億美元軍售延遲作為對華談判籌碼的說法，他表示不必過度解讀，軍售延遲與中東伊朗衝突後飛彈庫存需求有關。"
+      }
+    ],
+    "floor_schedule": {
+      "senate": "⚠️ 本週休會（District Work Period，10月12–18日）。參議院未開議，無院會議程。",
+      "house": "⚠️ 本週休會（District Work Period，10月12–18日）。眾議院未開議，無院會議程。",
+      "date": "截至 2026年10月14日"
+    },
+    "committees": [],
+    "upcoming": []
+  }
+];
+</script>
+
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="site-title">
+      <div class="en">U.S. Congressional Intelligence &amp; Taiwan Affairs Monitor</div>
+      <div class="zh">美國國會動態暨台美關係情報分析系統</div>
+    </div>
+    <div class="header-right">
+      <span class="status-live">即時監測</span>
+      <span class="update-time">更新：<strong id="update-time">—</strong></span>
+    </div>
+  </div>
+</header>
+
+
+<button id="btn-home" onclick="switchTab('dashboard')" aria-label="回首頁">⌂ 回首頁</button>
+
+<nav class="nav-tabs">
+  <button class="nav-tab active" data-tab="dashboard">🏠 首頁</button>
+  <button class="nav-tab" data-tab="bills">法案追蹤</button>
+  <button class="nav-tab" data-tab="statements">議員言論</button>
+  <button class="nav-tab" data-tab="schedule">議程日曆</button>
+</nav>
+
+<main class="main">
+
+  <!-- 儀表板 -->
+  <div class="tab-panel active" id="tab-dashboard">
+    <div class="period-bar">
+      <span class="period-lbl">彙整區間：<strong id="period-range">—</strong></span>
+      <span class="period-tag" id="period-date">—</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat-card s-taiwan" onclick="switchTab('dashboard')" title="點擊查看新聞">
+        <div class="s-label">涉台重大動態</div>
+        <div class="s-val" id="stat-taiwan">—</div>
+        <div class="s-sub">本期直接涉台則數 →</div>
+      </div>
+      <div class="stat-card s-bills" onclick="switchTab('bills')" title="點擊查看法案追蹤">
+        <div class="s-label">追蹤法案</div>
+        <div class="s-val" id="stat-bills">—</div>
+        <div class="s-sub">涉台／涉中進行中 →</div>
+      </div>
+      <div class="stat-card s-stmt" onclick="switchTab('statements')" title="點擊查看議員言論">
+        <div class="s-label">議員涉台言論</div>
+        <div class="s-val" id="stat-stmts">—</div>
+        <div class="s-sub">本期公開發言 →</div>
+      </div>
+    </div>
+    <div class="sec-hd">
+      <h2><span class="marker"></span>今日重點快訊</h2>
+      <span class="sec-badge" id="news-badge">—</span>
+    </div>
+    <div class="notif-list" id="news-list"></div>
+    <div class="sec-hd"><h2><span class="marker"></span>國會院會議程</h2></div>
+    <div id="floor-summary"></div>
+    <div class="sec-hd"><h2><span class="marker"></span>委員會動態</h2></div>
+    <div class="cmte-list" id="cmte-list"></div>
+  </div>
+
+  <!-- 法案追蹤 -->
+  <div class="tab-panel" id="tab-bills">
+    <button class="back-home" onclick="switchTab('dashboard')">返回首頁</button>
+    <div class="sec-hd">
+      <h2><span class="marker"></span>涉台／涉中重要法案</h2>
+      <span class="sec-badge">持續更新</span>
+    </div>
+    <div class="bills-list" id="bills-list"></div>
+  </div>
+
+  <!-- 議員言論 -->
+  <div class="tab-panel" id="tab-statements">
+    <button class="back-home" onclick="switchTab('dashboard')">返回首頁</button>
+    <div class="sec-hd">
+      <h2><span class="marker"></span>議員涉台言論監測</h2>
+      <span class="sec-badge" id="stmt-period">—</span>
+    </div>
+    <div style="font-size:11px;color:var(--ink-3);margin-bottom:12px;">資料涵蓋本日及前十日 · 僅收錄參眾兩院民選議員 · 各則附原始連結</div>
+    <!-- 近五日區 -->
+    <div class="stmt-section-hd" id="stmt-recent-hd" hidden>📅 近五日言論</div>
+    <div class="stmt-list" id="stmt-recent"></div>
+    <!-- 五日以前區（可折疊） -->
+    <details id="stmt-older-details" hidden style="margin-top:16px;">
+      <summary style="cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:6px 0 4px;border-bottom:1px solid var(--rule);list-style:none;display:flex;justify-content:space-between;align-items:center;">
+        <span>🗂 五日以前言論</span><span style="font-size:12px;">▼ 展開</span>
+      </summary>
+      <div class="stmt-list" id="stmt-older" style="margin-top:10px;"></div>
+    </details>
+    <div id="stmt-empty" class="empty" hidden>本時段無涉台議員言論</div>
+  </div>
+
+  <!-- 議程日曆 -->
+  <div class="tab-panel" id="tab-schedule">
+    <button class="back-home" onclick="switchTab('dashboard')">返回首頁</button>
+    <div class="sec-hd">
+      <h2><span class="marker"></span>近期重要議程</h2>
+    </div>
+    <div class="sched-list" id="sched-list"></div>
+  </div>
+
+</main>
+
+<footer>
+  <span>資料來源：Congress.gov · senate.gov · house.gov · Politico · The Hill · Roll Call</span>
+  <span>每3小時自動更新 · <a href="https://christopherpyliu-a11y.github.io/global-digest/" target="_blank" rel="noopener">GitHub Pages</a></span>
+</footer>
+
+<script>
+(function(){
+  function $id(id){return document.getElementById(id);}
+  function stripeClass(p){return{critical:'p-critical',high:'p-high',normal:'p-normal',low:'p-low'}[p]||'p-low';}
+  function catClass(c){return{taiwan:'cat-taiwan',china:'cat-china',defense:'cat-defense',leg:'cat-leg'}[c]||'cat-news';}
+
+  const data = EMBEDDED_DATA[0];
+  if(!data) return;
+
+  $id('update-time').textContent = data.date + '　' + data.generated_at;
+  $id('period-range').textContent = data.period_start + ' – ' + data.period_end + '　台北時間';
+  $id('period-date').textContent = data.date;
+
+  const twNews = (data.news||[]).filter(n=>n.taiwan_rel==='直接');
+  $id('stat-taiwan').textContent = twNews.length;
+  $id('stat-bills').textContent  = (data.bills||[]).length;
+  $id('stat-stmts').textContent  = (data.member_statements||[]).length;
+  $id('news-badge').textContent  = (data.news||[]).length + ' 則';
+
+  /* ── 推播式新聞卡 ── */
+  const newsList = $id('news-list');
+  (data.news||[]).forEach(n=>{
+    const relBadge = n.taiwan_rel==='直接' ? '<span class="notif-rel-badge">涉台</span>' : '';
+    const linkHTML = n.source_url
+      ? `<a class="notif-link" href="${n.source_url}" target="_blank" rel="noopener">${n.source}</a>`
+      : `<span style="font-size:11px;color:var(--ink-3)">${n.source||''}</span>`;
+    const item = document.createElement('div');
+    item.className = 'notif-item';
+    item.innerHTML = `
+      <div class="notif-stripe ${stripeClass(n.priority)}"></div>
+      <div>
+        <div class="notif-meta">
+          <span class="notif-cat ${catClass(n.category)}">${n.cat_label}</span>
+          <span class="notif-time">${n.time}${n.time_et?' · '+n.time_et:''}</span>
+          ${relBadge}
+        </div>
+        <div class="notif-title">${n.title}</div>
+        <div class="notif-summary">${n.summary}</div>
+        <div class="notif-footer">
+          <div class="notif-actors">涉及：<span>${(n.actors||[]).join('、')}</span></div>
+          ${linkHTML}
+        </div>
+      </div>`;
+    newsList.appendChild(item);
+  });
+  if(!data.news||!data.news.length) newsList.innerHTML='<div class="empty">本時段暫無新發展</div>';
+
+  /* ── 院會議程 ── */
+  const fs = data.floor_schedule;
+  if(fs){
+    $id('floor-summary').innerHTML=`<div class="floor-box">
+      <div class="chamber-block"><div class="chamber">🏛 參議院</div>${fs.senate}</div>
+      <div class="chamber-block"><div class="chamber">🏛 眾議院</div>${fs.house}</div>
+      <div class="date-note">${fs.date}</div>
+    </div>`;
+  }
+
+  /* ── 委員會 ── */
+  const cmteList = $id('cmte-list');
+  (data.committees||[]).forEach(c=>{
+    const d = document.createElement('div');
+    d.className='cmte-item';
+    d.innerHTML=`<span class="cmte-name">${c.committee}${c.taiwan_rel?'<span class="cmte-badge">涉台</span>':''}</span><span>${c.activity}</span>`;
+    cmteList.appendChild(d);
+  });
+  if(!data.committees||!data.committees.length) cmteList.innerHTML='<div class="empty">本時段委員會無新動態</div>';
+
+  /* ── 法案（雙軌進度條） ── */
+  const billsList = $id('bills-list');
+
+  function makeTrack(label, trackClass, introduced, committee, committeeDate, floorDate, isSigned){
+    /* Returns HTML for one chamber track. Nodes: 提案→委員會→通過院會 */
+    if(!introduced && !committee && !floorDate) return '';
+    function node(text, date, isDone, isCurrent){
+      const cls='bill-stage'+(isDone?' done':isCurrent?' current':'');
+      const dateTxt=date?`<span class="stage-date">${date}</span>`:'';
+      return `<div class="${cls}">${text}${dateTxt}</div>`;
+    }
+    const hasFloor=!!floorDate;
+    const hasCommittee=!!(committee||committeeDate);
+    const hasIntro=!!introduced;
+    const n1=node('提案', hasIntro?introduced:null, hasIntro, !hasIntro);
+    const n2=node(committee||'委員會', committeeDate||null, hasCommittee&&hasIntro, hasIntro&&!hasCommittee);
+    const n3=node('通過院會', floorDate||null, hasFloor, hasCommittee&&!hasFloor);
+    return `<div class="bill-track ${trackClass}">
+      <div class="bill-track-label">${label}</div>
+      <div class="bill-stage-row">${n1}${n2}${n3}</div>
+    </div>`;
+  }
+
+  function overallStatusClass(b){
+    const s=b.status||'';
+    if(b.signed_date||s.includes('公法')) return 'bs-law';
+    if(s.includes('日程')||s.includes('calendar')) return 'bs-calendar';
+    if(s.includes('委員會通過')||s.includes('通過委員會')||s.includes('ordered reported')||
+       s.includes('45-0')||s.includes('48-0')) return 'bs-committee';
+    if(s.includes('送達參議院')||s.includes('送達眾議院')||s.includes('Received')) return 'bs-passed';
+    return 'bs-senate';
+  }
+  function overallStatusLabel(b){
+    const s=b.status||'';
+    if(b.signed_date||s.includes('公法')) return '已成為公法 '+(b.law_number||'');
+    if(b.senate_floor_date&&b.house_floor_date) return '兩院均已通過';
+    if(s.includes('日程')) return '已列入議事日程';
+    if(s.includes('委員會通過')||s.includes('45-0')||s.includes('48-0')) return '委員會通過';
+    if(s.includes('送達')) return '已送達另院';
+    return '已提出';
+  }
+
+  (data.bills||[]).forEach(b=>{
+    const senateTrack = makeTrack('參議院',   'track-senate',
+      b.senate_introduced, b.senate_committee_name, b.senate_committee_date, b.senate_floor_date, false);
+    const houseTrack  = makeTrack('眾議院',   'track-house',
+      b.house_introduced,  b.house_committee_name,  b.house_committee_date,  b.house_floor_date,  false);
+    const signedTrack = b.signed_date
+      ? `<div class="bill-track track-signed"><div class="bill-track-label">總統簽署</div>
+          <div class="bill-stage-row"><div class="bill-stage done">簽署成法<span class="stage-date">${b.signed_date}${b.law_number?' · '+b.law_number:''}</span></div></div></div>`
+      : '';
+
+    const sponsor=b.sponsor?`<strong>提案人：</strong>${b.sponsor}`:'';
+    const cospon=b.cosponsors&&b.cosponsors.length?` ／ <strong>連署人／共同提案人：</strong>${b.cosponsors.join('、')}`:'';
+    const sc=overallStatusClass(b);
+    const slabel=overallStatusLabel(b);
+    const d = document.createElement('div');
+    d.className='bill-card '+(b.category||'taiwan');
+    d.innerHTML=`
+      <div class="bill-hd">
+        <span class="bill-num">${b.bill_num}</span>
+        <span class="bill-status ${sc}">${slabel}</span>
+      </div>
+      <div class="bill-title">${b.title_zh}</div>
+      <div class="bill-title-en">${b.title_en}</div>
+      <div class="bill-progress-wrap">${senateTrack}${houseTrack}${signedTrack}</div>
+      ${sponsor||cospon?`<div class="bill-sponsors">${sponsor}${cospon}</div>`:''}
+      <div class="bill-summary">${b.summary}</div>
+      <div class="bill-footer">
+        <a class="bill-link" href="${b.url}" target="_blank" rel="noopener">Congress.gov ↗</a>
+      </div>`;
+    billsList.appendChild(d);
+  });
+
+  /* ── 議員言論 ── */
+  $id('stmt-period').textContent = data.date;
+  (function(){
+    const stmts = (data.member_statements||[]);
+    // 今日及前十日區間
+    const today = new Date(data.date);
+    const cutoff5 = new Date(today); cutoff5.setDate(today.getDate()-5);
+    const recentList = $id('stmt-recent');
+    const olderList  = $id('stmt-older');
+    let cntRecent=0, cntOlder=0;
+
+    // 排序：最新在前
+    const sorted = stmts.slice().sort((a,b)=>b.time.localeCompare(a.time));
+
+    sorted.forEach(s=>{
+      const sDate = new Date(s.time);
+      const isRecent = sDate > cutoff5;
+      const partyClass = s.party==='R'?'party-r':(s.party==='D'?'party-d':'');
+      const chamberLabel = s.chamber ? `${s.chamber}` : '';
+      const d = document.createElement('div');
+      d.className='stmt-card' + (isRecent?'':' stmt-old');
+      d.innerHTML=`
+        <div class="stmt-hd">
+          <span class="stmt-date-badge">${s.time}</span>
+          <span class="stmt-member ${partyClass}">${s.member}</span>
+          ${chamberLabel?`<span class="stmt-chamber">${chamberLabel}</span>`:''}
+          <span class="stmt-committee">${s.committee}</span>
+          <span class="stmt-topic">${s.topic}</span>
+        </div>
+        <div class="stmt-body">「${s.body}」</div>
+        <div class="stmt-time">${s.source_url?`<a class="stmt-src" href="${s.source_url}" target="_blank" rel="noopener">原始來源 ↗</a>`:'（無原始連結）'}</div>`;
+      if(isRecent){ recentList.appendChild(d); cntRecent++; }
+      else         { olderList.appendChild(d);  cntOlder++; }
+    });
+
+    if(cntRecent>0){ $id('stmt-recent-hd').hidden=false; }
+    if(cntOlder>0) { $id('stmt-older-details').hidden=false; }
+    if(cntRecent===0&&cntOlder===0){ $id('stmt-empty').hidden=false; }
+  })();
+
+  /* ── 議程 ── */
+  const schedList = $id('sched-list');
+  (data.upcoming||[]).forEach(u=>{
+    const tags=[];
+    if(u.taiwan) tags.push('<span class="sched-tag st-taiwan">涉台</span>');
+    if(u.ndaa)   tags.push('<span class="sched-tag st-ndaa">NDAA</span>');
+    if(u.defense)tags.push('<span class="sched-tag st-defense">國防</span>');
+    const d = document.createElement('div');
+    d.className='sched-item';
+    d.innerHTML=`
+      <div class="sched-date-box">
+        <div class="sched-month">${u.month}</div>
+        <div class="sched-day">${u.day}</div>
+      </div>
+      <div>
+        <div class="sched-title">${u.title}${tags.join('')}</div>
+        <div class="sched-body">${u.body}</div>
+      </div>
+      <div class="sched-rel">${u.rel||''}</div>`;
+    schedList.appendChild(d);
+  });
+  if(!data.upcoming||!data.upcoming.length) schedList.innerHTML='<div class="empty">本週暫無涉台重要議程</div>';
+
+  /* ── tabs ── */
+  function switchTab(name){
+    document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    const btn=document.querySelector(`.nav-tab[data-tab="${name}"]`);
+    if(btn) btn.classList.add('active');
+    const panel=document.getElementById('tab-'+name);
+    if(panel){ panel.classList.add('active'); panel.scrollIntoView({behavior:'smooth',block:'start'}); }
+  }
+  window.switchTab=switchTab;
+
+  document.querySelectorAll('.nav-tab').forEach(btn=>{
+    btn.addEventListener('click',()=>switchTab(btn.dataset.tab));
+  });
+})();
+</script>
+
+</body>
+</html>
