@@ -445,21 +445,42 @@ body{
 .watch-item{font-size:12px;color:var(--ink-2);line-height:1.55;padding:5px 0;border-bottom:1px solid var(--rule-2);}
 .watch-item:last-child{border-bottom:none;padding-bottom:0;}
 .watch-item strong{color:var(--ink);}
+.watch-src{font-size:10px;color:var(--accent);text-decoration:none;font-weight:600;margin-top:3px;display:inline-block;border-bottom:1px solid rgba(37,99,235,.25);}
+.watch-src:hover{color:var(--accent-2);}
+.watch-src-txt{font-size:10px;color:var(--ink-4);margin-top:3px;display:inline-block;}
 
 /* ══ DIRECTORY ══ */
-.dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+.dir-filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.dir-filter-btn{font-size:12px;padding:5px 14px;border-radius:20px;border:1px solid var(--rule);background:var(--bg-card);color:var(--ink-3);cursor:pointer;transition:all .15s;}
+.dir-filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.dir-search-wrap{position:relative;margin-bottom:16px;}
+.dir-search-wrap .si{position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none;}
+#dir-search{width:100%;padding:8px 12px 8px 32px;border:1px solid var(--rule);border-radius:6px;background:var(--bg-card);color:var(--ink);font-size:13px;font-family:var(--font-sans);}
+.dir-state-section{margin-bottom:20px;}
+.dir-state-hd{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--rule);padding:6px 0 4px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;}
+.dir-state-hd-name{color:var(--ink);}
+.dir-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;}
 .dir-card{
   background:var(--bg-card);border:1px solid var(--rule);border-radius:8px;
-  padding:14px;box-shadow:var(--shadow);
+  padding:10px 12px;box-shadow:var(--shadow);
 }
-.dir-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:2px;}
-.dir-title{font-size:11px;color:var(--ink-3);margin-bottom:8px;}
-.dir-chamber{font-size:10px;padding:1px 7px;border-radius:10px;border:1px solid;display:inline-block;margin-bottom:6px;}
+.dir-name{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.dir-meta{font-size:11px;color:var(--ink-3);display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.dir-chamber{font-size:10px;padding:1px 6px;border-radius:10px;border:1px solid;display:inline-block;}
 .dir-chamber.senate{color:var(--accent);border-color:var(--accent);background:var(--accent-soft);}
 .dir-chamber.house{color:var(--red);border-color:var(--red);background:var(--red-soft);}
-.dir-party-r{color:#DC2626;font-weight:700;font-size:11px;}
-.dir-party-d{color:var(--accent);font-weight:700;font-size:11px;}
-.dir-bills{font-size:10px;color:var(--ink-4);margin-top:6px;}
+.dir-party-r{color:#DC2626;font-weight:700;}
+.dir-party-d{color:var(--accent);font-weight:700;}
+.dir-party-i{color:var(--green);font-weight:700;}
+.dir-district{font-size:10px;color:var(--ink-4);}
+.dir-bills{font-size:10px;color:var(--ink-4);margin-top:4px;}
+.dir-chamber-hd{
+  font-family:var(--font-serif);font-size:15px;font-weight:700;
+  padding:12px 16px;background:var(--accent);color:#fff;border-radius:8px;
+  margin:16px 0 12px;display:flex;align-items:center;gap:8px;
+}
+.dir-chamber-hd.house-hd{background:var(--red);}
+.dir-hidden{display:none !important;}
 
 /* ══ EMPTY STATE ══ */
 .empty{padding:28px;text-align:center;color:var(--ink-3);font-size:12px;border:1px dashed var(--rule);border-radius:6px;background:var(--rule-2);}
@@ -773,13 +794,19 @@ const EMBEDDED_DATA = [
         </div>
         <span class="page-badge" id="stmt-period">—</span>
       </div>
-      <div class="stmt-section-hd" id="stmt-recent-hd" hidden>📅 近五日言論</div>
-      <div class="stmt-list" id="stmt-recent"></div>
-      <details id="stmt-older-details" hidden style="margin-top:16px;">
+      <div class="stmt-section-hd" id="stmt-week-hd" hidden>📅 本週言論</div>
+      <div class="stmt-list" id="stmt-week"></div>
+      <details id="stmt-2mo-details" hidden style="margin-top:16px;">
         <summary style="cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:6px 0 4px;border-bottom:1px solid var(--rule);list-style:none;display:flex;justify-content:space-between;align-items:center;">
-          <span>🗂 五日以前言論</span><span style="font-size:12px;">▼ 展開</span>
+          <span>🗂 兩個月內言論</span><span style="font-size:12px;">▼ 展開</span>
         </summary>
-        <div class="stmt-list" id="stmt-older" style="margin-top:10px;"></div>
+        <div class="stmt-list" id="stmt-2mo" style="margin-top:10px;"></div>
+      </details>
+      <details id="stmt-old-details" hidden style="margin-top:16px;">
+        <summary style="cursor:pointer;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);padding:6px 0 4px;border-bottom:1px solid var(--rule);list-style:none;display:flex;justify-content:space-between;align-items:center;">
+          <span>📦 兩個月前言論</span><span style="font-size:12px;">▼ 展開</span>
+        </summary>
+        <div class="stmt-list" id="stmt-old" style="margin-top:10px;"></div>
       </details>
       <div id="stmt-empty" class="empty" hidden>本時段無涉台議員言論</div>
     </div>
@@ -812,10 +839,20 @@ const EMBEDDED_DATA = [
       <div class="page-hd">
         <div>
           <div class="page-title"><span class="icon">🏛</span>議員資料庫</div>
-          <div class="page-subtitle">涉台法案提案人及連署人 · 依法案資料自動建檔</div>
+          <div class="page-subtitle">第119屆國會全體議員 · 535席（參100＋眾435）· 依院別及州別分類</div>
         </div>
+        <span class="page-badge">第119屆</span>
       </div>
-      <div class="dir-grid" id="dir-grid"></div>
+      <div class="dir-filter-bar">
+        <button class="dir-filter-btn active" data-chamber="all">全部（535）</button>
+        <button class="dir-filter-btn" data-chamber="senate">參議院（100）</button>
+        <button class="dir-filter-btn" data-chamber="house">眾議院（435）</button>
+      </div>
+      <div class="dir-search-wrap">
+        <span class="si">🔍</span>
+        <input type="text" id="dir-search" placeholder="搜尋議員姓名、州別…">
+      </div>
+      <div id="dir-content"></div>
     </div>
 
   </div><!-- /content -->
@@ -1035,78 +1072,91 @@ const EMBEDDED_DATA = [
     });
   }
 
-  /* ── 議員言論 ── */
+  /* ── 議員言論（三時段：本週／兩個月內／兩個月前） ── */
   (function(){
     const stmts=(data.member_statements||[]);
     const today=new Date(data.date.replace(/年|月/g,'-').replace('日',''));
-    const cutoff5=new Date(today); cutoff5.setDate(today.getDate()-5);
-    const recentList=$id('stmt-recent');
-    const olderList=$id('stmt-older');
-    let cntRecent=0, cntOlder=0;
+    // 本週：7天內
+    const cutoffWeek=new Date(today); cutoffWeek.setDate(today.getDate()-7);
+    // 兩個月：60天
+    const cutoff2mo=new Date(today); cutoff2mo.setDate(today.getDate()-60);
+    const weekList=$id('stmt-week');
+    const twoMoList=$id('stmt-2mo');
+    const oldList=$id('stmt-old');
+    let cntWeek=0, cnt2mo=0, cntOld=0;
     const sorted=stmts.slice().sort((a,b)=>b.time.localeCompare(a.time));
     sorted.forEach(s=>{
       const sDate=new Date(s.time);
-      const isRecent=sDate>cutoff5;
       const partyClass=s.party==='R'?'party-r':(s.party==='D'?'party-d':'');
       const d=document.createElement('div');
-      d.className='stmt-card'+(isRecent?'':' stmt-old');
+      let bucket;
+      if(sDate>cutoffWeek){bucket='week';d.className='stmt-card';}
+      else if(sDate>cutoff2mo){bucket='2mo';d.className='stmt-card stmt-old';}
+      else{bucket='old';d.className='stmt-card stmt-old';}
       d.innerHTML=`
         <div class="stmt-hd">
           <span class="stmt-date-badge">${s.time}</span>
           <span class="stmt-member ${partyClass}">${s.member}</span>
           ${s.chamber?`<span class="stmt-chamber">${s.chamber}</span>`:''}
-          <span class="stmt-committee">${s.committee}</span>
+          <span class="stmt-committee">${s.committee||''}</span>
           <span class="stmt-topic">${s.topic}</span>
         </div>
         <div class="stmt-body">「${s.body}」</div>
         <div class="stmt-time">${s.source_url?`<a class="stmt-src" href="${s.source_url}" target="_blank" rel="noopener">原始來源 ↗</a>`:'（無原始連結）'}</div>`;
-      if(isRecent){recentList.appendChild(d);cntRecent++;}
-      else{olderList.appendChild(d);cntOlder++;}
+      if(bucket==='week'){weekList.appendChild(d);cntWeek++;}
+      else if(bucket==='2mo'){twoMoList.appendChild(d);cnt2mo++;}
+      else{oldList.appendChild(d);cntOld++;}
     });
-    if(cntRecent>0) $id('stmt-recent-hd').hidden=false;
-    if(cntOlder>0)  $id('stmt-older-details').hidden=false;
-    if(cntRecent===0&&cntOlder===0) $id('stmt-empty').hidden=false;
+    if(cntWeek>0) $id('stmt-week-hd').hidden=false;
+    if(cnt2mo>0)  $id('stmt-2mo-details').hidden=false;
+    if(cntOld>0)  $id('stmt-old-details').hidden=false;
+    if(cntWeek===0&&cnt2mo===0&&cntOld===0) $id('stmt-empty').hidden=false;
   })();
 
   /* ── 涉台涉中專區 ── */
   (function(){
     const themes=[
       {key:'mil',cls:'wc-mil',icon:'⚔️',title:'軍事動態',items:[
-        {t:'解放軍活動',v:'今日9架次越台海中線，進入北部、中部、西南及東部防空識別區；6艘海軍艦艇及6艘官方船隻在台灣周邊海域活動。來源：台灣國防部（2026-10-14）'},
-        {t:'海鯤號潛艦',v:'台灣首艘自製潛艦完成第24次海試，不對稱戰力持續強化。來源：Rio Times（2026-10-13）'},
-        {t:'普拉塔斯事件',v:'台灣海巡對中國漁船動用水炮驅離，北京發出警告。來源：Rio Times（2026-10-14）'}
+        {t:'解放軍活動',v:'今日9架次越台海中線，進入北部、中部、西南及東部防空識別區；6艘海軍艦艇及6艘官方船隻在台灣周邊海域活動。',src:'台灣國防部（2026-10-14）',url:'https://air.mnd.gov.tw/en/News/News_Detail.aspx?CID=214&ID=59309'},
+        {t:'海鯤號潛艦',v:'台灣首艘自製潛艦完成第24次海試，不對稱戰力持續強化。',src:'Rio Times（2026-10-13）',url:'https://www.riotimesonline.com/asia-intelligence-brief-wednesday-october-14-2026/'},
+        {t:'普拉塔斯事件',v:'台灣海巡對中國漁船動用水炮驅離，北京發出警告。',src:'Rio Times（2026-10-14）',url:'https://www.riotimesonline.com/asia-intelligence-brief-wednesday-october-14-2026/'}
       ]},
       {key:'dip',cls:'wc-dip',icon:'🤝',title:'外交動態',items:[
-        {t:'美台議員互動',v:'參眾議員代表團（Bennet、Boyle等）10月初訪問台灣，深化雙邊夥伴關係。來源：Focus Taiwan（2026-10-06/07）'},
-        {t:'北京制裁行動',v:'中國宣布制裁數名支持台灣的友邦國家官員，美國務院發聲批評「脅迫與侵略」。來源：Focus Taiwan（2026-10-14）'},
-        {t:'軍售延遲爭議',v:'21位民主黨參議員聯署，敦促川普立即向台灣交付已批准軍售（140億美元）。來源：Taipei Times（2026-10-02）'}
+        {t:'美台議員互動',v:'參眾議員代表團（Bennet、Boyle等）10月初訪問台灣，深化雙邊夥伴關係。',src:'Focus Taiwan（2026-10-06/07）',url:'https://focustaiwan.tw/politics/202610060005'},
+        {t:'北京制裁行動',v:'中國宣布制裁數名支持台灣的友邦國家官員，美國務院發聲批評「脅迫與侵略」。',src:'Focus Taiwan（2026-10-14）',url:'https://focustaiwan.tw/politics/202610140001'},
+        {t:'軍售延遲爭議',v:'21位民主黨參議員聯署，敦促川普立即向台灣交付已批准軍售（140億美元）。',src:'Taipei Times（2026-10-02）',url:'https://www.taipeitimes.com/News/front/archives/2026/10/02/2003865245'}
       ]},
       {key:'eco',cls:'wc-eco',icon:'📈',title:'經濟動態',items:[
-        {t:'IMF GDP預測',v:'IMF預測台灣2026年GDP成長10.7%，為近年高點。來源：Rio Times（2026-10-14）'},
-        {t:'阿拉斯加管線',v:'北京外交部點名批評台灣計畫投資44億美元於美國阿拉斯加天然氣管線項目。來源：fmprc.gov.cn（2026-10-14）'},
-        {t:'美台租稅協定',v:'H.R.33 及 S.199《美台雙重課稅救濟法》立法進行中；H.R.33已通過眾院，待參院審議。'}
+        {t:'IMF GDP預測',v:'IMF預測台灣2026年GDP成長10.7%，為近年高點。',src:'Rio Times（2026-10-14）',url:'https://www.riotimesonline.com/asia-intelligence-brief-wednesday-october-14-2026/'},
+        {t:'阿拉斯加管線',v:'北京外交部點名批評台灣計畫投資44億美元於美國阿拉斯加天然氣管線項目。',src:'中國外交部（2026-10-14）',url:'https://www.fmprc.gov.cn/mfa_eng/xwfw_665399/s2510_665401/'},
+        {t:'美台租稅協定',v:'H.R.33 及 S.199《美台雙重課稅救濟法》立法進行中；H.R.33已通過眾院，待參院審議。',src:'Congress.gov',url:'https://www.congress.gov/bill/119th-congress/house-bill/33'}
       ]},
       {key:'leg',cls:'wc-leg',icon:'📜',title:'立法動態',items:[
-        {t:'已成為公法',v:'H.R.1512《台灣保證執行法》於2025年12月2日簽署成法（公法119-45）。'},
-        {t:'參院日程案件',v:'S. Res. 86（反UN2758誤用）、S.199（雙重課稅）、S.974（代表處法）等多案已列入議事日程，待表決。'},
-        {t:'本週休會',v:'國會本週（10月12–18日）District Work Period休會，無院會議程。'}
+        {t:'已成為公法',v:'H.R.1512《台灣保證執行法》於2025年12月2日簽署成法（公法119-45）。',src:'Congress.gov',url:'https://www.congress.gov/bill/119th-congress/house-bill/1512'},
+        {t:'參院日程案件',v:'S. Res. 86（反UN2758誤用）、S.199（雙重課稅）、S.974（代表處法）等多案已列入議事日程，待表決。',src:'Senate Calendar',url:'https://www.senate.gov/legislative/schedule/floor_schedule.htm'},
+        {t:'本週休會',v:'國會本週（10月12–18日）District Work Period休會，無院會議程。',src:'House Schedule',url:'https://www.majoritywhip.gov/calendar/'}
       ]},
       {key:'pub',cls:'wc-pub',icon:'📣',title:'公眾輿論',items:[
-        {t:'議員聲明',v:'Roger Wicker（R-MS）：「美國必須遵守《台灣關係法》，國會已授權大幅增加對台資源」（2026-09-29）'},
-        {t:'議長立場',v:'眾議院議長 Mike Johnson：「台灣的穩定與獨立對美國國家安全至關重要」（2026-09-28）'},
-        {t:'對中共態度',v:'眾院對中共特委會主席 John Moolenaar 強烈譴責中共在美境內監控台灣總統之子（2026-10-06）'}
+        {t:'Wicker議員聲明',v:'Roger Wicker（R-MS）：「美國必須遵守《台灣關係法》，國會已授權大幅增加對台資源」（2026-09-29）',src:'Taipei Times（2026-10-01）',url:'https://www.taipeitimes.com/News/taiwan/archives/2026/10/01/2003865191'},
+        {t:'議長立場',v:'眾議院議長 Mike Johnson：「台灣的穩定與獨立對美國國家安全至關重要」（2026-09-28）',src:'Taipei Times（2026-10-02）',url:'https://www.taipeitimes.com/News/front/archives/2026/10/02/2003865245'},
+        {t:'對中共態度',v:'眾院對中共特委會主席 John Moolenaar 強烈譴責中共在美境內監控台灣總統之子（2026-10-06）',src:'House China Committee（2026-10-06）',url:'https://chinaselectcommittee.house.gov/media/press-releases'}
       ]},
       {key:'int',cls:'wc-int',icon:'🌐',title:'國際參與',items:[
-        {t:'UN2758決議案',v:'多案立法（S.Res.86、H.Res.148、H.R.2416）推進，明確聲明聯合國大會第2758號決議不代表台灣代表權問題已解決。'},
-        {t:'台灣盟友基金',v:'S.1216 及 H.R.2559《台灣盟友基金法》立法進行中，旨在支援台灣邦交國、防止外交脅迫。'},
-        {t:'IMF預測',v:'台灣GDP年增10.7%，顯示台灣在國際經濟體系中的重要性持續提升。'}
+        {t:'UN2758決議案',v:'多案立法（S.Res.86、H.Res.148、H.R.2416）推進，明確聲明聯合國大會第2758號決議不代表台灣代表權問題已解決。',src:'Congress.gov',url:'https://www.congress.gov/bill/119th-congress/senate-resolution/86'},
+        {t:'台灣盟友基金',v:'S.1216 及 H.R.2559《台灣盟友基金法》立法進行中，旨在支援台灣邦交國、防止外交脅迫。',src:'Congress.gov',url:'https://www.congress.gov/bill/119th-congress/senate-bill/1216'},
+        {t:'IMF台灣預測',v:'台灣GDP年增10.7%，顯示台灣在國際經濟體系中的重要性持續提升。',src:'Rio Times（2026-10-14）',url:'https://www.riotimesonline.com/asia-intelligence-brief-wednesday-october-14-2026/'}
       ]}
     ];
     const grid=$id('watch-grid');
     themes.forEach(th=>{
       const card=document.createElement('div');
       card.className='watch-card '+th.cls;
-      const items=th.items.map(i=>`<div class="watch-item"><strong>${i.t}</strong><br>${i.v}</div>`).join('');
+      const items=th.items.map(i=>{
+        const srcHtml=i.url
+          ?`<a class="watch-src" href="${i.url}" target="_blank" rel="noopener">來源：${i.src} ↗</a>`
+          :`<span class="watch-src-txt">來源：${i.src}</span>`;
+        return `<div class="watch-item"><strong>${i.t}</strong><br>${i.v}<br>${srcHtml}</div>`;
+      }).join('');
       card.innerHTML=`<div class="watch-card-hd">${th.icon} ${th.title}</div>${items}`;
       grid.appendChild(card);
     });
@@ -1135,38 +1185,463 @@ const EMBEDDED_DATA = [
   });
   if(!data.upcoming||!data.upcoming.length) schedList.innerHTML='<div class="empty">本週暫無涉台重要議程（國會休會中）</div>';
 
-  /* ── 議員資料庫（從法案資料中提取） ── */
+  /* ── 議員資料庫（第119屆國會全體535席） ── */
   (function(){
-    const memberMap={};
+    // ── 參議院 100席（Wikipedia 119th Congress senators, verified 2026-10-14）
+    const SENATORS=[
+      {n:'Katie Britt',p:'R',st:'AL'},{n:'Tommy Tuberville',p:'R',st:'AL'},
+      {n:'Dan Sullivan',p:'R',st:'AK'},{n:'Lisa Murkowski',p:'R',st:'AK'},
+      {n:'Mark Kelly',p:'D',st:'AZ'},{n:'Ruben Gallego',p:'D',st:'AZ'},
+      {n:'John Boozman',p:'R',st:'AR'},{n:'Tom Cotton',p:'R',st:'AR'},
+      {n:'Alex Padilla',p:'D',st:'CA'},{n:'Adam Schiff',p:'D',st:'CA'},
+      {n:'Michael Bennet',p:'D',st:'CO'},{n:'John Hickenlooper',p:'D',st:'CO'},
+      {n:'Richard Blumenthal',p:'D',st:'CT'},{n:'Chris Murphy',p:'D',st:'CT'},
+      {n:'Chris Coons',p:'D',st:'DE'},{n:'Lisa Blunt Rochester',p:'D',st:'DE'},
+      {n:'Rick Scott',p:'R',st:'FL'},{n:'Ashley Moody',p:'R',st:'FL'},
+      {n:'Jon Ossoff',p:'D',st:'GA'},{n:'Raphael Warnock',p:'D',st:'GA'},
+      {n:'Brian Schatz',p:'D',st:'HI'},{n:'Mazie Hirono',p:'D',st:'HI'},
+      {n:'Mike Crapo',p:'R',st:'ID'},{n:'Jim Risch',p:'R',st:'ID'},
+      {n:'Dick Durbin',p:'D',st:'IL'},{n:'Tammy Duckworth',p:'D',st:'IL'},
+      {n:'Todd Young',p:'R',st:'IN'},{n:'Jim Banks',p:'R',st:'IN'},
+      {n:'Chuck Grassley',p:'R',st:'IA'},{n:'Joni Ernst',p:'R',st:'IA'},
+      {n:'Jerry Moran',p:'R',st:'KS'},{n:'Roger Marshall',p:'R',st:'KS'},
+      {n:'Mitch McConnell',p:'R',st:'KY'},{n:'Rand Paul',p:'R',st:'KY'},
+      {n:'Bill Cassidy',p:'R',st:'LA'},{n:'John Kennedy',p:'R',st:'LA'},
+      {n:'Susan Collins',p:'R',st:'ME'},{n:'Angus King',p:'I',st:'ME'},
+      {n:'Chris Van Hollen',p:'D',st:'MD'},{n:'Angela Alsobrooks',p:'D',st:'MD'},
+      {n:'Ed Markey',p:'D',st:'MA'},{n:'Elizabeth Warren',p:'D',st:'MA'},
+      {n:'Gary Peters',p:'D',st:'MI'},{n:'Elissa Slotkin',p:'D',st:'MI'},
+      {n:'Amy Klobuchar',p:'D',st:'MN'},{n:'Tina Smith',p:'D',st:'MN'},
+      {n:'Roger Wicker',p:'R',st:'MS'},{n:'Cindy Hyde-Smith',p:'R',st:'MS'},
+      {n:'Josh Hawley',p:'R',st:'MO'},{n:'Eric Schmitt',p:'R',st:'MO'},
+      {n:'Steve Daines',p:'R',st:'MT'},{n:'Tim Sheehy',p:'R',st:'MT'},
+      {n:'Deb Fischer',p:'R',st:'NE'},{n:'Pete Ricketts',p:'R',st:'NE'},
+      {n:'Catherine Cortez Masto',p:'D',st:'NV'},{n:'Jacky Rosen',p:'D',st:'NV'},
+      {n:'Jeanne Shaheen',p:'D',st:'NH'},{n:'Maggie Hassan',p:'D',st:'NH'},
+      {n:'Cory Booker',p:'D',st:'NJ'},{n:'Andy Kim',p:'D',st:'NJ'},
+      {n:'Martin Heinrich',p:'D',st:'NM'},{n:'Ben Ray Luján',p:'D',st:'NM'},
+      {n:'Chuck Schumer',p:'D',st:'NY'},{n:'Kirsten Gillibrand',p:'D',st:'NY'},
+      {n:'Thom Tillis',p:'R',st:'NC'},{n:'Ted Budd',p:'R',st:'NC'},
+      {n:'John Hoeven',p:'R',st:'ND'},{n:'Kevin Cramer',p:'R',st:'ND'},
+      {n:'Jon Husted',p:'R',st:'OH'},{n:'Bernie Moreno',p:'R',st:'OH'},
+      {n:'Alan Armstrong',p:'R',st:'OK'},{n:'James Lankford',p:'R',st:'OK'},
+      {n:'Ron Wyden',p:'D',st:'OR'},{n:'Jeff Merkley',p:'D',st:'OR'},
+      {n:'John Fetterman',p:'D',st:'PA'},{n:'David McCormick',p:'R',st:'PA'},
+      {n:'Jack Reed',p:'D',st:'RI'},{n:'Sheldon Whitehouse',p:'D',st:'RI'},
+      {n:'Darline Graham',p:'R',st:'SC'},{n:'Tim Scott',p:'R',st:'SC'},
+      {n:'John Thune',p:'R',st:'SD'},{n:'Mike Rounds',p:'R',st:'SD'},
+      {n:'Marsha Blackburn',p:'R',st:'TN'},{n:'Bill Hagerty',p:'R',st:'TN'},
+      {n:'John Cornyn',p:'R',st:'TX'},{n:'Ted Cruz',p:'R',st:'TX'},
+      {n:'Mike Lee',p:'R',st:'UT'},{n:'John Curtis',p:'R',st:'UT'},
+      {n:'Bernie Sanders',p:'I',st:'VT'},{n:'Peter Welch',p:'D',st:'VT'},
+      {n:'Mark Warner',p:'D',st:'VA'},{n:'Tim Kaine',p:'D',st:'VA'},
+      {n:'Patty Murray',p:'D',st:'WA'},{n:'Maria Cantwell',p:'D',st:'WA'},
+      {n:'Shelley Moore Capito',p:'R',st:'WV'},{n:'Jim Justice',p:'R',st:'WV'},
+      {n:'Ron Johnson',p:'R',st:'WI'},{n:'Tammy Baldwin',p:'D',st:'WI'},
+      {n:'John Barrasso',p:'R',st:'WY'},{n:'Cynthia Lummis',p:'R',st:'WY'}
+    ];
+
+    // ── 眾議院 435席 + 6非投票代表（congresscountdown.com, verified 2026-10-14）
+    // 格式：{n:姓名, p:黨, st:州, d:選區（'AL'=全州）}
+    const REPS=[
+      // Alabama
+      {n:'Barry Moore',p:'R',st:'AL',d:'1'},{n:'Shomari Figures',p:'D',st:'AL',d:'2'},
+      {n:'Mike Rogers',p:'R',st:'AL',d:'3'},{n:'Robert Aderholt',p:'R',st:'AL',d:'4'},
+      {n:'Dale Strong',p:'R',st:'AL',d:'5'},{n:'Gary Palmer',p:'R',st:'AL',d:'6'},
+      {n:'Terri Sewell',p:'D',st:'AL',d:'7'},
+      // Alaska
+      {n:'Nicholas Begich',p:'R',st:'AK',d:'AL'},
+      // Arizona
+      {n:'David Schweikert',p:'R',st:'AZ',d:'1'},{n:'Elijah Crane',p:'R',st:'AZ',d:'2'},
+      {n:'Yassamin Ansari',p:'D',st:'AZ',d:'3'},{n:'Greg Stanton',p:'D',st:'AZ',d:'4'},
+      {n:'Andy Biggs',p:'R',st:'AZ',d:'5'},{n:'Juan Ciscomani',p:'R',st:'AZ',d:'6'},
+      {n:'Adelita Grijalva',p:'D',st:'AZ',d:'7'},{n:'Abraham Hamadeh',p:'R',st:'AZ',d:'8'},
+      {n:'Paul Gosar',p:'R',st:'AZ',d:'9'},
+      // Arkansas
+      {n:'Eric Crawford',p:'R',st:'AR',d:'1'},{n:'J. Hill',p:'R',st:'AR',d:'2'},
+      {n:'Steve Womack',p:'R',st:'AR',d:'3'},{n:'Bruce Westerman',p:'R',st:'AR',d:'4'},
+      // California
+      {n:'James Gallagher',p:'R',st:'CA',d:'1'},{n:'Jared Huffman',p:'D',st:'CA',d:'2'},
+      {n:'Kevin Kiley',p:'I',st:'CA',d:'3'},{n:'Mike Thompson',p:'D',st:'CA',d:'4'},
+      {n:'Tom McClintock',p:'R',st:'CA',d:'5'},{n:'Ami Bera',p:'D',st:'CA',d:'6'},
+      {n:'Doris Matsui',p:'D',st:'CA',d:'7'},{n:'John Garamendi',p:'D',st:'CA',d:'8'},
+      {n:'Josh Harder',p:'D',st:'CA',d:'9'},{n:'Mark DeSaulnier',p:'D',st:'CA',d:'10'},
+      {n:'Nancy Pelosi',p:'D',st:'CA',d:'11'},{n:'Lateefah Simon',p:'D',st:'CA',d:'12'},
+      {n:'Adam Gray',p:'D',st:'CA',d:'13'},{n:'Aisha Wahab',p:'D',st:'CA',d:'14'},
+      {n:'Kevin Mullin',p:'D',st:'CA',d:'15'},{n:'Sam Liccardo',p:'D',st:'CA',d:'16'},
+      {n:'Ro Khanna',p:'D',st:'CA',d:'17'},{n:'Zoe Lofgren',p:'D',st:'CA',d:'18'},
+      {n:'Jimmy Panetta',p:'D',st:'CA',d:'19'},{n:'Vince Fong',p:'R',st:'CA',d:'20'},
+      {n:'Jim Costa',p:'D',st:'CA',d:'21'},{n:'David Valadao',p:'R',st:'CA',d:'22'},
+      {n:'Jay Obernolte',p:'R',st:'CA',d:'23'},{n:'Salud Carbajal',p:'D',st:'CA',d:'24'},
+      {n:'Raul Ruiz',p:'D',st:'CA',d:'25'},{n:'Julia Brownley',p:'D',st:'CA',d:'26'},
+      {n:'George Whitesides',p:'D',st:'CA',d:'27'},{n:'Judy Chu',p:'D',st:'CA',d:'28'},
+      {n:'Luz Rivas',p:'D',st:'CA',d:'29'},{n:'Laura Friedman',p:'D',st:'CA',d:'30'},
+      {n:'Gilbert Cisneros',p:'D',st:'CA',d:'31'},{n:'Brad Sherman',p:'D',st:'CA',d:'32'},
+      {n:'Pete Aguilar',p:'D',st:'CA',d:'33'},{n:'Jimmy Gomez',p:'D',st:'CA',d:'34'},
+      {n:'Norma Torres',p:'D',st:'CA',d:'35'},{n:'Ted Lieu',p:'D',st:'CA',d:'36'},
+      {n:'Sydney Kamlager-Dove',p:'D',st:'CA',d:'37'},{n:'Linda Sánchez',p:'D',st:'CA',d:'38'},
+      {n:'Mark Takano',p:'D',st:'CA',d:'39'},{n:'Young Kim',p:'R',st:'CA',d:'40'},
+      {n:'Ken Calvert',p:'R',st:'CA',d:'41'},{n:'Robert Garcia',p:'D',st:'CA',d:'42'},
+      {n:'Maxine Waters',p:'D',st:'CA',d:'43'},{n:'Nanette Barragán',p:'D',st:'CA',d:'44'},
+      {n:'Derek Tran',p:'D',st:'CA',d:'45'},{n:'J. Correa',p:'D',st:'CA',d:'46'},
+      {n:'Dave Min',p:'D',st:'CA',d:'47'},{n:'Darrell Issa',p:'R',st:'CA',d:'48'},
+      {n:'Mike Levin',p:'D',st:'CA',d:'49'},{n:'Scott Peters',p:'D',st:'CA',d:'50'},
+      {n:'Sara Jacobs',p:'D',st:'CA',d:'51'},{n:'Juan Vargas',p:'D',st:'CA',d:'52'},
+      // Colorado
+      {n:'Diana DeGette',p:'D',st:'CO',d:'1'},{n:'Joe Neguse',p:'D',st:'CO',d:'2'},
+      {n:'Jeff Hurd',p:'R',st:'CO',d:'3'},{n:'Lauren Boebert',p:'R',st:'CO',d:'4'},
+      {n:'Jeff Crank',p:'R',st:'CO',d:'5'},{n:'Jason Crow',p:'D',st:'CO',d:'6'},
+      {n:'Brittany Pettersen',p:'D',st:'CO',d:'7'},{n:'Gabe Evans',p:'R',st:'CO',d:'8'},
+      // Connecticut
+      {n:'John Larson',p:'D',st:'CT',d:'1'},{n:'Joe Courtney',p:'D',st:'CT',d:'2'},
+      {n:'Rosa DeLauro',p:'D',st:'CT',d:'3'},{n:'James Himes',p:'D',st:'CT',d:'4'},
+      {n:'Jahana Hayes',p:'D',st:'CT',d:'5'},
+      // Delaware
+      {n:'Sarah McBride',p:'D',st:'DE',d:'AL'},
+      // Florida
+      {n:'Jimmy Patronis',p:'R',st:'FL',d:'1'},{n:'Neal Dunn',p:'R',st:'FL',d:'2'},
+      {n:'Kat Cammack',p:'R',st:'FL',d:'3'},{n:'Aaron Bean',p:'R',st:'FL',d:'4'},
+      {n:'John Rutherford',p:'R',st:'FL',d:'5'},{n:'Randy Fine',p:'R',st:'FL',d:'6'},
+      {n:'Cory Mills',p:'R',st:'FL',d:'7'},{n:'Mike Haridopolos',p:'R',st:'FL',d:'8'},
+      {n:'Darren Soto',p:'D',st:'FL',d:'9'},{n:'Maxwell Frost',p:'D',st:'FL',d:'10'},
+      {n:'Daniel Webster',p:'R',st:'FL',d:'11'},{n:'Gus Bilirakis',p:'R',st:'FL',d:'12'},
+      {n:'Anna Luna',p:'R',st:'FL',d:'13'},{n:'Kathy Castor',p:'D',st:'FL',d:'14'},
+      {n:'Laurel Lee',p:'R',st:'FL',d:'15'},{n:'Vern Buchanan',p:'R',st:'FL',d:'16'},
+      {n:'W. Steube',p:'R',st:'FL',d:'17'},{n:'Scott Franklin',p:'R',st:'FL',d:'18'},
+      {n:'Byron Donalds',p:'R',st:'FL',d:'19'},{n:'Brian Mast',p:'R',st:'FL',d:'21'},
+      {n:'Lois Frankel',p:'D',st:'FL',d:'22'},{n:'Jared Moskowitz',p:'D',st:'FL',d:'23'},
+      {n:'Frederica Wilson',p:'D',st:'FL',d:'24'},{n:'Debbie Wasserman Schultz',p:'D',st:'FL',d:'25'},
+      {n:'Mario Diaz-Balart',p:'R',st:'FL',d:'26'},{n:'Maria Salazar',p:'R',st:'FL',d:'27'},
+      {n:'Carlos Gimenez',p:'R',st:'FL',d:'28'},
+      // Georgia
+      {n:'Earl Carter',p:'R',st:'GA',d:'1'},{n:'Sanford Bishop',p:'D',st:'GA',d:'2'},
+      {n:'Brian Jack',p:'R',st:'GA',d:'3'},{n:'Henry Johnson',p:'D',st:'GA',d:'4'},
+      {n:'Nikema Williams',p:'D',st:'GA',d:'5'},{n:'Lucy McBath',p:'D',st:'GA',d:'6'},
+      {n:'Richard McCormick',p:'R',st:'GA',d:'7'},{n:'Austin Scott',p:'R',st:'GA',d:'8'},
+      {n:'Andrew Clyde',p:'R',st:'GA',d:'9'},{n:'Mike Collins',p:'R',st:'GA',d:'10'},
+      {n:'Barry Loudermilk',p:'R',st:'GA',d:'11'},{n:'Rick Allen',p:'R',st:'GA',d:'12'},
+      {n:'Everton Blair',p:'D',st:'GA',d:'13'},{n:'Clay Fuller',p:'R',st:'GA',d:'14'},
+      // Hawaii
+      {n:'Ed Case',p:'D',st:'HI',d:'1'},{n:'Jill Tokuda',p:'D',st:'HI',d:'2'},
+      // Idaho
+      {n:'Russ Fulcher',p:'R',st:'ID',d:'1'},{n:'Michael Simpson',p:'R',st:'ID',d:'2'},
+      // Illinois
+      {n:'Jonathan Jackson',p:'D',st:'IL',d:'1'},{n:'Robin Kelly',p:'D',st:'IL',d:'2'},
+      {n:'Delia Ramirez',p:'D',st:'IL',d:'3'},{n:'Jesús García',p:'D',st:'IL',d:'4'},
+      {n:'Mike Quigley',p:'D',st:'IL',d:'5'},{n:'Sean Casten',p:'D',st:'IL',d:'6'},
+      {n:'Danny Davis',p:'D',st:'IL',d:'7'},{n:'Raja Krishnamoorthi',p:'D',st:'IL',d:'8'},
+      {n:'Janice Schakowsky',p:'D',st:'IL',d:'9'},{n:'Bradley Schneider',p:'D',st:'IL',d:'10'},
+      {n:'Bill Foster',p:'D',st:'IL',d:'11'},{n:'Mike Bost',p:'R',st:'IL',d:'12'},
+      {n:'Nikki Budzinski',p:'D',st:'IL',d:'13'},{n:'Lauren Underwood',p:'D',st:'IL',d:'14'},
+      {n:'Mary Miller',p:'R',st:'IL',d:'15'},{n:'Darin LaHood',p:'R',st:'IL',d:'16'},
+      {n:'Eric Sorensen',p:'D',st:'IL',d:'17'},
+      // Indiana
+      {n:'Frank Mrvan',p:'D',st:'IN',d:'1'},{n:'Rudy Yakym',p:'R',st:'IN',d:'2'},
+      {n:'Marlin Stutzman',p:'R',st:'IN',d:'3'},{n:'James Baird',p:'R',st:'IN',d:'4'},
+      {n:'Victoria Spartz',p:'R',st:'IN',d:'5'},{n:'Jefferson Shreve',p:'R',st:'IN',d:'6'},
+      {n:'André Carson',p:'D',st:'IN',d:'7'},{n:'Mark Messmer',p:'R',st:'IN',d:'8'},
+      {n:'Erin Houchin',p:'R',st:'IN',d:'9'},
+      // Iowa
+      {n:'Mariannette Miller-Meeks',p:'R',st:'IA',d:'1'},{n:'Ashley Hinson',p:'R',st:'IA',d:'2'},
+      {n:'Zachary Nunn',p:'R',st:'IA',d:'3'},{n:'Randy Feenstra',p:'R',st:'IA',d:'4'},
+      // Kansas
+      {n:'Tracey Mann',p:'R',st:'KS',d:'1'},{n:'Derek Schmidt',p:'R',st:'KS',d:'2'},
+      {n:'Sharice Davids',p:'D',st:'KS',d:'3'},{n:'Ron Estes',p:'R',st:'KS',d:'4'},
+      // Kentucky
+      {n:'James Comer',p:'R',st:'KY',d:'1'},{n:'Brett Guthrie',p:'R',st:'KY',d:'2'},
+      {n:'Morgan McGarvey',p:'D',st:'KY',d:'3'},{n:'Thomas Massie',p:'R',st:'KY',d:'4'},
+      {n:'Harold Rogers',p:'R',st:'KY',d:'5'},{n:'Andy Barr',p:'R',st:'KY',d:'6'},
+      // Louisiana
+      {n:'Steve Scalise',p:'R',st:'LA',d:'1'},{n:'Troy Carter',p:'D',st:'LA',d:'2'},
+      {n:'Clay Higgins',p:'R',st:'LA',d:'3'},{n:'Mike Johnson',p:'R',st:'LA',d:'4'},
+      {n:'Julia Letlow',p:'R',st:'LA',d:'5'},{n:'Cleo Fields',p:'D',st:'LA',d:'6'},
+      // Maine
+      {n:'Chellie Pingree',p:'D',st:'ME',d:'1'},{n:'Jared Golden',p:'D',st:'ME',d:'2'},
+      // Maryland
+      {n:'Andy Harris',p:'R',st:'MD',d:'1'},{n:'Johnny Olszewski',p:'D',st:'MD',d:'2'},
+      {n:'Sarah Elfreth',p:'D',st:'MD',d:'3'},{n:'Glenn Ivey',p:'D',st:'MD',d:'4'},
+      {n:'Steny Hoyer',p:'D',st:'MD',d:'5'},{n:'April McClain Delaney',p:'D',st:'MD',d:'6'},
+      {n:'Kweisi Mfume',p:'D',st:'MD',d:'7'},{n:'Jamie Raskin',p:'D',st:'MD',d:'8'},
+      // Massachusetts
+      {n:'Richard Neal',p:'D',st:'MA',d:'1'},{n:'James McGovern',p:'D',st:'MA',d:'2'},
+      {n:'Lori Trahan',p:'D',st:'MA',d:'3'},{n:'Jake Auchincloss',p:'D',st:'MA',d:'4'},
+      {n:'Katherine Clark',p:'D',st:'MA',d:'5'},{n:'Seth Moulton',p:'D',st:'MA',d:'6'},
+      {n:'Ayanna Pressley',p:'D',st:'MA',d:'7'},{n:'Stephen Lynch',p:'D',st:'MA',d:'8'},
+      {n:'William Keating',p:'D',st:'MA',d:'9'},
+      // Michigan
+      {n:'Jack Bergman',p:'R',st:'MI',d:'1'},{n:'John Moolenaar',p:'R',st:'MI',d:'2'},
+      {n:'Hillary Scholten',p:'D',st:'MI',d:'3'},{n:'Bill Huizenga',p:'R',st:'MI',d:'4'},
+      {n:'Tim Walberg',p:'R',st:'MI',d:'5'},{n:'Debbie Dingell',p:'D',st:'MI',d:'6'},
+      {n:'Tom Barrett',p:'R',st:'MI',d:'7'},{n:'Kristen McDonald Rivet',p:'D',st:'MI',d:'8'},
+      {n:'Lisa McClain',p:'R',st:'MI',d:'9'},{n:'John James',p:'R',st:'MI',d:'10'},
+      {n:'Haley Stevens',p:'D',st:'MI',d:'11'},{n:'Rashida Tlaib',p:'D',st:'MI',d:'12'},
+      {n:'Shri Thanedar',p:'D',st:'MI',d:'13'},
+      // Minnesota
+      {n:'Brad Finstad',p:'R',st:'MN',d:'1'},{n:'Angie Craig',p:'D',st:'MN',d:'2'},
+      {n:'Kelly Morrison',p:'D',st:'MN',d:'3'},{n:'Betty McCollum',p:'D',st:'MN',d:'4'},
+      {n:'Ilhan Omar',p:'D',st:'MN',d:'5'},{n:'Tom Emmer',p:'R',st:'MN',d:'6'},
+      {n:'Michelle Fischbach',p:'R',st:'MN',d:'7'},{n:'Pete Stauber',p:'R',st:'MN',d:'8'},
+      // Mississippi
+      {n:'Trent Kelly',p:'R',st:'MS',d:'1'},{n:'Bennie Thompson',p:'D',st:'MS',d:'2'},
+      {n:'Michael Guest',p:'R',st:'MS',d:'3'},{n:'Mike Ezell',p:'R',st:'MS',d:'4'},
+      // Missouri
+      {n:'Wesley Bell',p:'D',st:'MO',d:'1'},{n:'Ann Wagner',p:'R',st:'MO',d:'2'},
+      {n:'Robert Onder',p:'R',st:'MO',d:'3'},{n:'Mark Alford',p:'R',st:'MO',d:'4'},
+      {n:'Emanuel Cleaver',p:'D',st:'MO',d:'5'},{n:'Sam Graves',p:'R',st:'MO',d:'6'},
+      {n:'Eric Burlison',p:'R',st:'MO',d:'7'},{n:'Jason Smith',p:'R',st:'MO',d:'8'},
+      // Montana
+      {n:'Ryan Zinke',p:'R',st:'MT',d:'1'},{n:'Troy Downing',p:'R',st:'MT',d:'2'},
+      // Nebraska
+      {n:'Mike Flood',p:'R',st:'NE',d:'1'},{n:'Don Bacon',p:'R',st:'NE',d:'2'},
+      {n:'Adrian Smith',p:'R',st:'NE',d:'3'},
+      // Nevada
+      {n:'Dina Titus',p:'D',st:'NV',d:'1'},{n:'Mark Amodei',p:'R',st:'NV',d:'2'},
+      {n:'Susie Lee',p:'D',st:'NV',d:'3'},{n:'Steven Horsford',p:'D',st:'NV',d:'4'},
+      // New Hampshire
+      {n:'Chris Pappas',p:'D',st:'NH',d:'1'},{n:'Maggie Goodlander',p:'D',st:'NH',d:'2'},
+      // New Jersey
+      {n:'Donald Norcross',p:'D',st:'NJ',d:'1'},{n:'Jefferson Van Drew',p:'R',st:'NJ',d:'2'},
+      {n:'Herbert Conaway',p:'D',st:'NJ',d:'3'},{n:'Christopher Smith',p:'R',st:'NJ',d:'4'},
+      {n:'Josh Gottheimer',p:'D',st:'NJ',d:'5'},{n:'Frank Pallone',p:'D',st:'NJ',d:'6'},
+      {n:'Thomas Kean',p:'R',st:'NJ',d:'7'},{n:'Robert Menendez',p:'D',st:'NJ',d:'8'},
+      {n:'Nellie Pou',p:'D',st:'NJ',d:'9'},{n:'LaMonica McIver',p:'D',st:'NJ',d:'10'},
+      {n:'Analilia Mejia',p:'D',st:'NJ',d:'11'},{n:'Bonnie Watson Coleman',p:'D',st:'NJ',d:'12'},
+      // New Mexico
+      {n:'Melanie Stansbury',p:'D',st:'NM',d:'1'},{n:'Gabe Vasquez',p:'D',st:'NM',d:'2'},
+      {n:'Teresa Leger Fernandez',p:'D',st:'NM',d:'3'},
+      // New York
+      {n:'Nick LaLota',p:'R',st:'NY',d:'1'},{n:'Andrew Garbarino',p:'R',st:'NY',d:'2'},
+      {n:'Thomas Suozzi',p:'D',st:'NY',d:'3'},{n:'Laura Gillen',p:'D',st:'NY',d:'4'},
+      {n:'Gregory Meeks',p:'D',st:'NY',d:'5'},{n:'Grace Meng',p:'D',st:'NY',d:'6'},
+      {n:'Nydia Velázquez',p:'D',st:'NY',d:'7'},{n:'Hakeem Jeffries',p:'D',st:'NY',d:'8'},
+      {n:'Yvette Clarke',p:'D',st:'NY',d:'9'},{n:'Daniel Goldman',p:'D',st:'NY',d:'10'},
+      {n:'Nicole Malliotakis',p:'R',st:'NY',d:'11'},{n:'Jerrold Nadler',p:'D',st:'NY',d:'12'},
+      {n:'Adriano Espaillat',p:'D',st:'NY',d:'13'},{n:'Alexandria Ocasio-Cortez',p:'D',st:'NY',d:'14'},
+      {n:'Ritchie Torres',p:'D',st:'NY',d:'15'},{n:'George Latimer',p:'D',st:'NY',d:'16'},
+      {n:'Michael Lawler',p:'R',st:'NY',d:'17'},{n:'Patrick Ryan',p:'D',st:'NY',d:'18'},
+      {n:'Josh Riley',p:'D',st:'NY',d:'19'},{n:'Paul Tonko',p:'D',st:'NY',d:'20'},
+      {n:'Elise Stefanik',p:'R',st:'NY',d:'21'},{n:'John Mannion',p:'D',st:'NY',d:'22'},
+      {n:'Nicholas Langworthy',p:'R',st:'NY',d:'23'},{n:'Claudia Tenney',p:'R',st:'NY',d:'24'},
+      {n:'Joseph Morelle',p:'D',st:'NY',d:'25'},{n:'Timothy Kennedy',p:'D',st:'NY',d:'26'},
+      // North Carolina
+      {n:'Donald Davis',p:'D',st:'NC',d:'1'},{n:'Deborah Ross',p:'D',st:'NC',d:'2'},
+      {n:'Gregory Murphy',p:'R',st:'NC',d:'3'},{n:'Valerie Foushee',p:'D',st:'NC',d:'4'},
+      {n:'Virginia Foxx',p:'R',st:'NC',d:'5'},{n:'Addison McDowell',p:'R',st:'NC',d:'6'},
+      {n:'David Rouzer',p:'R',st:'NC',d:'7'},{n:'Mark Harris',p:'R',st:'NC',d:'8'},
+      {n:'Richard Hudson',p:'R',st:'NC',d:'9'},{n:'Pat Harrigan',p:'R',st:'NC',d:'10'},
+      {n:'Chuck Edwards',p:'R',st:'NC',d:'11'},{n:'Alma Adams',p:'D',st:'NC',d:'12'},
+      {n:'Brad Knott',p:'R',st:'NC',d:'13'},{n:'Tim Moore',p:'R',st:'NC',d:'14'},
+      // North Dakota
+      {n:'Julie Fedorchak',p:'R',st:'ND',d:'AL'},
+      // Ohio
+      {n:'Greg Landsman',p:'D',st:'OH',d:'1'},{n:'David Taylor',p:'R',st:'OH',d:'2'},
+      {n:'Joyce Beatty',p:'D',st:'OH',d:'3'},{n:'Jim Jordan',p:'R',st:'OH',d:'4'},
+      {n:'Robert Latta',p:'R',st:'OH',d:'5'},{n:'Michael Rulli',p:'R',st:'OH',d:'6'},
+      {n:'Max Miller',p:'R',st:'OH',d:'7'},{n:'Warren Davidson',p:'R',st:'OH',d:'8'},
+      {n:'Marcy Kaptur',p:'D',st:'OH',d:'9'},{n:'Michael Turner',p:'R',st:'OH',d:'10'},
+      {n:'Shontel Brown',p:'D',st:'OH',d:'11'},{n:'Troy Balderson',p:'R',st:'OH',d:'12'},
+      {n:'Emilia Sykes',p:'D',st:'OH',d:'13'},{n:'David Joyce',p:'R',st:'OH',d:'14'},
+      {n:'Mike Carey',p:'R',st:'OH',d:'15'},
+      // Oklahoma
+      {n:'Kevin Hern',p:'R',st:'OK',d:'1'},{n:'Josh Brecheen',p:'R',st:'OK',d:'2'},
+      {n:'Frank Lucas',p:'R',st:'OK',d:'3'},{n:'Tom Cole',p:'R',st:'OK',d:'4'},
+      {n:'Stephanie Bice',p:'R',st:'OK',d:'5'},
+      // Oregon
+      {n:'Suzanne Bonamici',p:'D',st:'OR',d:'1'},{n:'Cliff Bentz',p:'R',st:'OR',d:'2'},
+      {n:'Maxine Dexter',p:'D',st:'OR',d:'3'},{n:'Val Hoyle',p:'D',st:'OR',d:'4'},
+      {n:'Janelle Bynum',p:'D',st:'OR',d:'5'},{n:'Andrea Salinas',p:'D',st:'OR',d:'6'},
+      // Pennsylvania
+      {n:'Brian Fitzpatrick',p:'R',st:'PA',d:'1'},{n:'Brendan Boyle',p:'D',st:'PA',d:'2'},
+      {n:'Dwight Evans',p:'D',st:'PA',d:'3'},{n:'Madeleine Dean',p:'D',st:'PA',d:'4'},
+      {n:'Mary Scanlon',p:'D',st:'PA',d:'5'},{n:'Chrissy Houlahan',p:'D',st:'PA',d:'6'},
+      {n:'Ryan Mackenzie',p:'R',st:'PA',d:'7'},{n:'Robert Bresnahan',p:'R',st:'PA',d:'8'},
+      {n:'Daniel Meuser',p:'R',st:'PA',d:'9'},{n:'Scott Perry',p:'R',st:'PA',d:'10'},
+      {n:'Lloyd Smucker',p:'R',st:'PA',d:'11'},{n:'Summer Lee',p:'D',st:'PA',d:'12'},
+      {n:'John Joyce',p:'R',st:'PA',d:'13'},{n:'Guy Reschenthaler',p:'R',st:'PA',d:'14'},
+      {n:'Glenn Thompson',p:'R',st:'PA',d:'15'},{n:'Mike Kelly',p:'R',st:'PA',d:'16'},
+      {n:'Christopher Deluzio',p:'D',st:'PA',d:'17'},
+      // Rhode Island
+      {n:'Gabe Amo',p:'D',st:'RI',d:'1'},{n:'Seth Magaziner',p:'D',st:'RI',d:'2'},
+      // South Carolina
+      {n:'Nancy Mace',p:'R',st:'SC',d:'1'},{n:'Joe Wilson',p:'R',st:'SC',d:'2'},
+      {n:'Sheri Biggs',p:'R',st:'SC',d:'3'},{n:'William Timmons',p:'R',st:'SC',d:'4'},
+      {n:'Ralph Norman',p:'R',st:'SC',d:'5'},{n:'James Clyburn',p:'D',st:'SC',d:'6'},
+      {n:'Russell Fry',p:'R',st:'SC',d:'7'},
+      // South Dakota
+      {n:'Dusty Johnson',p:'R',st:'SD',d:'AL'},
+      // Tennessee
+      {n:'Diana Harshbarger',p:'R',st:'TN',d:'1'},{n:'Tim Burchett',p:'R',st:'TN',d:'2'},
+      {n:'Charles Fleischmann',p:'R',st:'TN',d:'3'},{n:'Scott DesJarlais',p:'R',st:'TN',d:'4'},
+      {n:'Andrew Ogles',p:'R',st:'TN',d:'5'},{n:'John Rose',p:'R',st:'TN',d:'6'},
+      {n:'Matt Van Epps',p:'R',st:'TN',d:'7'},{n:'David Kustoff',p:'R',st:'TN',d:'8'},
+      {n:'Steve Cohen',p:'D',st:'TN',d:'9'},
+      // Texas
+      {n:'Nathaniel Moran',p:'R',st:'TX',d:'1'},{n:'Dan Crenshaw',p:'R',st:'TX',d:'2'},
+      {n:'Keith Self',p:'R',st:'TX',d:'3'},{n:'Pat Fallon',p:'R',st:'TX',d:'4'},
+      {n:'Lance Gooden',p:'R',st:'TX',d:'5'},{n:'Jake Ellzey',p:'R',st:'TX',d:'6'},
+      {n:'Lizzie Fletcher',p:'D',st:'TX',d:'7'},{n:'Morgan Luttrell',p:'R',st:'TX',d:'8'},
+      {n:'Al Green',p:'D',st:'TX',d:'9'},{n:'Michael McCaul',p:'R',st:'TX',d:'10'},
+      {n:'August Pfluger',p:'R',st:'TX',d:'11'},{n:'Craig Goldman',p:'R',st:'TX',d:'12'},
+      {n:'Ronny Jackson',p:'R',st:'TX',d:'13'},{n:'Randy Weber',p:'R',st:'TX',d:'14'},
+      {n:'Monica De La Cruz',p:'R',st:'TX',d:'15'},{n:'Veronica Escobar',p:'D',st:'TX',d:'16'},
+      {n:'Pete Sessions',p:'R',st:'TX',d:'17'},{n:'Christian Menefee',p:'D',st:'TX',d:'18'},
+      {n:'Jodey Arrington',p:'R',st:'TX',d:'19'},{n:'Joaquin Castro',p:'D',st:'TX',d:'20'},
+      {n:'Chip Roy',p:'R',st:'TX',d:'21'},{n:'Troy Nehls',p:'R',st:'TX',d:'22'},
+      {n:'Beth Van Duyne',p:'R',st:'TX',d:'24'},{n:'Roger Williams',p:'R',st:'TX',d:'25'},
+      {n:'Brandon Gill',p:'R',st:'TX',d:'26'},{n:'Michael Cloud',p:'R',st:'TX',d:'27'},
+      {n:'Henry Cuellar',p:'D',st:'TX',d:'28'},{n:'Sylvia Garcia',p:'D',st:'TX',d:'29'},
+      {n:'Jasmine Crockett',p:'D',st:'TX',d:'30'},{n:'John Carter',p:'R',st:'TX',d:'31'},
+      {n:'Julie Johnson',p:'D',st:'TX',d:'32'},{n:'Marc Veasey',p:'D',st:'TX',d:'33'},
+      {n:'Vicente Gonzalez',p:'D',st:'TX',d:'34'},{n:'Greg Casar',p:'D',st:'TX',d:'35'},
+      {n:'Brian Babin',p:'R',st:'TX',d:'36'},{n:'Lloyd Doggett',p:'D',st:'TX',d:'37'},
+      {n:'Wesley Hunt',p:'R',st:'TX',d:'38'},
+      // Utah
+      {n:'Blake Moore',p:'R',st:'UT',d:'1'},{n:'Celeste Maloy',p:'R',st:'UT',d:'2'},
+      {n:'Mike Kennedy',p:'R',st:'UT',d:'3'},{n:'Burgess Owens',p:'R',st:'UT',d:'4'},
+      // Vermont
+      {n:'Becca Balint',p:'D',st:'VT',d:'AL'},
+      // Virginia
+      {n:'Robert Wittman',p:'R',st:'VA',d:'1'},{n:'Jennifer Kiggans',p:'R',st:'VA',d:'2'},
+      {n:'Robert Scott',p:'D',st:'VA',d:'3'},{n:'Jennifer McClellan',p:'D',st:'VA',d:'4'},
+      {n:'John McGuire',p:'R',st:'VA',d:'5'},{n:'Ben Cline',p:'R',st:'VA',d:'6'},
+      {n:'Eugene Vindman',p:'D',st:'VA',d:'7'},{n:'Donald Beyer',p:'D',st:'VA',d:'8'},
+      {n:'H. Griffith',p:'R',st:'VA',d:'9'},{n:'Suhas Subramanyam',p:'D',st:'VA',d:'10'},
+      {n:'James Walkinshaw',p:'D',st:'VA',d:'11'},
+      // Washington
+      {n:'Suzan DelBene',p:'D',st:'WA',d:'1'},{n:'Rick Larsen',p:'D',st:'WA',d:'2'},
+      {n:'Marie Perez',p:'D',st:'WA',d:'3'},{n:'Dan Newhouse',p:'R',st:'WA',d:'4'},
+      {n:'Michael Baumgartner',p:'R',st:'WA',d:'5'},{n:'Emily Randall',p:'D',st:'WA',d:'6'},
+      {n:'Pramila Jayapal',p:'D',st:'WA',d:'7'},{n:'Kim Schrier',p:'D',st:'WA',d:'8'},
+      {n:'Adam Smith',p:'D',st:'WA',d:'9'},{n:'Marilyn Strickland',p:'D',st:'WA',d:'10'},
+      // West Virginia
+      {n:'Carol Miller',p:'R',st:'WV',d:'1'},{n:'Riley Moore',p:'R',st:'WV',d:'2'},
+      // Wisconsin
+      {n:'Bryan Steil',p:'R',st:'WI',d:'1'},{n:'Mark Pocan',p:'D',st:'WI',d:'2'},
+      {n:'Derrick Van Orden',p:'R',st:'WI',d:'3'},{n:'Gwen Moore',p:'D',st:'WI',d:'4'},
+      {n:'Scott Fitzgerald',p:'R',st:'WI',d:'5'},{n:'Glenn Grothman',p:'R',st:'WI',d:'6'},
+      {n:'Thomas Tiffany',p:'R',st:'WI',d:'7'},{n:'Tony Wied',p:'R',st:'WI',d:'8'},
+      // Wyoming
+      {n:'Harriet Hageman',p:'R',st:'WY',d:'AL'},
+      // ── 非投票代表（Delegates / Resident Commissioner）
+      {n:'Aumua Radewagen',p:'R',st:'AS',d:'AL'},{n:'Eleanor Norton',p:'D',st:'DC',d:'AL'},
+      {n:'James Moylan',p:'R',st:'GU',d:'AL'},{n:'Kimberlyn King-Hinds',p:'R',st:'MP',d:'AL'},
+      {n:'Pablo Hernández',p:'D',st:'PR',d:'AL'},{n:'Stacey Plaskett',p:'D',st:'VI',d:'AL'}
+    ];
+
+    const STATE_NAMES={
+      AL:'阿拉巴馬州',AK:'阿拉斯加州',AZ:'亞利桑那州',AR:'阿肯色州',CA:'加利福尼亞州',
+      CO:'科羅拉多州',CT:'康乃狄克州',DE:'德拉瓦州',FL:'佛羅里達州',GA:'喬治亞州',
+      HI:'夏威夷州',ID:'愛達荷州',IL:'伊利諾州',IN:'印第安納州',IA:'愛荷華州',
+      KS:'堪薩斯州',KY:'肯塔基州',LA:'路易斯安那州',ME:'緬因州',MD:'馬里蘭州',
+      MA:'麻薩諸塞州',MI:'密西根州',MN:'明尼蘇達州',MS:'密西西比州',MO:'密蘇里州',
+      MT:'蒙大拿州',NE:'內布拉斯加州',NV:'內華達州',NH:'新罕布夏州',NJ:'紐澤西州',
+      NM:'新墨西哥州',NY:'紐約州',NC:'北卡羅來納州',ND:'北達科他州',OH:'俄亥俄州',
+      OK:'奧克拉荷馬州',OR:'俄勒岡州',PA:'賓夕法尼亞州',RI:'羅德島州',SC:'南卡羅來納州',
+      SD:'南達科他州',TN:'田納西州',TX:'德克薩斯州',UT:'猶他州',VT:'佛蒙特州',
+      VA:'維吉尼亞州',WA:'華盛頓州',WV:'西維吉尼亞州',WI:'威斯康辛州',WY:'懷俄明州',
+      AS:'美屬薩摩亞',DC:'哥倫比亞特區',GU:'關島',MP:'北馬里亞納群島',PR:'波多黎各',VI:'美屬維京群島'
+    };
+
+    // 從法案中建立議員-法案對應（方便標注）
+    const memberBillMap={};
     (data.bills||[]).forEach(b=>{
-      function addMember(name, chamber){
-        if(!name) return;
-        // 解析 "Ann Wagner（R-MO-2）"
-        const m=name.match(/^(.+?)（([RDI])-([A-Z]{2}).*?）/);
-        if(!m) return;
-        const nm=m[1].trim(), party=m[2], state=m[3];
-        if(!memberMap[nm]){
-          memberMap[nm]={name:nm,party,state,chamber,bills:[],committees:[]};
-        }
-        if(!memberMap[nm].bills.includes(b.bill_num)) memberMap[nm].bills.push(b.bill_num);
+      function extractName(s){
+        if(!s) return null;
+        const m=s.match(/^(.+?)（/);
+        return m?m[1].trim():s.trim();
       }
-      const ch = b.chamber==='senate'?'參院':'眾院';
-      addMember(b.sponsor, ch);
+      const nm=extractName(b.sponsor);
+      if(nm){
+        if(!memberBillMap[nm]) memberBillMap[nm]=[];
+        if(!memberBillMap[nm].includes(b.bill_num)) memberBillMap[nm].push(b.bill_num);
+      }
     });
-    const grid=$id('dir-grid');
-    const members=Object.values(memberMap).sort((a,b)=>a.name.localeCompare(b.name));
-    if(!members.length){grid.innerHTML='<div class="empty">暫無資料</div>';return;}
-    members.forEach(m=>{
-      const chClass=m.chamber==='參院'?'senate':'house';
-      const pClass=m.party==='R'?'dir-party-r':'dir-party-d';
-      const d=document.createElement('div');d.className='dir-card';
-      d.innerHTML=`
-        <div class="dir-name">${m.name}</div>
-        <div class="dir-title"><span class="${pClass}">${m.party==='R'?'共和黨':'民主黨'}</span> · ${m.state}</div>
-        <span class="dir-chamber ${chClass}">${m.chamber}</span>
-        <div class="dir-bills">提案法案：${m.bills.join('、')}</div>`;
-      grid.appendChild(d);
+
+    function makeCard(m, isSenate){
+      const pClass = m.p==='R'?'dir-party-r':(m.p==='D'?'dir-party-d':'dir-party-i');
+      const pLabel = m.p==='R'?'共和黨':(m.p==='D'?'民主黨':'無黨籍');
+      const chamberClass = isSenate?'senate':'house';
+      const chamberLabel = isSenate?'參院':'眾院';
+      const distLabel = m.d&&m.d!=='AL'?` 第${m.d}選區`:(m.d==='AL'?'（全州）':'');
+      const bills = memberBillMap[m.n];
+      const billHtml = bills&&bills.length?`<div class="dir-bills">涉台法案：${bills.join('、')}</div>`:'';
+      return `<div class="dir-card" data-name="${m.n}" data-state="${m.st}" data-chamber="${isSenate?'senate':'house'}">
+        <div class="dir-name">${m.n}</div>
+        <div class="dir-meta">
+          <span class="${pClass}">${pLabel}</span>
+          <span class="dir-chamber ${chamberClass}">${chamberLabel}</span>
+          <span class="dir-district">${STATE_NAMES[m.st]||m.st}${distLabel}</span>
+        </div>
+        ${billHtml}
+      </div>`;
+    }
+
+    // 建立所有州的分組
+    function buildSection(members, isSenate){
+      // 按州分組
+      const byState={};
+      members.forEach(m=>{
+        if(!byState[m.st]) byState[m.st]=[];
+        byState[m.st].push(m);
+      });
+      const stateKeys=Object.keys(byState).sort();
+      return stateKeys.map(st=>{
+        const stMembers=byState[st];
+        const cards=stMembers.map(m=>makeCard(m,isSenate)).join('');
+        return `<div class="dir-state-section" data-state="${st}" data-chamber="${isSenate?'senate':'house'}">
+          <div class="dir-state-hd">
+            <span class="dir-state-hd-name">${STATE_NAMES[st]||st}</span>
+            <span>${stMembers.length}席</span>
+          </div>
+          <div class="dir-grid">${cards}</div>
+        </div>`;
+      }).join('');
+    }
+
+    const senateHtml=`<div class="dir-chamber-hd" data-chamber-hd="senate">🏛 參議院 · 100席（53R / 45D / 2I）</div>`+buildSection(SENATORS,true);
+    const houseHtml=`<div class="dir-chamber-hd house-hd" data-chamber-hd="house">🏛 眾議院 · 435席 + 6非投票代表（218R / 214D / 1I / 2空缺）</div>`+buildSection(REPS,false);
+
+    const dirContent=$id('dir-content');
+    dirContent.innerHTML=senateHtml+houseHtml;
+
+    // ── 篩選
+    let activeChamber='all';
+    document.querySelectorAll('.dir-filter-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        document.querySelectorAll('.dir-filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        activeChamber=btn.dataset.chamber;
+        applyDirFilter();
+      });
     });
+
+    function applyDirFilter(){
+      const q=($id('dir-search').value||'').trim().toLowerCase();
+      // 院別標頭顯示
+      document.querySelectorAll('[data-chamber-hd]').forEach(hd=>{
+        const ch=hd.dataset.chamberHd;
+        hd.classList.toggle('dir-hidden', activeChamber!=='all'&&activeChamber!==ch);
+      });
+      // 州section
+      document.querySelectorAll('.dir-state-section').forEach(sec=>{
+        const ch=sec.dataset.chamber;
+        const st=sec.dataset.state;
+        const chamberOk=activeChamber==='all'||activeChamber===ch;
+        if(!chamberOk){sec.classList.add('dir-hidden');return;}
+        // 卡片搜尋
+        let anyVisible=false;
+        sec.querySelectorAll('.dir-card').forEach(card=>{
+          const nameMatch=!q||card.dataset.name.toLowerCase().includes(q);
+          const stMatch=!q||(STATE_NAMES[card.dataset.state]||card.dataset.state).includes(q);
+          const show=!q||(nameMatch||stMatch);
+          card.classList.toggle('dir-hidden',!show);
+          if(show) anyVisible=true;
+        });
+        sec.classList.toggle('dir-hidden',!anyVisible);
+      });
+    }
+
+    $id('dir-search').addEventListener('input', applyDirFilter);
   })();
 
   /* ── 全域搜尋 ── */
