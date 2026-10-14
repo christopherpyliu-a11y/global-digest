@@ -262,18 +262,18 @@ body{
 .bill-progress-wrap{margin-bottom:10px;}
 .bill-track{margin-bottom:6px;}
 .bill-track-label{
-  font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
-  color:var(--ink-3);margin-bottom:2px;
+  font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:3px;
 }
 .bill-track.track-senate .bill-track-label{color:var(--blue);}
 .bill-track.track-house  .bill-track-label{color:var(--accent);}
 .bill-track.track-signed .bill-track-label{color:var(--green);}
 .bill-stage-row{display:flex;gap:0;}
 .bill-stage{
-  flex:1;text-align:center;font-size:9px;color:var(--ink-3);padding:4px 2px 2px;
-  border-top:3px solid var(--rule-2);transition:border-color .2s;line-height:1.4;
+  flex:1;text-align:center;font-size:11px;color:var(--ink-3);padding:5px 3px 3px;
+  border-top:3px solid var(--rule-2);transition:border-color .2s;line-height:1.5;
 }
-.bill-stage .stage-date{display:block;font-size:8px;color:var(--ink-3);margin-top:1px;}
+.bill-stage .stage-date{display:block;font-size:10px;color:var(--ink-3);margin-top:2px;}
 /* Senate track colours */
 .bill-track.track-senate .bill-stage.done   {color:var(--blue);border-top-color:var(--blue);}
 .bill-track.track-senate .bill-stage.done .stage-date{color:var(--blue);opacity:.7;}
@@ -455,11 +455,11 @@ const EMBEDDED_DATA = [
         "bill_num": "H.R. 1512", "chamber": "house",
         "title_zh": "台灣保證執行法", "title_en": "Taiwan Assurance Implementation Act",
         "status": "已成為公法 119-45", "category": "taiwan",
-        "sponsor": "Ann Wagner（R-MO-2）", "cosponsors": [],
+        "sponsor": "Ann Wagner（R-MO-2）", "cosponsors": ["Gerald Connolly（D-VA）","Ted Lieu（D-CA）","Michael Lawler（R-NY）"],
         "house_introduced": "2025年2月21日", "house_committee_name": "眾院外交委員會",
         "house_committee_date": null, "house_floor_date": "2025年5月5日",
         "senate_introduced": "（配對法案 S.821，2025年3月3日）", "senate_committee_name": "參院外交委員會",
-        "senate_committee_date": null, "senate_floor_date": "2025年11月18日",
+        "senate_committee_date": "2025年3月27日", "senate_floor_date": "2025年11月18日",
         "signed_date": "2025年12月2日", "law_number": "公法 119-45",
         "summary": "要求國務院向國會提交《台灣保證法》執行情況報告，包括對台軍售常態化、台灣參與國際組織等進展。眾院2025年5月通過，參院2025年11月通過，總統2025年12月2日簽署成為公法。",
         "url": "https://www.congress.gov/bill/119th-congress/house-bill/1512"
@@ -468,9 +468,9 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 821", "chamber": "senate",
         "title_zh": "台灣保證執行法（參院版）", "title_en": "Taiwan Assurance Implementation Act",
         "status": "已列入參議院議事日程第 52 號", "category": "taiwan",
-        "sponsor": "John Cornyn（R-TX）", "cosponsors": [],
+        "sponsor": "John Cornyn（R-TX）", "cosponsors": ["（連署人3人，詳見Congress.gov）"],
         "senate_introduced": "2025年3月3日", "senate_committee_name": "參院外交委員會",
-        "senate_committee_date": null, "senate_floor_date": null,
+        "senate_committee_date": "2025年3月27日", "senate_floor_date": null,
         "house_introduced": "（配對法案 H.R.1512，2025年2月21日）", "house_committee_name": null,
         "house_committee_date": null, "house_floor_date": "2025年5月5日",
         "signed_date": "2025年12月2日", "law_number": "公法 119-45（H.R.1512）",
@@ -494,7 +494,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 199", "chamber": "senate",
         "title_zh": "美台雙重課稅救濟法（參院版）", "title_en": "U.S.-Taiwan Double Taxation Relief Act",
         "status": "已列入參議院議事日程", "category": "taiwan",
-        "sponsor": "Mike Crapo（R-ID）", "cosponsors": [],
+        "sponsor": "Mike Crapo（R-ID）", "cosponsors": ["Ron Wyden（D-OR）","James Risch（R-ID）","Jeanne Shaheen（D-NH）","Chris Van Hollen（D-MD）","Thom Tillis（R-NC）","（另43人）"],
         "senate_introduced": "2025年1月23日", "senate_committee_name": "參院財政委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": "（配對法案 H.R.33，2025年1月3日）", "house_committee_name": "眾院歲計委員會",
@@ -507,7 +507,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. Res. 86", "chamber": "senate",
         "title_zh": "反對聯合國2758號決議誤用決議案", "title_en": "Resolution Regarding UN General Assembly Resolution 2758",
         "status": "已列入參議院議事日程第 56 號", "category": "taiwan",
-        "sponsor": "James Risch（R-ID）", "cosponsors": [],
+        "sponsor": "James Risch（R-ID）", "cosponsors": ["Pete Ricketts（R-NE）","Christopher Coons（D-DE）","Jeanne Shaheen（D-NH）","Tammy Duckworth（D-IL）","Andy Kim（D-NJ）","（另11人）"],
         "senate_introduced": "2025年2月20日", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": "2025年3月27日", "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
@@ -520,7 +520,7 @@ const EMBEDDED_DATA = [
         "bill_num": "H. Res. 148", "chamber": "house",
         "title_zh": "反對聯合國2758號決議誤用決議案（眾院版）", "title_en": "Resolution Regarding UN General Assembly Resolution 2758",
         "status": "眾院外交委員會審議中", "category": "taiwan",
-        "sponsor": "Young Kim（R-CA-40）", "cosponsors": [],
+        "sponsor": "Young Kim（R-CA-40）", "cosponsors": ["Ami Bera（D-CA）","Joaquin Castro（D-TX）","Josh Gottheimer（D-NJ）","Raja Krishnamoorthi（D-IL）","John R. Moolenaar（R-MI）","Carlos Gimenez（R-FL）","Michael Lawler（R-NY）","Gerald Connolly（D-VA）","Ed Case（D-HI）","Derrick Van Orden（R-WI）","Ashley Hinson（R-IA）","Gabe Evans（R-CO）","Mike Quigley（D-IL）","Sarah McBride（D-DE）","Maria Elvira Salazar（R-FL）","Frank Lucas（R-OK）","Randy Feenstra（R-IA）","Tim Moore（R-NC）","Julie Johnson（D-TX）","Donald Davis（D-NC）","Thomas Suozzi（D-NY）","Suhas Subramanyam（D-VA）","Dina Titus（D-NV）","Chrissy Houlahan（D-PA）","Ted Lieu（D-CA）","Pete Sessions（R-TX）","Wesley Bell（D-MO）","Scott DesJarlais（R-TN）","Anna Paulina Luna（R-FL）"],
         "house_introduced": "2025年2月21日", "house_committee_name": "眾院外交委員會",
         "house_committee_date": null, "house_floor_date": null,
         "senate_introduced": null, "senate_committee_name": null,
@@ -533,7 +533,7 @@ const EMBEDDED_DATA = [
         "bill_num": "H. Con. Res. 8", "chamber": "house",
         "title_zh": "呼籲美台建立正式外交關係決議案", "title_en": "Calling for U.S.-Taiwan Diplomatic Ties",
         "status": "眾院外交委員會及歲計委員會審議中", "category": "taiwan",
-        "sponsor": "Thomas Tiffany（R-WI-7）", "cosponsors": [],
+        "sponsor": "Thomas Tiffany（R-WI-7）", "cosponsors": ["Scott Perry（R-PA）","Christopher Smith（R-NJ）","Nicole Malliotakis（R-NY）","Andrew Ogles（R-TN）","Lance Gooden（R-TX）","Kat Cammack（R-FL）","James Baird（R-IN）","Glenn Grothman（R-WI）","Pete Stauber（R-MN）","Randy Weber（R-TX）","Tony Wied（R-WI）","Scott Fitzgerald（R-WI）","Diana Harshbarger（R-TN）","Jake Ellzey（R-TX）","Richard McCormick（R-GA）","Charles Fleischmann（R-TN）","Dan Meuser（R-PA）","Carlos Gimenez（R-FL）","Lauren Boebert（R-CO）","Roger Williams（R-TX）","Randy Feenstra（R-IA）","Andrew Garbarino（R-NY）","Zachary Nunn（R-IA）","Ashley Hinson（R-IA）","Michael Lawler（R-NY）","Earl Carter（R-GA）","Byron Donalds（R-FL）","Burgess Owens（R-UT）","Carol Miller（R-WV）","Nicholas Begich（R-AK）","Keith Self（R-TX）","August Pfluger（R-TX）","Addison McDowell（R-NC）","Tim Burchett（R-TN）","Robert Aderholt（R-AL）","Jefferson Shreve（R-IN）","Tracey Mann（R-KS）","John Rose（R-TN）"],
         "house_introduced": "2025年2月6日", "house_committee_name": "眾院外交委員會／歲計委員會",
         "house_committee_date": null, "house_floor_date": null,
         "senate_introduced": null, "senate_committee_name": null,
@@ -546,7 +546,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 733", "chamber": "senate",
         "title_zh": "台灣旅遊協調法", "title_en": "Taiwan Travel and Tourism Coordination Act",
         "status": "已列入參議院議事日程", "category": "taiwan",
-        "sponsor": "Marsha Blackburn（R-TN）", "cosponsors": [],
+        "sponsor": "Marsha Blackburn（R-TN）", "cosponsors": ["Brian Schatz（D-HI）","Pete Ricketts（R-NE）"],
         "senate_introduced": "2025年2月25日", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
@@ -559,9 +559,9 @@ const EMBEDDED_DATA = [
         "bill_num": "H.R. 910", "chamber": "house",
         "title_zh": "台灣非歧視法", "title_en": "Taiwan Non-Discrimination Act of 2025",
         "status": "已送達參議院，列入議事日程第 103 號", "category": "taiwan",
-        "sponsor": "Young Kim（R-CA-40）", "cosponsors": [],
+        "sponsor": "Young Kim（R-CA-40）", "cosponsors": ["Al Green（D-TX）","Ted Lieu（D-CA）","Michael Lawler（R-NY）"],
         "house_introduced": "2025年2月4日", "house_committee_name": "眾院金融服務委員會",
-        "house_committee_date": null, "house_floor_date": "2025年6月（已通過）",
+        "house_committee_date": null, "house_floor_date": "2025年6月23日",
         "senate_introduced": "（2025年送達參議院）", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "signed_date": null, "law_number": null,
@@ -572,7 +572,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 974", "chamber": "senate",
         "title_zh": "台灣代表處法", "title_en": "Taiwan Representative Office Act",
         "status": "已列入參議院議事日程", "category": "taiwan",
-        "sponsor": "John R. Curtis（R-UT）", "cosponsors": [],
+        "sponsor": "John R. Curtis（R-UT）", "cosponsors": ["Jeff Merkley（D-OR）","Cynthia Lummis（R-WY）","Rick Scott（R-FL）"],
         "senate_introduced": "2025年3月12日", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
@@ -587,7 +587,7 @@ const EMBEDDED_DATA = [
         "status": "已送達參議院，交外交委員會（2026年2月11日）", "category": "taiwan",
         "sponsor": "Frank D. Lucas（R-OK-3）", "cosponsors": ["Vicente Gonzalez（D-TX-34）","Michael Lawler（R-NY-17）"],
         "house_introduced": "2025年2月24日", "house_committee_name": "眾院外交委員會",
-        "house_committee_date": null, "house_floor_date": "2026年2月（已通過）",
+        "house_committee_date": null, "house_floor_date": "2026年2月9日",
         "senate_introduced": "（2026年2月11日送達參議院）", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "signed_date": null, "law_number": null,
@@ -611,7 +611,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 1216", "chamber": "senate",
         "title_zh": "台灣盟友基金法", "title_en": "Taiwan Allies Fund Act",
         "status": "已列入參議院議事日程第 321 號", "category": "taiwan",
-        "sponsor": "Chris Van Hollen（D-MD）", "cosponsors": [],
+        "sponsor": "Chris Van Hollen（D-MD）", "cosponsors": ["John R. Curtis（R-UT）","Andy Kim（D-NJ）","Michael Bennet（D-CO）"],
         "senate_introduced": "2025年3月31日", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": "（配對法案 H.R.2559，2025年4月1日）", "house_committee_name": "眾院外交委員會",
@@ -624,7 +624,7 @@ const EMBEDDED_DATA = [
         "bill_num": "H.R. 2113", "chamber": "house",
         "title_zh": "美國支持台灣法", "title_en": "America Supports Taiwan Act",
         "status": "眾院外交委員會審議中", "category": "taiwan",
-        "sponsor": "Byron Donalds（R-FL-19）", "cosponsors": [],
+        "sponsor": "Byron Donalds（R-FL-19）", "cosponsors": ["Mike Collins（R-GA）","Barry Moore（R-AL）","Thomas Tiffany（R-WI）","Andrew Ogles（R-TN）"],
         "house_introduced": "2025年3月14日", "house_committee_name": "眾院外交委員會",
         "house_committee_date": null, "house_floor_date": null,
         "senate_introduced": null, "senate_committee_name": null,
@@ -637,9 +637,9 @@ const EMBEDDED_DATA = [
         "bill_num": "H.R. 2416", "chamber": "house",
         "title_zh": "台灣國際團結法", "title_en": "Taiwan International Solidarity Act",
         "status": "已送達參議院，交外交委員會（2025年5月6日）", "category": "taiwan",
-        "sponsor": "Gerald E. Connolly（D-VA-11）", "cosponsors": [],
+        "sponsor": "Gerald E. Connolly（D-VA-11）", "cosponsors": ["Thomas Suozzi（D-NY）","Dave Min（D-CA）","Brad Sherman（D-CA）","Steve Cohen（D-TN）","Brian Fitzpatrick（R-PA）","（另7人）"],
         "house_introduced": "2025年3月27日", "house_committee_name": "眾院外交委員會",
-        "house_committee_date": null, "house_floor_date": "2025年5月（已通過）",
+        "house_committee_date": null, "house_floor_date": "2025年5月5日",
         "senate_introduced": "（2025年5月6日送達參議院）", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "signed_date": null, "law_number": null,
@@ -650,7 +650,7 @@ const EMBEDDED_DATA = [
         "bill_num": "H.R. 2559", "chamber": "house",
         "title_zh": "台灣盟友基金法（眾院版）", "title_en": "Taiwan Allies Fund Act",
         "status": "眾院外交委員會審議中", "category": "taiwan",
-        "sponsor": "Raja Krishnamoorthi（D-IL-8）", "cosponsors": [],
+        "sponsor": "Raja Krishnamoorthi（D-IL-8）", "cosponsors": ["Gregory Meeks（D-NY）","Gabe Amo（D-RI）","Andy Barr（R-KY）","Ami Bera（D-CA）","Thomas Suozzi（D-NY）","Ted Lieu（D-CA）","Ed Case（D-HI）","Jim Costa（D-CA）","Gerald Connolly（D-VA）","Sheila Cherfilus-McCormick（D-FL）","John Moolenaar（R-MI）","Brian Fitzpatrick（R-PA）","Josh Gottheimer（D-NJ）","Wesley Bell（D-MO）","Jennifer Kiggans（R-VA）","Yassamin Ansari（D-AZ）","Jill Tokuda（D-HI）","Julie Johnson（D-TX）","Sydney Kamlager-Dove（D-CA）","Johnny Olszewski（D-MD）","Seth Moulton（D-MA）","Greg Stanton（D-AZ）","Robert Menendez（D-NJ）","Michael Baumgartner（R-WA）","Brad Schneider（D-IL）","Suzan DelBene（D-WA）","James Moylan（R-GU）","James Walkinshaw（D-VA）","Thomas Kean（R-NJ）","Brad Sherman（D-CA）","April McClain Delaney（D-MD）","Sylvia Garcia（D-TX）"],
         "house_introduced": "2025年4月1日", "house_committee_name": "眾院外交委員會",
         "house_committee_date": null, "house_floor_date": null,
         "senate_introduced": "（配對法案 S.1216，2025年3月31日）", "senate_committee_name": null,
@@ -663,7 +663,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 1588", "chamber": "senate",
         "title_zh": "台灣關係強化法", "title_en": "Taiwan Relations Reinforcement Act of 2025",
         "status": "參院外交委員會審議中", "category": "taiwan",
-        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": [],
+        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": ["John R. Curtis（R-UT）"],
         "senate_introduced": "2025年5月5日", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
@@ -675,10 +675,10 @@ const EMBEDDED_DATA = [
       {
         "bill_num": "S. 1744", "chamber": "senate",
         "title_zh": "豪豬法（非對稱防衛授權法）", "title_en": "PORCUPINE Act",
-        "status": "已列入參議院議事日程第 232 號（2025年12月）", "category": "taiwan",
-        "sponsor": "Pete Ricketts（R-NE）", "cosponsors": [],
+        "status": "已通過參議院（2025年12月11日）", "category": "taiwan",
+        "sponsor": "Pete Ricketts（R-NE）", "cosponsors": ["Christopher Coons（D-DE）","John Cornyn（R-TX）","Michael Bennet（D-CO）","Ted Budd（R-NC）","Rick Scott（R-FL）","Raphael Warnock（D-GA）"],
         "senate_introduced": "2025年5月13日", "senate_committee_name": "參院外交委員會",
-        "senate_committee_date": null, "senate_floor_date": null,
+        "senate_committee_date": null, "senate_floor_date": "2025年12月11日",
         "house_introduced": null, "house_committee_name": null,
         "house_committee_date": null, "house_floor_date": null,
         "signed_date": null, "law_number": null,
@@ -715,7 +715,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 1900", "chamber": "senate",
         "title_zh": "台灣非歧視法（參院版）", "title_en": "Taiwan Non-Discrimination Act of 2025",
         "status": "已列入參議院議事日程第 100 號", "category": "taiwan",
-        "sponsor": "David McCormick（R-PA）", "cosponsors": [],
+        "sponsor": "David McCormick（R-PA）", "cosponsors": ["Jacky Rosen（D-NV）","Dan Sullivan（R-AK）","Elissa Slotkin（D-MI）","Ted Budd（R-NC）","Jeff Merkley（D-OR）","Pete Ricketts（R-NE）"],
         "senate_introduced": "2025年5月22日", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": "（配對法案 H.R.910，2025年2月4日）", "house_committee_name": "眾院金融服務委員會",
@@ -728,7 +728,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 2222", "chamber": "senate",
         "title_zh": "關鍵海底基礎設施韌性倡議法", "title_en": "Critical Undersea Infrastructure Resilience Initiative Act",
         "status": "已列入參議院議事日程第 323 號", "category": "taiwan",
-        "sponsor": "John R. Curtis（R-UT）", "cosponsors": [],
+        "sponsor": "John R. Curtis（R-UT）", "cosponsors": ["Jacky Rosen（D-NV）","David McCormick（R-PA）"],
         "senate_introduced": "2025年7月9日", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
@@ -741,7 +741,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 2224", "chamber": "senate",
         "title_zh": "台灣國際團結法（參院版）", "title_en": "Taiwan International Solidarity Act",
         "status": "已列入參議院議事日程第 237 號", "category": "taiwan",
-        "sponsor": "Chris Van Hollen（D-MD）", "cosponsors": [],
+        "sponsor": "Chris Van Hollen（D-MD）", "cosponsors": ["John R. Curtis（R-UT）"],
         "senate_introduced": "2025年7月9日", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": "（配對法案 H.R.2416，2025年3月27日）", "house_committee_name": "眾院外交委員會",
@@ -754,7 +754,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 2626", "chamber": "senate",
         "title_zh": "強化美國在美洲開發銀行領導力法", "title_en": "Strengthening United States Leadership at the IDB Act",
         "status": "已列入參議院議事日程第 240 號", "category": "taiwan",
-        "sponsor": "David McCormick（R-PA）", "cosponsors": [],
+        "sponsor": "David McCormick（R-PA）", "cosponsors": ["Timothy Kaine（D-VA）"],
         "senate_introduced": "2025年7月31日", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
@@ -767,7 +767,7 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 2684", "chamber": "senate",
         "title_zh": "美台美洲夥伴關係法", "title_en": "U.S.-Taiwan Partnership in the Americas Act",
         "status": "已列入參議院議事日程第 242 號", "category": "taiwan",
-        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": [],
+        "sponsor": "Jeff Merkley（D-OR）", "cosponsors": ["John R. Curtis（R-UT）","Timothy Kaine（D-VA）","Pete Ricketts（R-NE）","Michael Bennet（D-CO）","Ron Wyden（D-OR）","（另1人）"],
         "senate_introduced": "2025年9月2日", "senate_committee_name": "參院外交委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
@@ -793,9 +793,9 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 2960", "chamber": "senate",
         "title_zh": "嚇阻中國侵台法", "title_en": "Deter PRC Aggression Against Taiwan Act",
         "status": "已列入參議院議事日程第 245 號", "category": "taiwan",
-        "sponsor": "James Risch（R-ID）", "cosponsors": [],
+        "sponsor": "James Risch（R-ID）", "cosponsors": ["Jeanne Shaheen（D-NH）","Christopher Coons（D-DE）","Pete Ricketts（R-NE）","John Cornyn（R-TX）","Bill Hagerty（R-TN）","Andy Kim（D-NJ）","John Boozman（R-AR）","Michael Bennet（D-CO）","Ted Budd（R-NC）","Rick Scott（R-FL）","Jeff Merkley（D-OR）","Roger Wicker（R-MS）","David McCormick（R-PA）"],
         "senate_introduced": "2025年10月1日", "senate_committee_name": "參院外交委員會",
-        "senate_committee_date": null, "senate_floor_date": null,
+        "senate_committee_date": "2025年10月22日", "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
         "house_committee_date": null, "house_floor_date": null,
         "signed_date": null, "law_number": null,
@@ -805,9 +805,9 @@ const EMBEDDED_DATA = [
       {
         "bill_num": "S. 4065", "chamber": "senate",
         "title_zh": "制裁侵略鄰近民主國家法", "title_en": "STAND with Taiwan Act of 2026",
-        "status": "參院外交委員會審議中", "category": "taiwan",
-        "sponsor": "Dan Sullivan（R-AK）", "cosponsors": [],
-        "senate_introduced": "2026年（待確認）", "senate_committee_name": "參院外交委員會",
+        "status": "參院銀行委員會審議中", "category": "taiwan",
+        "sponsor": "Dan Sullivan（R-AK）", "cosponsors": ["Ted Budd（R-NC）","John Cornyn（R-TX）","Tammy Duckworth（D-IL）","Lindsey Graham（R-SC）","John Kennedy（R-LA）","（另2人）"],
+        "senate_introduced": "2026年3月11日", "senate_committee_name": "參院銀行委員會",
         "senate_committee_date": null, "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
         "house_committee_date": null, "house_floor_date": null,
@@ -832,9 +832,9 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 4600", "chamber": "senate",
         "title_zh": "南海戰略法", "title_en": "South China Sea Strategy Act of 2026",
         "status": "已列入參議院議事日程第 512 號", "category": "china",
-        "sponsor": "（待確認）", "cosponsors": [],
-        "senate_introduced": "2026年", "senate_committee_name": "參院外交委員會",
-        "senate_committee_date": null, "senate_floor_date": null,
+        "sponsor": "Tammy Duckworth（D-IL）", "cosponsors": ["John R. Curtis（R-UT）"],
+        "senate_introduced": "2026年5月20日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2026年6月17日", "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
         "house_committee_date": null, "house_floor_date": null,
         "signed_date": null, "law_number": null,
@@ -845,9 +845,9 @@ const EMBEDDED_DATA = [
         "bill_num": "S. 4610", "chamber": "senate",
         "title_zh": "太平洋夥伴暨經濟韌性法", "title_en": "Pacific POWER Act",
         "status": "已列入參議院議事日程第 513 號", "category": "taiwan",
-        "sponsor": "（待確認）", "cosponsors": [],
-        "senate_introduced": "2026年", "senate_committee_name": "參院外交委員會",
-        "senate_committee_date": null, "senate_floor_date": null,
+        "sponsor": "Brian Schatz（D-HI）", "cosponsors": [],
+        "senate_introduced": "2026年5月20日", "senate_committee_name": "參院外交委員會",
+        "senate_committee_date": "2026年6月17日", "senate_floor_date": null,
         "house_introduced": null, "house_committee_name": null,
         "house_committee_date": null, "house_floor_date": null,
         "signed_date": null, "law_number": null,
@@ -1109,7 +1109,7 @@ const EMBEDDED_DATA = [
       : '';
 
     const sponsor=b.sponsor?`<strong>提案人：</strong>${b.sponsor}`:'';
-    const cospon=b.cosponsors&&b.cosponsors.length?` ／ <strong>連署：</strong>${b.cosponsors.join('、')}`:'';
+    const cospon=b.cosponsors&&b.cosponsors.length?` ／ <strong>連署人／共同提案人：</strong>${b.cosponsors.join('、')}`:'';
     const sc=overallStatusClass(b);
     const slabel=overallStatusLabel(b);
     const d = document.createElement('div');
