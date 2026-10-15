@@ -191,6 +191,7 @@ body{
   background:var(--green);box-shadow:0 0 5px var(--green);
 }
 .topbar-update{font-size:10px;color:var(--ink-4);white-space:nowrap;}
+.page-update-line{font-size:11px;color:var(--ink-4);margin-top:3px;}
 
 /* ══ CONTENT AREA ══ */
 .content{
@@ -763,6 +764,7 @@ const EMBEDDED_DATA = [
         <div>
           <div class="page-title"><span class="icon">🏠</span>儀表板</div>
           <div class="page-subtitle">彙整區間：<strong id="period-range">—</strong></div>
+          <div class="page-update-line">🔄 資料更新：<span id="update-time-dash">—</span></div>
         </div>
         <span class="page-badge" id="dash-date">—</span>
       </div>
@@ -940,7 +942,9 @@ const EMBEDDED_DATA = [
   setInterval(updateClocks, 30000);
 
   /* ── 基本資訊 ── */
-  $id('update-time').textContent     = data.date + '　' + data.generated_at;
+  const updateStr = data.date + '　' + data.generated_at;
+  $id('update-time').textContent     = updateStr;
+  $id('update-time-dash').textContent = updateStr;
   $id('period-range').textContent    = data.period_start + ' – ' + data.period_end + '　台北時間';
   $id('dash-date').textContent       = data.date;
   $id('stmt-period').textContent     = data.date;
